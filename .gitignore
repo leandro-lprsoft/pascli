@@ -1,0 +1,25 @@
+# Created by https://www.toptal.com/developers/gitignore/api/freepascal
+# Edit at https://www.toptal.com/developers/gitignore?templates=freepascal
+
+### FreePascal ###
+*.lps
+*.compiled
+*.[oa]
+*.ppu
+*.rst
+*.cgi
+*.exe
+*.log
+*.bak*
+fp.ini
+fp.cfg
+fp.dsk
+
+tests/backup/
+tests/lib/
+src/backup/
+src/lib/
+samples/basic/backup
+samples/basic/lib
+
+# End of https://www.toptal.com/developers/gitignore/api/freepascal

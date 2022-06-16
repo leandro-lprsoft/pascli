@@ -1,0 +1,73 @@
+{
+    "version": "2.0.0",
+    "runner": "terminal",
+    "tasks": [
+        {
+            "command": "lazbuild",
+            "args": [
+                "./tests/TestPascli.lpr"
+            ],
+            "type": "shell",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "label": "build tests",
+            "problemMatcher": {
+                "owner": "external",
+               "fileLocation": ["absolute"],
+               "pattern": {
+                   "regexp": "(([A-Za-z]):\\\\(?:[^\\/:*?\"<>|\\r\\n]+\\\\)*[^\\/\\s\\(:*?\"<>|\\r\\n]*)\\((\\d+),(\\d+)\\)\\s.*(Fatal|Error|Warning|Hint|Note):\\s\\((\\d+)\\)\\s(.*)$",
+                   "file": 1,
+                   "line": 3,
+                   "column": 4,
+                   "severity": 5,
+                   "code": 6,
+                   "message": 7
+                },
+                "severity": "info"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "command": "./tests/TestPascli.exe",
+            "args": [
+                "--format=plain",
+                "--no-addresses",
+                "-a"
+            ],
+            "type": "shell",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "label": "test",
+            "dependsOn": "build tests",
+            "problemMatcher": {
+                "owner": "external",
+               "fileLocation": ["absolute"],
+               "pattern": {
+                   "regexp": "(([A-Za-z]):\\\\(?:[^\\/:*?\"<>|\\r\\n]+\\\\)*[^\\/\\s\\(:*?\"<>|\\r\\n]*)\\((\\d+),(\\d+)\\)\\s.*(Fatal|Error|Warning|Hint|Note):\\s\\((\\d+)\\)\\s(.*)$",
+                   "file": 1,
+                   "line": 3,
+                   "column": 4,
+                   "severity": 5,
+                   "code": 6,
+                   "message": 7
+                },
+                "severity": "info"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}
