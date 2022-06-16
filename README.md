@@ -82,6 +82,21 @@ Run 'basic.exe help COMMAND' for more information on a command.
 
 ```
 
+## Features
+
+* Works with [command] [short options or long options] [arguments] structure.
+* Easy to fast setup a robust CLI tool using the AddCommand method. Just create your handler like the following example: 
+```pascal
+procedure MyCommand(ABuilder: ICommandBuilder);
+begin
+  // my code
+end;
+```
+* Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.
+* Command usage out of the box, outputs command information for a given command or general usage of the tool. Just add Command.Usage unit to the uses clause and setup a command for UsageCommand procedure using AddCommand method.
+* This library is unit tested.
+
+
 ## License
 
 `pascli` is free and open-source software licensed under the [MIT License](https://github.com/leandro-lprsoft/pascli/blob/master/LICENSE). 
