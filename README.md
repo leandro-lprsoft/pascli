@@ -26,7 +26,7 @@ uses
   Command.Usage;
 ```
 
-* **GET**
+* **Basic implementation**
 
 ```pascal
 var
@@ -59,6 +59,28 @@ begin
   Application.Free;
 end.
 ``` 
+
+* **Test**
+
+Build the project and try run on console:
+```console
+./basic help
+```
+
+You should see the following output:
+```console
+
+Usage: basic.exe [command] 
+
+Commands: 
+  help           Shows information about how to use this tool or about a specific command.
+                 Ex: basic help
+  hello          Show a hello world message.
+                 Ex: basic hello
+
+Run 'basic.exe help COMMAND' for more information on a command.
+
+```
 
 ## License
 
