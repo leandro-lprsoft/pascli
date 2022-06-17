@@ -15,11 +15,7 @@ fp.ini
 fp.cfg
 fp.dsk
 
-tests/backup/
-tests/lib/
-src/backup/
-src/lib/
-samples/basic/backup
-samples/basic/lib
+**/lib/
+**/backup/
 
 # End of https://www.toptal.com/developers/gitignore/api/freepascal

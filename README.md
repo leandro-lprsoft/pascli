@@ -17,6 +17,8 @@ boss install github.com/leandro-lprsoft/pascli
 
 ## Quickstart
 
+Create a new project on Lazarus and execute "Installation" procedure to update search path and make pascli units visible to the project.
+
 You need to add the following units to the uses clause:
 
 ```pascal
