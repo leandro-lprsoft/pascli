@@ -43,7 +43,7 @@ begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'Basic CLI tool.';
   Application
-    .Command
+    .CommandBuilder
       .AddCommand(
           'help', 
           'Shows information about how to use this tool or about a specific command.'#13#10 +

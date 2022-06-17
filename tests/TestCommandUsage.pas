@@ -53,7 +53,7 @@ procedure TTestCommandUsage.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'testcmdapp';
-  FApplication.Command.Output := MockOutput;
+  FApplication.CommandBuilder.Output := MockOutput;
   FExeName := ExtractFileName(FApplication.ExeName);
   CapturedOutput := '';
 end;
@@ -61,7 +61,7 @@ end;
 procedure TTestCommandUsage.TestWriteUsage;
 begin
   // act
-  WriteUsage(FApplication.Command, '[app_title]', '[create]', '[-options]', '<file_name>');
+  WriteUsage(FApplication.CommandBuilder, '[app_title]', '[create]', '[-options]', '<file_name>');
 
   // assert
   AssertTrue('Should print app title', ContainsText(CapturedOutput, 'app_title'));
@@ -74,14 +74,14 @@ procedure TTestCommandUsage.TestUsageCommandPathGeneral;
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
       .SetCommandAsArgument(nil);
 
   // act
-  UsageCommand(FApplication.Command);
+  UsageCommand(FApplication.CommandBuilder);
 
   // assert
   AssertTrue('should have "Commands:" text', ContainsText(CapturedOutput, 'Commands:'));
@@ -93,15 +93,15 @@ procedure TTestCommandUsage.TestUsageCommandPathSpecificCommand;
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault, ccNoArgumentsButCommands])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
         .AddOption('a', 'a-option', 'first option')
-      .SetCommandAsArgument(FApplication.Command.Commands[1]);
+      .SetCommandAsArgument(FApplication.CommandBuilder.Commands[1]);
 
   // act
-  UsageCommand(FApplication.Command);
+  UsageCommand(FApplication.CommandBuilder);
 
   // assert
   AssertFalse('should have "Commands:" text', ContainsText(CapturedOutput, 'Commands:'));
@@ -113,11 +113,11 @@ var
   LArguments: string;
 begin
   // arrange
-  FApplication.Command.AddArgument('project file name', acOptional);
-  FApplication.Command.AddArgument('run mode', acRequired);
+  FApplication.CommandBuilder.AddArgument('project file name', acOptional);
+  FApplication.CommandBuilder.AddArgument('run mode', acRequired);
 
   // act
-  LArguments := GetArgumentList(FApplication.Command);
+  LArguments := GetArgumentList(FApplication.CommandBuilder);
 
   // assert
   AssertTrue('Should contain project argument', ContainsText(LArguments, 'project file name'));
@@ -130,14 +130,14 @@ var
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
-      .SetCommandAsArgument(FApplication.Command.Commands[1]);
+      .SetCommandAsArgument(FApplication.CommandBuilder.Commands[1]);
 
   // act
-  WriteCommandUsage(FApplication.Command);
+  WriteCommandUsage(FApplication.CommandBuilder);
 
   // asserts
   LExpectUsage := Format('Usage: %s %s', [FExeName, 'sample']);
@@ -153,16 +153,16 @@ var
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
       .AddCommand('cmd_with_arg', 'command that requires an argument', MockCommand, [ccRequiresOneArgument])
-      .SetCommandAsArgument(FApplication.Command.Commands[2])
+      .SetCommandAsArgument(FApplication.CommandBuilder.Commands[2])
       .AddArgument('arg1', acOptional);
 
   // act
-  WriteCommandUsage(FApplication.Command);
+  WriteCommandUsage(FApplication.CommandBuilder);
 
   // asserts
   LExpectUsage := Format('Usage: %s %s <%s>', [FExeName, 'cmd_with_arg', 'arg1']);
@@ -179,17 +179,17 @@ var
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
       .AddCommand('cmd_with_opt', 'command that requires options', MockCommand, [ccRequiresOneOption])
         .AddOption('a', 'a-option', 'option A is nice', [])
         .AddOption('b', 'b-option', 'option B is better', [])
-      .SetCommandAsArgument(FApplication.Command.Commands[2]);
+      .SetCommandAsArgument(FApplication.CommandBuilder.Commands[2]);
 
   // act
-  WriteCommandUsage(FApplication.Command);
+  WriteCommandUsage(FApplication.CommandBuilder);
 
   // asserts
   LExpectUsage := Format('Usage: %s %s [%s]', [FExeName, 'cmd_with_opt', 'options']);
@@ -207,18 +207,18 @@ var
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample', 'execute sample action', MockCommand, [ccNoParameters])
       .AddCommand('cmd_with_opt', 'command that requires options', MockCommand, [ccRequiresOneOption])
         .AddOption('a', 'a-option', 'option A is nice', [])
         .AddOption('b', 'b-option', 'option B is better', [])
-      .SetCommandAsArgument(FApplication.Command.Commands[2])
+      .SetCommandAsArgument(FApplication.CommandBuilder.Commands[2])
       .AddArgument('arg1', acOptional);
 
   // act
-  WriteCommandUsage(FApplication.Command);
+  WriteCommandUsage(FApplication.CommandBuilder);
 
   // asserts
   LExpectUsage := Format('Usage: %s %s [%s] <%s>', [FExeName, 'cmd_with_opt', 'options', 'arg1']);
@@ -235,14 +235,14 @@ procedure TTestCommandUsage.TestWriteGeneralUsage;
 begin
   // arrange
   FApplication
-    .Command
+    .CommandBuilder
       .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
-      .SetCommandSelected(FApplication.Command.Commands[0])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
       .AddCommand('sample_cmd', 'execute sample action', MockCommand, [ccNoParameters])
       .SetCommandAsArgument(nil);
 
   // act
-  UsageCommand(FApplication.Command);
+  UsageCommand(FApplication.CommandBuilder);
 
   // assert
   AssertTrue('should have "Commands:" text', ContainsText(CapturedOutput, 'Commands:'));

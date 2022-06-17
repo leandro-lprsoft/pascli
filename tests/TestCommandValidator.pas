@@ -51,7 +51,7 @@ procedure TTestCommandValidator.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'validator_app';
-  FBuilder := FApplication.Command;
+  FBuilder := FApplication.CommandBuilder;
 end;
 
 procedure TTestCommandValidator.TearDown;

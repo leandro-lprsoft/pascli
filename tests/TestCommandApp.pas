@@ -40,7 +40,7 @@ begin
   LInvokedMethods := TStringList.Create;
   try
     LCommand := TCommandBuildMock.New<ICommandBuilder>(LInvokedMethods);
-    FApplication.Command := LCommand;
+    FApplication.CommandBuilder := LCommand;
     FApplication.Initialize;
     FApplication.Run;
     AssertEquals('Parse method should be invoked', 'Parse', LInvokedMethods[0]);
@@ -66,7 +66,7 @@ procedure TTestCommandApp.TestAppHasValidCommandBuilderInstance;
 begin
   AssertTrue(
     'Application should have valid ICommandBuilder instance. Check create method.', 
-    Assigned(FApplication.Command))  
+    Assigned(FApplication.CommandBuilder))  
 end;
 
 initialization

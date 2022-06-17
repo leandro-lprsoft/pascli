@@ -20,7 +20,7 @@ type
     procedure DoRun; override;
   public
     constructor Create(TheOwner: TComponent); override;
-    property Command: ICommandBuilder read FCommandBuilder write FCommandBuilder;
+    property CommandBuilder: ICommandBuilder read FCommandBuilder write FCommandBuilder;
   end;
 
 implementation
@@ -29,9 +29,9 @@ implementation
 
 procedure TCommandApp.DoRun;
 begin
-  Command.Parse;
-  Command.Validate;
-  Command.Execute;
+  CommandBuilder.Parse;
+  CommandBuilder.Validate;
+  CommandBuilder.Execute;
   Terminate;
 end;
 
