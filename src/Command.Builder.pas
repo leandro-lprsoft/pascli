@@ -451,6 +451,8 @@ end;
 function TCommandBuilder.AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
   AConstraints: TCommandConstraints): ICommandBuilder;
 begin
+  
+
   SetLength(FCommands, Length(FCommands) + 1);
   FCommands[Length(FCommands) - 1] := TCommand.New(ACommand, ADescription, ACallback, AConstraints);
   Result := Self;
@@ -690,7 +692,7 @@ end;
 
 function TCommandBuilder.ExeName: string;
 begin
-  Result := FExeName;
+  Result := ChangeFileExt(FExeName, '');
 end;
 
 function TCommandBuilder.HasCommands: Boolean;

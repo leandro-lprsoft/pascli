@@ -8,11 +8,13 @@ uses
   TestCommandHelper,
   TestCommandApp,
   TestCommandUsage,
+  TestCommandVersion,
   TestCommandValidator,
   TestCommandBuilderOption,
   TestCommandBuilderArgument,
   TestCommandBuilderCommand,
-  TestCommandBuilder, TestMockCommandBuilder;
+  TestCommandBuilder, 
+  TestMockCommandBuilder;
 
 type
   TTestPascli = class(TTestRunner)
@@ -20,6 +22,8 @@ type
 
 var
   Application: TTestPascli;
+
+{$R *.res}
 
 begin
   Application := TTestPascli.Create(nil);

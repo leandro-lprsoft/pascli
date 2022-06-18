@@ -33,6 +33,7 @@ type
     procedure TestWriteCommandUsageWithOption;
     procedure TestWriteCommandUsageWithArgumentAndOption;
     procedure TestWriteGeneralUsage;
+    procedure TestRegistryForCommandUsage;
   end;
 
 implementation
@@ -54,7 +55,7 @@ begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'testcmdapp';
   FApplication.CommandBuilder.Output := MockOutput;
-  FExeName := ExtractFileName(FApplication.ExeName);
+  FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   CapturedOutput := '';
 end;
 
@@ -251,6 +252,13 @@ begin
   AssertTrue('should have "sample_cmd" command text ', ContainsText(CapturedOutput, 'sample_cmd'));    
   AssertTrue('should have "for more information on a command" text', 
     ContainsText(CapturedOutput, 'for more information on a command'));  
+end;
+
+procedure TTestCommandUsage.TestRegistryForCommandUsage;
+begin
+  Command.Usage.Registry(FApplication.CommandBuilder);
+  AssertEquals('Should have one registered command.', 1, Length(FApplication.CommandBuilder.Commands));
+  AssertEquals('First builder command should be "help"', 'help', FApplication.CommandBuilder.Commands[0].Name);
 end;
 
 initialization

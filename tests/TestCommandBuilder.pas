@@ -63,7 +63,7 @@ procedure TTestCommandBuilder.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'basic app';
-  FExeName := ExtractFileName(FApplication.ExeName);
+  FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   FBuilder := TCommandBuilder.Create(FExeName);
   MockCommandCapture := '';
 end;
@@ -82,10 +82,10 @@ procedure TTestCommandBuilder.TestConstructor;
 var
   LBuilder: ICommandBuilder;
 begin
-  LBuilder := TCommandBuilder.Create(FApplication.ExeName);
+  LBuilder := TCommandBuilder.Create(FExeName);
 
   AssertTrue('Valid instance', Assigned(LBuilder));
-  AssertTrue('Application instance assigend correctly', LBuilder.ExeName = FApplication.ExeName);
+  AssertTrue('Application instance exe name differs from FApplication.ExeName', LBuilder.ExeName = FExeName);
 end;
 
 procedure TTestCommandBuilder.TestConstructorExeNameNotProvided;

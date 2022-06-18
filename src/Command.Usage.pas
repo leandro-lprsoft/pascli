@@ -5,7 +5,6 @@ unit Command.Usage;
 interface
 
 uses
-  CustApp,
   SysUtils,
   StrUtils,
   Command.Interfaces;
@@ -26,6 +25,9 @@ uses
   /// prints general help information for the application, including command usage syntax, command list
   /// and arguments.
   procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
+
+  /// configure UsageCommand with standard parameters
+  procedure Registry(ABuilder: ICommandBuilder);
 
 implementation
 
@@ -127,6 +129,17 @@ begin
     WriteCommandUsage(ABuilder)
   else  
     WriteGeneralUsage(ABuilder);
+end;
+
+procedure Registry(ABuilder: ICommandBuilder);
+begin
+  ABuilder
+  .AddCommand(
+    'help', 
+    'Shows information about how to use this tool or about a specific command.'#13#10 +
+    'Ex: ' + ABuilder.ExeName + ' help', 
+    @UsageCommand,
+    [ccDefault, ccNoArgumentsButCommands]);
 end;
 
 end.

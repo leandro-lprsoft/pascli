@@ -8,7 +8,8 @@ uses
   {$ENDIF}
   Command.Interfaces,
   Command.App,
-  Command.Usage;
+  Command.Usage,
+  Command.Version;
 
 var
   Application: TCommandApp;
@@ -23,20 +24,18 @@ end;
 begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'Basic CLI tool.';
+
+  Command.Usage.Registry(Application.CommandBuilder);
+  Command.Version.Registry(Application.CommandBuilder);
+
   Application
     .CommandBuilder
       .AddCommand(
-          'help', 
-          'Shows information about how to use this tool or about a specific command.'#13#10 +
-          'Ex: basic help', 
-          @UsageCommand, 
-          [ccDefault, ccNoArgumentsButCommands])
-      .AddCommand(
-          'hello',
-          'Show a hello world message.'#13#10 +
-          'Ex: basic hello',
-          @HelloCommand,
-          [ccNoParameters]);
+        'hello',
+        'Show a hello world message.'#13#10 +
+        'Ex: basic hello',
+        @HelloCommand,
+        [ccNoParameters]);
 
   Application.Run;
   Application.Free;

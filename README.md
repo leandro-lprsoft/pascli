@@ -25,7 +25,8 @@ You need to add the following units to the uses clause:
 uses 
   Command.Interfaces,
   Command.App,
-  Command.Usage;
+  Command.Usage,
+  Command.Version;
 ```
 
 * **Basic implementation**
@@ -42,21 +43,19 @@ end;
 begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'Basic CLI tool.';
+
+  Command.Usage.Registry(Application.CommandBuilder);
+  Command.Version.Registry(Application.CommandBuilder);
+
   Application
     .CommandBuilder
       .AddCommand(
-          'help', 
-          'Shows information about how to use this tool or about a specific command.'#13#10 +
-          'Ex: basic help', 
-          @UsageCommand, // built in usage command
-          [ccDefault, ccNoArgumentsButCommands])
-      .AddCommand(
-          'hello',
-          'Show a hello world message.'#13#10 +
-          'Ex: basic hello',
-          @HelloCommand,
-          [ccNoParameters]);
-
+        'hello',
+        'Show a hello world message.'#13#10 +
+        'Ex: basic hello',
+        @HelloCommand,
+        [ccNoParameters]);  
+  
   Application.Run;
   Application.Free;
 end.
@@ -87,17 +86,50 @@ Run 'basic.exe help COMMAND' for more information on a command.
 ## Features
 
 * Works with [command] [short options or long options] [arguments] structure.
-* Easy to fast setup a robust CLI tool using the AddCommand method. Just create your handler like the following example: 
+* Easy to fast create a CLI tool using the AddCommand method. Just create your handler like the following example: 
 ```pascal
 procedure MyCommand(ABuilder: ICommandBuilder);
 begin
   // my code
 end;
+
+{...}
+
+Application
+  .CommandBuilder
+    .AddCommand(
+      'mycommand',
+      'Excutes MyCommand procedure.'#13#10 +
+      'Ex: myapp mycommand',
+      @MyCommand,
+      [ccNoParameters]);
+
+{...}
+
 ```
 * Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.
-* Command usage out of the box, outputs command information for a given command or general usage of the tool. Just add Command.Usage unit to the uses clause and setup a command for UsageCommand procedure using AddCommand method.
-* This library is unit tested.
+* Short flags or long flags using the method add option like the following example:
+```pascal
+{...}
 
+Application
+  .CommandBuilder
+    .AddCommand('validate', 'validate file .'#13#10 + 'Ex: myapp validate', @MyCommandValidate, [])
+      .AddOption('f', 'full', 'Performs a full validation. Ex: myapp validate --full', ['s'])
+      .AddOption('s', 'simple', 'Performs a simple validation. Ex: myapp validate --full', ['f']);
+
+{...}
+
+```
+* Command usage out of the box, outputs command information for a given command or general usage of the tool. Just add Command.Usage unit to the uses clause and setup a command for UsageCommand procedure using AddCommand method or use the Registry procedure:
+```pascal
+Command.Usage.Registry(Application.CommandBuilder);
+```
+* Command version output procedure (Requires version info of project options). Just add Command.Version unit to the uses clause and setup a command for VersionCommand procedure using AddCommand method or use the Registry procedure:
+```pascal
+Command.Version.Registry(Application.CommandBuilder);
+```
+* Full unit test implementation.
 
 ## License
 
