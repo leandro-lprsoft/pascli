@@ -52,17 +52,13 @@
             "dependsOn": "build tests",
             "problemMatcher": {
                 "owner": "external",
-               "fileLocation": ["absolute"],
-               "pattern": {
-                   "regexp": "(([A-Za-z]):\\\\(?:[^\\/:*?\"<>|\\r\\n]+\\\\)*[^\\/\\s\\(:*?\"<>|\\r\\n]*)\\((\\d+),(\\d+)\\)\\s.*(Fatal|Error|Warning|Hint|Note):\\s\\((\\d+)\\)\\s(.*)$",
-                   "file": 1,
-                   "line": 3,
-                   "column": 4,
-                   "severity": 5,
-                   "code": 6,
-                   "message": 7
+                "fileLocation": ["absolute"],
+                "pattern": {
+                    "regexp": "^(.*\\d  )(.*)  Failed:(.*)$",
+                    "code": 2,
+                    "message": 3
                 },
-                "severity": "info"
+                "severity": "error"
             },
             "group": {
                 "kind": "test",

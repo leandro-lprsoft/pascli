@@ -23,6 +23,7 @@ type
     FExeName: string;
   protected
     procedure Setup; override;
+    procedure TearDown; override;
   published
     procedure TestWriteUsage;
     procedure TestUsageCommandPathGeneral;
@@ -57,6 +58,11 @@ begin
   FApplication.CommandBuilder.Output := MockOutput;
   FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   CapturedOutput := '';
+end;
+
+procedure TTestCommandUsage.TearDown;
+begin
+  FreeAndNil(FApplication);
 end;
 
 procedure TTestCommandUsage.TestWriteUsage;

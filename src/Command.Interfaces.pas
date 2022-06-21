@@ -178,6 +178,9 @@ type
     /// returns a list of IOptions related to selected command
     property ParsedOptions: TArray<IOption> read GetParsedOptions;
 
+    /// checks if a specific option was provided as a parameter
+    function CheckOption(const AOption: string): Boolean;
+
     /// build a list of IArguments related to selected command, if there are more than one argument
     /// provided the list will match one argument parameter by order of the command builder construction
     function GetParsedArguments: TArray<IArgument>;    

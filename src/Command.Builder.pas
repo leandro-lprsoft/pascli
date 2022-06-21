@@ -133,12 +133,14 @@ type
 
     FUseExternalArguments: Boolean;
     FExternalArguments: TArray<string>;
-    FParsedArgs: TArray<string>;
-    FParsedOptions: TArray<string>;
+    FProvidedArgs: TArray<string>;
+    FProvidedOptions: TArray<string>;
     FParsedErrors: TArray<string>;
 
     FCommandSelected: ICommand;
     FCommandAsArgument: ICommand;
+
+    FParsedOptions: TArray<IOption>;
 
     FCommandsFound: Integer;
 
@@ -157,6 +159,8 @@ type
 
     procedure ParseArguments;
     procedure ParseCommands;
+    procedure ParseOptions;
+
     function ParsedErrorsShow: Boolean;
     function GetParsedOptions: TArray<IOption>;
 
@@ -216,6 +220,9 @@ type
 
     /// returns parsed options list
     property ParsedOptions: TArray<IOption> read GetParsedOptions;    
+
+    /// checks if a specific option was provided as a parameter
+    function CheckOption(const AOption: string): Boolean;
 
     /// returns a list of IArgument related to selected command
     property ParsedArguments: TArray<IArgument> read GetParsedArguments;
@@ -533,7 +540,7 @@ var
 begin
   FCommandSelected := nil;
   FCommandAsArgument := nil;
-  SetLength(FParsedArgs, 0); 
+  SetLength(FProvidedArgs, 0); 
   SetLength(FParsedErrors, 0);
   FCommandsFound := 0;
 
@@ -544,17 +551,17 @@ begin
   begin
     for I := 0 to Length(FExternalArguments) - 1 do
       if Copy(FExternalArguments[I], 1, 1) <> '-' then
-        AppendToArray(FParsedArgs, FExternalArguments[I])
+        AppendToArray(FProvidedArgs, FExternalArguments[I])
       else
-        AppendToArray(FParsedOptions, FExternalArguments[I]);
+        AppendToArray(FProvidedOptions, FExternalArguments[I]);
   end
   else
   begin
     for I := 1 to ParamCount do
       if Copy(ParamStr(I), 1, 1) <> '-' then
-        AppendToArray(FParsedArgs, ParamStr(I))
+        AppendToArray(FProvidedArgs, ParamStr(I))
       else
-        AppendToArray(FParsedOptions, ParamStr(I));
+        AppendToArray(FProvidedOptions, ParamStr(I));
   end;
 end;
 
@@ -562,9 +569,9 @@ procedure TCommandBuilder.ParseCommands;
 var
   I, J: Integer;
 begin
-  for I := 0 to Length(FParsedArgs) - 1 do
+  for I := 0 to Length(FProvidedArgs) - 1 do
     for J := 0 to Length(FCommands) - 1 do
-      if SameText(FCommands[J].Name, FParsedArgs[I]) then
+      if SameText(FCommands[J].Name, FProvidedArgs[I]) then
       begin
         if not Assigned(FCommandSelected) then 
           FCommandSelected := FCommands[J]
@@ -572,12 +579,38 @@ begin
           FCommandAsArgument := FCommands[J];
         Inc(FCommandsFound);
       end;
+  
+  if not Assigned(FCommandSelected) then
+    FCommandSelected := GetDefaultCommand;
+
+end;
+
+procedure TCommandBuilder.ParseOptions;
+var
+  LOption: IOption;
+  LRawOption, LOptionCleaned: string;
+begin
+  SetLength(FParsedOptions, 0);
+  if not Assigned(CommandSelected) then 
+    Exit;
+
+  for LOption in CommandSelected.Options do
+    for LRawOption in FProvidedOptions do
+    begin
+      LOptionCleaned := RemoveStartingDashes(LRawOption);
+      if AnsiMatchText(LOptionCleaned, [LOption.Flag, LOption.Name]) then
+      begin
+        SetLength(FParsedOptions, Length(FParsedOptions) + 1);
+        FParsedOptions[Length(FParsedOptions) - 1] := LOption;
+      end;
+    end;
 end;
 
 procedure TCommandBuilder.Parse; 
 begin
   ParseArguments;
   ParseCommands;
+  ParseOptions;  
 end;
 
 procedure TCommandBuilder.Validate;  
@@ -589,9 +622,6 @@ begin
  
   if ParsedErrorsShow then
     Exit;
-
-  if not Assigned(FCommandSelected) then
-    FCommandSelected := GetDefaultCommand;
 end;
 
 procedure TCommandBuilder.Execute;
@@ -623,22 +653,18 @@ begin
 end;
 
 function TCommandBuilder.GetParsedOptions: TArray<IOption>;
-var
-  LArray: TArray<IOption> = [];
-  LOption: IOption;
-  LRawOption, LOptionCleaned: string;
 begin
-  for LOption in CommandSelected.Options do
-    for LRawOption in FParsedOptions do
-    begin
-      LOptionCleaned := RemoveStartingDashes(LRawOption);
-      if AnsiMatchText(LOptionCleaned, [LOption.Flag, LOption.Name]) then
-      begin
-        SetLength(LArray, Length(LArray) + 1);
-        LArray[Length(LArray) - 1] := LOption;
-      end;
-    end;
-  Result := LArray;
+  Result := FParsedOptions;
+end;
+
+function TCommandBuilder.CheckOption(const AOption: string): Boolean;
+var
+  LOption: IOption;
+begin
+  Result := False;
+  for LOption in FParsedOptions do
+    if AnsiMatchText(AOption, [LOption.Flag, LOption.Name]) then
+      Exit(True);
 end;
 
 function TCommandBuilder.GetParsedArguments: TArray<IArgument>;
@@ -657,12 +683,12 @@ begin
   for I := 0 to Length(FArguments) - 1 do
   begin
     // busca pelo primeiro argumento que não é um comando
-    for J := LStart to Length(FParsedArgs) - 1 do
-      if (not SameText(FParsedArgs[J], LCmdSel)) and (not SameText(FParsedArgs[J], LCmdArg)) then
+    for J := LStart to Length(FProvidedArgs) - 1 do
+      if (not SameText(FProvidedArgs[J], LCmdSel)) and (not SameText(FProvidedArgs[J], LCmdArg)) then
       begin
         SetLength(LArray, Length(LArray) + 1);
         LArray[Length(LArray) - 1] := FArguments[I];
-        FArguments[I].Value := FParsedArgs[J];
+        FArguments[I].Value := FProvidedArgs[J];
         LStart := J + 1;
       end;
   end;
@@ -672,12 +698,12 @@ end;
 
 function TCommandBuilder.GetRawArguments: TArray<string>;
 begin
-  Result := FParsedArgs;
+  Result := FProvidedArgs;
 end;
 
 function TCommandBuilder.GetRawOptions: TArray<string>;
 begin
-  Result := FParsedOptions;
+  Result := FProvidedOptions;
 end;
 
 function TCommandBuilder.GetCommandsFound: Integer;

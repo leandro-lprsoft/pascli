@@ -9,7 +9,7 @@
       "type": "by-gdb",
       "request": "launch",
       "program": "./tests/TestPascli",
-      "programArgs": "--suite=TestDefaultCommandWithOptionsWithoutProvidingCommand",
+      "programArgs": "--suite=TESTWRITECOMMANDUSAGEWITHARGUMENTANDOPTION",
       "cwd": "${workspaceRoot}"
     }
   ]

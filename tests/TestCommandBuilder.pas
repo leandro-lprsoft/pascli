@@ -45,6 +45,7 @@ type
     procedure TestParseCommandsFound;
     procedure TestGetDefaultCommand;
     procedure TestParsedOptions;
+    procedure TestCheckOption;
     procedure TestParsedArguments;
     procedure TestGetRawArguments;
     procedure TestGetRawOptions;
@@ -337,6 +338,26 @@ begin
   AssertEquals('Must match number of options found', 2, Length(LOptions));
   AssertEquals('First option should be', 'a', LOptions[0].Flag);
   AssertEquals('Second option should be', 'b', LOptions[1].Flag);
+end;
+
+procedure TTestCommandBuilder.TestCheckOption;
+begin
+   // arrange
+  FBuilder
+    .AddCommand('cmd', 'cmd command', MockCommand, [ccDefault])
+      .AddOption('a', 'a-option', 'a option', [])
+      .AddOption('b', 'long-option', 'long option name to be used as argument', [])
+      .AddOption('c', 'c-option', 'shoud not be used is this test')
+    .UseArguments(['cmd', '-a', '--long-option', '--invalidoption'])
+    .Parse;
+
+  // assert
+  AssertTrue('Must find option "a"', FBuilder.CheckOption('a'));
+  AssertTrue('Must find option "a-option"', FBuilder.CheckOption('a-option'));
+  AssertTrue('Must find option "b"', FBuilder.CheckOption('b'));
+  AssertTrue('Must find option "long-option"', FBuilder.CheckOption('long-option'));  
+  AssertFalse('Must ignore "invalidoption"', FBuilder.CheckOption('invalidoption'));
+  AssertFalse('Must not find "c-option"', FBuilder.CheckOption('c-option'));
 end;
 
 procedure TTestCommandBuilder.TestParsedArguments;
