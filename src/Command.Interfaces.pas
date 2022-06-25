@@ -18,6 +18,14 @@ type
   IValidatorContext = interface;
   IValidatorBase = interface;
 
+  /// color theme for colored output
+  TColorTheme = record
+    Title: Byte;
+    Value: Byte;
+    Text: Byte;
+    Other: Byte;
+  end;  
+
   /// Command constraints enum
   TCommandConstraint = (ccDefault, ccRequiresOneArgument, ccRequiresOneOption, ccNoArgumentsButCommands,
     ccNoParameters);
@@ -31,6 +39,10 @@ type
 
   /// callback that will be used to print out any info like command usage or message validations
   TOutputCallback = procedure (const AMessage: string);
+
+  /// callback that will be used to print out any info like command usage or message validations
+  /// with color
+  TOutputColorCallback = procedure (const AMessage: string; const AColor: byte);
 
   /// option
   IOption = interface
@@ -211,8 +223,19 @@ type
     procedure SetOutput(AValue: TOutputCallback);
     property Output: TOutputCallback read GetOutput write SetOutput;
 
+    /// output callback procedure that will be called to print command usage and messages validation
+    /// with color
+    function GetOutputColor: TOutputColorCallback;
+    procedure SetOutputColor(AValue: TOutputColorCallback);
+    property OutputColor: TOutputColorCallback read GetOutputColor write SetOutputColor;    
+
     /// allows to inject external arguments instead of reading from ParamStr()
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
+
+    /// Color theme that should be used to output colors of commands, its use is optional
+    function GetColorTheme: TColorTheme;
+    procedure SetColorTheme(AValue: TColorTheme);
+    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;    
 
   end;
 
@@ -244,7 +267,6 @@ type
     function Validate(ACommand: ICommandBuilder): TArray<string>;
 
   end;
-
 
 implementation
 

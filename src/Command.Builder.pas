@@ -128,6 +128,8 @@ type
   private
     FExeName: string;
     FOutput: TOutputCallback;
+    FOutputColor: TOutputColorCallback;
+    FColorTheme: TColorTheme;
     FCommands: TArray<ICommand>;
     FArguments: TArray<IArgument>;
 
@@ -156,6 +158,16 @@ type
 
     function GetOutput: TOutputCallback;
     procedure SetOutput(AValue: TOutputCallback);
+
+    /// output callback procedure that will be called to print command usage and messages validation
+    /// with color
+    function GetOutputColor: TOutputColorCallback;
+    procedure SetOutputColor(AValue: TOutputColorCallback);
+    
+
+    /// Color theme that should be used to output colors of commands, its use is optional
+    function GetColorTheme: TColorTheme;
+    procedure SetColorTheme(AValue: TColorTheme);
 
     procedure ParseArguments;
     procedure ParseCommands;
@@ -248,19 +260,28 @@ type
     /// output callback procedure that will be called to print command usage and messages validation
     property Output: TOutputCallback read GetOutput write SetOutput;
 
+    /// output callback procedure that will be called to print command usage and messages validation
+    /// with color
+    property OutputColor: TOutputColorCallback read GetOutputColor write SetOutputColor;        
+
     /// allows to inject external arguments instead of reading from ParamStr()
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
+
+    /// Color theme that should be used to output colors of commands, its use is optional
+    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;        
 
   end;
 
   procedure StandardConsoleOutput(const AMessage: string);
+  procedure ColorConsoleOutput(const AMessage: string; const AColor: byte);
 
 implementation
 
 uses
   StrUtils,
   Command.Helpers,
-  Command.Validator;
+  Command.Validator,
+  Command.Colors;
 
 class function TOption.New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>): IOption;
 var
@@ -451,15 +472,15 @@ begin
   FCommandSelected := nil;
   FCommandAsArgument := nil;
   FUseExternalArguments := False;
+  FColorTheme := DarkColorTheme;
   SetLength(FExternalArguments, 0);
   FOutput := StandardConsoleOutput;
+  FOutputColor := ColorConsoleOutput;
 end;
 
 function TCommandBuilder.AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
   AConstraints: TCommandConstraints): ICommandBuilder;
 begin
-  
-
   SetLength(FCommands, Length(FCommands) + 1);
   FCommands[Length(FCommands) - 1] := TCommand.New(ACommand, ADescription, ACallback, AConstraints);
   Result := Self;
@@ -750,6 +771,26 @@ begin
   FOutput := AValue;
 end;
 
+function TCommandBuilder.GetOutputColor: TOutputColorCallback;
+begin
+  Result := FOutputColor;
+end;
+
+procedure TCommandBuilder.SetOutputColor(AValue: TOutputColorCallback);
+begin
+  FOutputColor := AValue;
+end;
+
+function TCommandBuilder.GetColorTheme: TColorTheme;
+begin
+  Result := FColorTheme;
+end;
+
+procedure TCommandBuilder.SetColorTheme(AValue: TColorTheme);
+begin
+  FColorTheme := AValue;
+end;
+
 function TCommandBuilder.UseArguments(AArguments: TArray<string>): ICommandBuilder;
 begin
   FExternalArguments := AArguments;
@@ -760,6 +801,12 @@ end;
 procedure StandardConsoleOutput(const AMessage: string);
 begin
   WriteLn(AMessage);
+end;
+
+procedure ColorConsoleOutput(const AMessage: string; const AColor: byte);
+begin
+  ChangeConsoleColor(AColor);
+  Write(AMessage);
 end;
 
 end.

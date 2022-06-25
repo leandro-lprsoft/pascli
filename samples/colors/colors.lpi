@@ -10,7 +10,7 @@
         <MainUnitHasScaledStatement Value="False"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="basic"/>
+      <Title Value="colors"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
@@ -35,7 +35,7 @@
     </RunParams>
     <Units>
       <Unit>
-        <Filename Value="basic.lpr"/>
+        <Filename Value="colors.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
@@ -44,7 +44,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="basic"/>
+      <Filename Value="colors"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

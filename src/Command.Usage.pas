@@ -31,6 +31,10 @@ uses
 
 implementation
 
+uses
+  Command.Builder,
+  Command.Colors;
+
 function GetArgumentList(ABuilder: ICommandBuilder): string;
 var
   LArgument: IArgument;
@@ -42,13 +46,13 @@ end;
 
 procedure WriteUsage(ABuilder: ICommandBuilder; const ATitle, ACommand, AOptions, AArgument: string);
 begin
-  ABuilder.Output(
-    Format(#13#10'Usage: %s %s%s%s'#13#10, [
-      ATitle, 
-      ACommand, 
-      AOptions, 
-      AArgument]
-  ));
+  ABuilder.OutputColor(#13#10'Usage: ', ABuilder.ColorTheme.Title);
+
+  ABuilder.OutputColor(
+    Format('%s%s', [ACommand, AOptions]),
+    ABuilder.ColorTheme.Value);
+
+  ABuilder.OutputColor(AArgument + #13#10, ABuilder.ColorTheme.Value);
 end;
 
 procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
@@ -104,12 +108,13 @@ begin
     IfThen(ABuilder.CommandAsArgument.HasOptions, '[options] ', ''), 
     LArguments);
 
-  ABuilder.Output(ABuilder.CommandAsArgument.Description);
+  ABuilder.Output('');
+  ABuilder.OutputColor(ABuilder.CommandAsArgument.Description + #13#10, ABuilder.ColorTheme.Text);
   ABuilder.Output('');
 
   if ABuilder.CommandAsArgument.HasOptions then
   begin
-    ABuilder.Output('Options: ');
+    ABuilder.OutputColor('Options: ' + #13#10, ABuilder.ColorTheme.Title);
 
     for LOption in ABuilder.CommandAsArgument.Options do
       ABuilder.Output(Format('  %s%s%s', [
