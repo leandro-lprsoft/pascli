@@ -35,6 +35,8 @@ uses
 var
   Application: TCommandApp;
 
+{$R *.res} // important to build version info
+
 procedure HelloCommand(ABuilder: ICommandBuilder);
 begin
   WriteLn('Hello world!');
