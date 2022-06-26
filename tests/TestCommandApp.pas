@@ -37,6 +37,7 @@ var
   LCommand: ICommandBuilder;
   LInvokedMethods: TStringList;
 begin
+  {$IFDEF WINDOWS}
   LInvokedMethods := TStringList.Create;
   try
     LCommand := TCommandBuildMock.New<ICommandBuilder>(LInvokedMethods);
@@ -49,6 +50,7 @@ begin
   finally
     LInvokedMethods.Free;
   end;
+  {$ENDIF}
 end;
 
 procedure TTestCommandApp.SetUp;

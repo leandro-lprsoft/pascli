@@ -236,12 +236,6 @@ begin
   // asserts
   LExpectUsage := Format('Usage: %s %s [%s] <%s>', [FExeName, 'cmd_with_opt', 'options', 'arg1']);
   LExpectDesc := 'command that requires options';
-
-  WriteLn('***********************************************');
-  WriteLn('LExpectUsage: ', LExpectUsage);
-  WriteLn('***********************************************');
-  WriteLn('Capture: ', CapturedOutput);
-  WriteLn('***********************************************');
   
   AssertTrue('Should have usage instruction for the command with [options]', 
     ContainsText(CapturedOutput, LExpectUsage));
