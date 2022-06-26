@@ -36,7 +36,7 @@ const
 
 var
   StartupColor: byte;
-  LightColorTheme, DarkColorTheme: TColorTheme;
+  StartColorTheme, LightColorTheme, DarkColorTheme: TColorTheme;
 
 implementation
 
@@ -106,13 +106,17 @@ end;
 
 procedure InitalizeColorThemes;
 begin
+  StartColorTheme.Title := StartupColor;
+  StartColorTheme.Value := StartupColor;
+  StartColorTheme.Text := StartupColor;
+  StartColorTheme.Other := StartupColor;
   LightColorTheme.Title := Blue;
   LightColorTheme.Value := Magenta;
   LightColorTheme.Text := DarkGray;
   LightColorTheme.Other := DarkGray;
-  DarkColorTheme.Title := LightGreen;
-  DarkColorTheme.Value := LightBlue;
-  DarkColorTheme.Text := Yellow;
+  DarkColorTheme.Title := Magenta;
+  DarkColorTheme.Value := LightGreen;
+  DarkColorTheme.Text := LightBlue;
   DarkColorTheme.Other := White;
 end;
 

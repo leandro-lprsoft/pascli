@@ -34,6 +34,8 @@ begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'Basic CLI tool with colors.';
 
+  Application.CommandBuilder.ColorTheme := DarkColorTheme;
+
   Command.Usage.Registry(Application.CommandBuilder);
   Command.Version.Registry(Application.CommandBuilder);
   

@@ -51,11 +51,17 @@ begin
   CapturedOutput := CapturedOutput + AMessage + #13#10;
 end;
 
+procedure MockOutputColor(const AMessage: string; const AColor: Byte);
+begin
+  CapturedOutput := CapturedOutput + AMessage;
+end;
+
 procedure TTestCommandUsage.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'testcmdapp';
   FApplication.CommandBuilder.Output := MockOutput;
+  FApplication.CommandBuilder.OutputColor := MockOutputColor;
   FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   CapturedOutput := '';
 end;
@@ -231,6 +237,12 @@ begin
   LExpectUsage := Format('Usage: %s %s [%s] <%s>', [FExeName, 'cmd_with_opt', 'options', 'arg1']);
   LExpectDesc := 'command that requires options';
 
+  WriteLn('***********************************************');
+  WriteLn('LExpectUsage: ', LExpectUsage);
+  WriteLn('***********************************************');
+  WriteLn('Capture: ', CapturedOutput);
+  WriteLn('***********************************************');
+  
   AssertTrue('Should have usage instruction for the command with [options]', 
     ContainsText(CapturedOutput, LExpectUsage));
   AssertTrue('Should text "option A is nice"', ContainsText(CapturedOutput, 'option A is nice'));

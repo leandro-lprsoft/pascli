@@ -53,7 +53,8 @@ begin
 
 procedure VersionCommand(ABuilder: ICommandBuilder);
 begin
-  ABuilder.Output(ABuilder.ExeName + ' ' + ResourceVersionInfo);
+  ABuilder.OutputColor(ABuilder.ExeName + ' ', ABuilder.ColorTheme.Value);
+  ABuilder.OutputColor(ResourceVersionInfo + #13#10, ABuilder.ColorTheme.Other);
 end;
 
 procedure Registry(ABuilder: ICommandBuilder);

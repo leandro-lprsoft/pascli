@@ -33,7 +33,8 @@ implementation
 
 uses
   Command.Builder,
-  Command.Colors;
+  Command.Colors,
+  Command.Version;
 
 function GetArgumentList(ABuilder: ICommandBuilder): string;
 var
@@ -46,10 +47,12 @@ end;
 
 procedure WriteUsage(ABuilder: ICommandBuilder; const ATitle, ACommand, AOptions, AArgument: string);
 begin
+  VersionCommand(ABuilder);
+
   ABuilder.OutputColor(#13#10'Usage: ', ABuilder.ColorTheme.Title);
 
   ABuilder.OutputColor(
-    Format('%s%s', [ACommand, AOptions]),
+    Format('%s %s%s', [ATitle, ACommand, AOptions]),
     ABuilder.ColorTheme.Value);
 
   ABuilder.OutputColor(AArgument + #13#10, ABuilder.ColorTheme.Value);
@@ -69,13 +72,17 @@ begin
     IfThen(ABuilder.HasOptions, '[options] ', ''), 
     LArguments);
 
-  ABuilder.Output('Commands: ');
+  ABuilder.Output('');
+  ABuilder.OutputColor('Commands: '#13#10, ABuilder.ColorTheme.Title);
   
   for LCommand in ABuilder.Commands do
-    ABuilder.Output(Format('  %s%s', [
-      PadRight(LCommand.Name, 15),
-      StringReplace(LCommand.Description, #13#10, #13#10 + PadLeft('', 17), [rfReplaceAll])
-    ]));
+  begin
+    ABuilder.OutputColor('  ' + PadRight(LCommand.Name, 15), ABuilder.ColorTheme.Value);
+    ABuilder.OutputColor(
+      StringReplace(LCommand.Description, #13#10, #13#10 + PadLeft('', 17), [rfReplaceAll]), 
+      ABuilder.ColorTheme.Other);
+    ABuilder.Output('');
+  end;
 
   ABuilder.Output('');
   ABuilder.Output(
@@ -109,7 +116,7 @@ begin
     LArguments);
 
   ABuilder.Output('');
-  ABuilder.OutputColor(ABuilder.CommandAsArgument.Description + #13#10, ABuilder.ColorTheme.Text);
+  ABuilder.OutputColor(ABuilder.CommandAsArgument.Description + #13#10, ABuilder.ColorTheme.Other);
   ABuilder.Output('');
 
   if ABuilder.CommandAsArgument.HasOptions then
@@ -117,11 +124,19 @@ begin
     ABuilder.OutputColor('Options: ' + #13#10, ABuilder.ColorTheme.Title);
 
     for LOption in ABuilder.CommandAsArgument.Options do
-      ABuilder.Output(Format('  %s%s%s', [
-        PadRight('-' + LOption.Flag + ',', 4),
-        PadRight('--' + LOption.Name, 20),
-        StringReplace(LOption.Description, #13#10, #13#10 + PadLeft('', 30), [rfReplaceAll])
-      ]));  
+    begin
+      ABuilder.OutputColor(
+        Format('  %s%s', [
+          PadRight('-' + LOption.Flag + ',', 4),
+          PadRight('--' + LOption.Name, 20)
+          ]), 
+        ABuilder.ColorTheme.Value);  
+
+      ABuilder.OutputColor(
+        StringReplace(LOption.Description, #13#10, #13#10 + PadLeft('', 30), [rfReplaceAll]) + #13#10,
+        ABuilder.ColorTheme.Other);
+
+    end;
 
     ABuilder.Output('');
   end;

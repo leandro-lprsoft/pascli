@@ -129,6 +129,7 @@ Command.Usage.Registry(Application.CommandBuilder);
 ```pascal
 Command.Version.Registry(Application.CommandBuilder);
 ```
+* Console colors output using Command.Colors unit. Check "colors" sample project.
 * Full unit test implementation.
 
 ## License

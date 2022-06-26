@@ -40,12 +40,18 @@ begin
   CapturedOutput := CapturedOutput + AMessage + #13#10;
 end;
 
+procedure MockOutputColor(const AMessage: string; const AColor: Byte);
+begin
+  CapturedOutput := CapturedOutput + AMessage;
+end;
+
 procedure TTestCommandVersion.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
   FApplication.Title := 'version app';
   FBuilder := FApplication.CommandBuilder;
   FApplication.CommandBuilder.Output := MockOutput;
+  FApplication.CommandBuilder.OutputColor := MockOutputColor;
   CapturedOutput := '';
 end;
 
@@ -63,7 +69,7 @@ begin
   VersionCommand(FBuilder);
 
   // assert
-  AssertTrue('should have "Commands:" text', ContainsText(CapturedOutput, 'version'));
+  AssertTrue('should have "version" text', ContainsText(CapturedOutput, 'version'));
 end;
 
 initialization

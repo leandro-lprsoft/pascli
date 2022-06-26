@@ -472,7 +472,7 @@ begin
   FCommandSelected := nil;
   FCommandAsArgument := nil;
   FUseExternalArguments := False;
-  FColorTheme := DarkColorTheme;
+  FColorTheme := StartColorTheme;
   SetLength(FExternalArguments, 0);
   FOutput := StandardConsoleOutput;
   FOutputColor := ColorConsoleOutput;
