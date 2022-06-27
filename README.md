@@ -11,7 +11,10 @@ Object Pascal CLI library for ease development of command line applications
 
 * Installation using the [**Boss**](https://github.com/HashLoad/boss):
 
+Create a new project and save it. Open a terminal at the project location and type:
+
 ```
+boss init --quiet
 boss install github.com/leandro-lprsoft/pascli
 ```
 
