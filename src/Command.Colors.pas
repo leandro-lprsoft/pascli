@@ -114,14 +114,18 @@ begin
   LightColorTheme.Value := Magenta;
   LightColorTheme.Text := DarkGray;
   LightColorTheme.Other := DarkGray;
-  DarkColorTheme.Title := Magenta;
+  DarkColorTheme.Title := Yellow;
   DarkColorTheme.Value := LightGreen;
   DarkColorTheme.Text := LightBlue;
   DarkColorTheme.Other := White;
 end;
 
 initialization
+  {$IF DEFINED(WINDOWS)}
   StartupColor := GetTextColor;
+  {$ELSE}
+  StartupColor := 7;
+  {$ENDIF}
   InitalizeColorThemes;
 
 finalization
