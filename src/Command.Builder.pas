@@ -127,24 +127,23 @@ type
   TCommandBuilder = class(TInterfacedObject, ICommandBuilder)
   private
     FExeName: string;
+    FInputLn: TInputLnCallback;
     FOutput: TOutputCallback;
     FOutputColor: TOutputColorCallback;
     FColorTheme: TColorTheme;
     FCommands: TArray<ICommand>;
     FArguments: TArray<IArgument>;
-
     FUseExternalArguments: Boolean;
     FExternalArguments: TArray<string>;
     FProvidedArgs: TArray<string>;
     FProvidedOptions: TArray<string>;
     FParsedErrors: TArray<string>;
-
     FCommandSelected: ICommand;
     FCommandAsArgument: ICommand;
-
     FParsedOptions: TArray<IOption>;
-
     FCommandsFound: Integer;
+
+    procedure AppendProvidedOptions(const AParam: string);
 
     function GetCommand(const AName: string): ICommand;
 
@@ -156,6 +155,9 @@ type
 
     function GetArgument(const AName: string): IArgument;
 
+    function GetInputLn: TInputLnCallback;
+    procedure SetInputLn(AValue: TInputLnCallback);
+
     function GetOutput: TOutputCallback;
     procedure SetOutput(AValue: TOutputCallback);
 
@@ -163,7 +165,6 @@ type
     /// with color
     function GetOutputColor: TOutputColorCallback;
     procedure SetOutputColor(AValue: TOutputColorCallback);
-    
 
     /// Color theme that should be used to output colors of commands, its use is optional
     function GetColorTheme: TColorTheme;
@@ -207,7 +208,7 @@ type
     procedure Parse;
 
     /// validate supplied command and arguments
-    procedure Validate;    
+    function Validate: TArray<string>;   
 
     /// executes the command
     procedure Execute;
@@ -257,6 +258,9 @@ type
     /// returns if builder has any option set on root or in any command
     function HasOptions: Boolean;
 
+    /// callback function that will be used to read user input from console and returns a key
+    property InputLn: TInputLnCallback read GetInputLn write SetInputLn;
+
     /// output callback procedure that will be called to print command usage and messages validation
     property Output: TOutputCallback read GetOutput write SetOutput;
 
@@ -271,6 +275,8 @@ type
     property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;        
 
   end;
+
+  function StandardConsoleInputLn: string;
 
   procedure StandardConsoleOutput(const AMessage: string);
   procedure ColorConsoleOutput(const AMessage: string; const AColor: byte);
@@ -290,6 +296,10 @@ begin
   if AFlag = '' then
     raise Exception.CreateFmt(
       'A valid flag parameter for Command "--%s" should be provided.', [AName]);
+
+  if (Copy(AFlag, 1, 1) = '-') or (Copy(AName, 1, 1) = '-')  then      
+    raise Exception.CreateFmt(
+      'A valid flag or name option should not start with a "-"', [AFlag]);
 
   for LFlag in ANotAllowedFlags do
     if Length(LFlag) <> 1 then
@@ -401,7 +411,7 @@ var
 begin
   Result := nil;
   for I := 0 to Length(FOptions) - 1 do
-    if FOptions[I].Name = AIndex then
+    if SameText(FOptions[I].Name, AIndex) or SameText(FOptions[I].Flag, AIndex) then
       Exit(FOptions[I]);
 end;
 
@@ -474,6 +484,7 @@ begin
   FUseExternalArguments := False;
   FColorTheme := StartColorTheme;
   SetLength(FExternalArguments, 0);
+  FInputLn := StandardConsoleInputLn;
   FOutput := StandardConsoleOutput;
   FOutputColor := ColorConsoleOutput;
 end;
@@ -574,7 +585,7 @@ begin
       if Copy(FExternalArguments[I], 1, 1) <> '-' then
         AppendToArray(FProvidedArgs, FExternalArguments[I])
       else
-        AppendToArray(FProvidedOptions, FExternalArguments[I]);
+        AppendProvidedOptions(FExternalArguments[I]);
   end
   else
   begin
@@ -582,7 +593,7 @@ begin
       if Copy(ParamStr(I), 1, 1) <> '-' then
         AppendToArray(FProvidedArgs, ParamStr(I))
       else
-        AppendToArray(FProvidedOptions, ParamStr(I));
+        AppendProvidedOptions(FExternalArguments[I]);
   end;
 end;
 
@@ -634,13 +645,14 @@ begin
   ParseOptions;  
 end;
 
-procedure TCommandBuilder.Validate;  
+function TCommandBuilder.Validate: TArray<string>;  
 var
   LValidatorContext: IValidatorContext;
 begin
   LValidatorContext := TValidatorContext.Create;
   FParsedErrors := LValidatorContext.Validate(Self);
- 
+  Result := FParsedErrors;
+   
   if ParsedErrorsShow then
     Exit;
 end;
@@ -676,6 +688,17 @@ end;
 function TCommandBuilder.GetParsedOptions: TArray<IOption>;
 begin
   Result := FParsedOptions;
+end;
+
+procedure TCommandBuilder.AppendProvidedOptions(const AParam: string);
+var
+  I: Integer;
+begin
+  if StartsText('--', AParam) then
+    AppendToArray(FProvidedOptions, AParam)
+  else
+    for I := 2 to Length(AParam) do
+      AppendToArray(FProvidedOptions, '-' + Copy(AParam, I, 1));
 end;
 
 function TCommandBuilder.CheckOption(const AOption: string): Boolean;
@@ -761,6 +784,16 @@ begin
       Exit(True);
 end;
 
+procedure TCommandBuilder.SetInputLn(AValue: TInputLnCallback);
+begin
+  FInputLn := AValue; 
+end;
+
+function TCommandBuilder.GetInputLn: TInputLnCallback;
+begin
+  Result := FInputLn;
+end;
+
 function TCommandBuilder.GetOutput: TOutputCallback;
 begin
   Result := FOutput;
@@ -796,6 +829,14 @@ begin
   FExternalArguments := AArguments;
   FUseExternalArguments := True;
   Result := Self;
+end;
+
+function StandardConsoleInputLn: string;
+var
+  LResult: string = '';
+begin
+  ReadLn(LResult);
+  Result := LResult;
 end;
 
 procedure StandardConsoleOutput(const AMessage: string);

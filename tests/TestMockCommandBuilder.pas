@@ -26,21 +26,37 @@ type
   end;
 
   procedure MockCommand(ABuilder: ICommandBuilder);
+  function MockInputLn: string;
 
 var
-  MockCommandCapture: string;
+  MockCommandCapture, MockInputLnResult: string;
 
 implementation
+
+uses
+  StrUtils;
 
 procedure MockCommand(ABuilder: ICommandBuilder);
 begin  
   MockCommandCapture := 'executed';
 end;
 
+function MockInputLn: string;
+begin
+  Result := MockInputLnResult;
+end;
+
 procedure TCommandBuildMock.HandleInvoke(aMethod: TRttiMethod; const aArgs: TValueArray; 
   out aResult: TValue);
+var
+  LResult: TArray<string>;
 begin
   FData.Add(aMethod.Name);
+  if SameText(aMethod.Name, 'validate') then
+  begin
+    SetLength(LResult, 0);
+    aResult := TValue.From<TStringArray>(LResult);
+  end;
 end;
 
 constructor TCommandBuildMock.Create(aTypeInfo: PTypeInfo; AData: TStringList);
