@@ -64,6 +64,7 @@ type
     function GetOptions: TArray<IOption>;
 
   public
+    constructor Create;
 
     /// command name that will bu used as a command line argument
     property Name: string read GetName write SetName;
@@ -344,6 +345,10 @@ begin
   Result := FNotAllowedFlags;
 end;
 
+constructor TCommand.Create;
+begin
+  SetLength(FOptions, 0);
+end;
 
 class function TCommand.New(const AName, ADescription: string; ACallback: TCommandCallback; 
   AConstraints: TCommandConstraints): ICommand;
@@ -756,6 +761,7 @@ function TCommandBuilder.HasOptions: Boolean;
 var
   I: Integer;
 begin
+  Result := False;
   for I := 0 to Length(FCommands) - 1 do
     if (Length(FCommands[I].Options) > 0) then
       Exit(True);

@@ -121,7 +121,11 @@ begin
 end;
 
 initialization
+  {$IF DEFINED(WINDOWS)}
   StartupColor := GetTextColor;
+  {$ELSE}
+  StartupColor := 7;
+  {$ENDIF}
   InitalizeColorThemes;
 
 finalization
