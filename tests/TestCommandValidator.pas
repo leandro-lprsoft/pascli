@@ -33,7 +33,10 @@ type
     procedure TestDuplicateOptionValidatorError;
     procedure TestDuplicateOptionValidatorErrorUsingShortAndLongOption;
     procedure TestDuplicateOptionValidatorWorks;
+    procedure TestMultipleOptionsSameDash;
     procedure TestProvidedArgumentsAreNotValid;
+    procedure TestProvidedArgumentsAreNotRequired;
+    procedure TestProvidedArgumentsAreNotRequiredShouldNotRaise;
     procedure TestProvidedArgumentsAreNotValidWorksWithArgument;
     procedure TestProvidedArgumentsExceedsAcceptedLimit;
     procedure TestSelectedCommandDoesNotAcceptCommandAsArgument;
@@ -101,8 +104,8 @@ begin
   FBuilder
       .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
       .AddCommand('other', 'other command', nil, [])
-        .AddOption('-d', '--debug', 'debug option', [])
-        .AddOption('-r', '--run', 'run option', [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [])
       .UseArguments(['other', '-d', '-d'])
       .Parse;
 
@@ -113,7 +116,7 @@ begin
   // assert
   AssertEquals('Array length should be equals 1', 1, Length(FArray));
   if Length(FArray) > 0 then
-    AssertEquals('Duplicate option "-d" was provided', FArray[0]);
+    AssertEquals('Duplicate options "-d", "-d" provided', FArray[0]);
 end;
 
 procedure TTestCommandValidator.TestDuplicateOptionValidatorErrorUsingShortAndLongOption;
@@ -122,8 +125,8 @@ begin
   FBuilder
       .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
       .AddCommand('other', 'other command', nil, [])
-        .AddOption('-d', '--debug', 'debug option', [])
-        .AddOption('-r', '--run', 'run option', [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [])
       .UseArguments(['other', '-d', '--debug'])
       .Parse;
 
@@ -134,7 +137,9 @@ begin
   // assert
   AssertEquals('Array length should be equals 1', 1, Length(FArray));
   if Length(FArray) > 0 then
-    AssertEquals('Duplicate option "--debug" was provided. Option -d is equivalent to --debug', FArray[0]);  
+    AssertEquals(
+      'Duplicate options "-d", "--debug" provided. Option -d is equivalent to --debug', 
+      FArray[0]);  
 end;
 
 procedure TTestCommandValidator.TestDuplicateOptionValidatorWorks;
@@ -143,8 +148,8 @@ begin
   FBuilder
       .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
       .AddCommand('other', 'other command', nil, [])
-        .AddOption('-d', '--debug', 'debug option', [])
-        .AddOption('-r', '--run', 'run option', [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [])
       .UseArguments(['other', '-d', '-r']) // should work
       .Parse;
 
@@ -172,7 +177,44 @@ begin
   // assert
   AssertEquals('Array length should be equals 0', 1, Length(FArray)); 
   if Length(FArray) > 0 then
-    AssertEquals('Provided argumentos are not valid.', FArray[0]);    
+    AssertEquals('Provided arguments are not valid.', FArray[0]);    
+end;
+
+procedure TTestCommandValidator.TestProvidedArgumentsAreNotRequired;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+      .UseArguments(['invalidcommand']) // should work
+      .Parse;
+
+  // act
+  FValidator := TProvidedArgumentsAreNotRequired.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 0', 1, Length(FArray)); 
+  if Length(FArray) > 0 then
+    AssertEquals('Provided arguments are not required.', FArray[0]);    
+end;
+
+procedure TTestCommandValidator.TestProvidedArgumentsAreNotRequiredShouldNotRaise;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+      .AddArgument('any argument', acOptional)
+      .UseArguments(['invalidcommand']) // should work
+      .Parse;
+
+  // act
+  FValidator := TProvidedArgumentsAreNotRequired.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 0', 0, Length(FArray));
 end;
 
 procedure TTestCommandValidator.TestProvidedArgumentsAreNotValidWorksWithArgument;
@@ -348,6 +390,27 @@ begin
       Exception, 
       AddOptionInvalidNotAllowedFlag,
       'Not allowed option "debug" invalid for Command "--valid". Only flags should be used.');        
+end;
+
+procedure TTestCommandValidator.TestMultipleOptionsSameDash;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [])
+      .UseArguments(['other', '-dra'])
+      .Parse;
+
+  // act
+  FValidator := TSelectedCommandValidateIfOptionsExists.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 1', 1, Length(FArray));
+  if Length(FArray) > 0 then
+    AssertEquals('Command "other" invalid. Option not found: -a', FArray[0]);
 end;
 
 initialization

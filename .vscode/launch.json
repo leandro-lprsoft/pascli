@@ -6,10 +6,10 @@
   "configurations": [
     {
       "name": "Debug - Tests",
-      "type": "by-gdb",
+      "type": "gdb",
       "request": "launch",
-      "program": "./tests/TestPascli",
-      "programArgs": "--suite=TESTWRITECOMMANDUSAGEWITHARGUMENTANDOPTION",
+      "target": "./tests/TestPascli.exe",
+      "arguments": "--suite=TestParseCommandWithInvalidOption",
       "cwd": "${workspaceRoot}"
     }
   ]

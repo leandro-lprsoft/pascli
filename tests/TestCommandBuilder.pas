@@ -43,6 +43,7 @@ type
     procedure TestParseCommandSelectedProvided;
     procedure TestParseCommandAsArgument;
     procedure TestParseCommandsFound;
+    procedure TestParseCommandWithInvalidOption;
     procedure TestGetDefaultCommand;
     procedure TestParsedOptions;
     procedure TestCheckOption;
@@ -53,6 +54,7 @@ type
     procedure TestHasArguments;
     procedure TestHasOptions;
     procedure TestDefaultCommandWithOptionsWithoutProvidingCommand;
+    procedure TestInputLn;
   end;
 
 implementation
@@ -66,7 +68,9 @@ begin
   FApplication.Title := 'basic app';
   FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   FBuilder := TCommandBuilder.Create(FExeName);
+  FBuilder.InputLn := MockInputLn;
   MockCommandCapture := '';
+  MockInputLnResult := '';
 end;
 
 procedure TTestCommandBuilder.TearDown;
@@ -307,6 +311,24 @@ begin
     FBuilder.GetCommandsFound);  
 end;
 
+procedure TTestCommandBuilder.TestParseCommandWithInvalidOption;
+var
+  LErrors: TArray<string>;
+begin
+  // arrange
+  FBuilder
+    .AddCommand('cmd', 'cmd command', MockCommand, [ccNoArgumentsButCommands])
+    .AddCommand('another', 'another command that can be used as argument', MockCommand, [ccNoParameters])
+    .UseArguments(['cmd', 'anotherddd'])
+    .Parse;
+  
+  // act
+  LErrors := FBuilder.Validate;
+
+  // assert 
+  AssertEquals('Should return an error', 1, Length(LErrors));
+end;
+
 procedure TTestCommandBuilder.TestGetDefaultCommand;
 begin
   // arrange
@@ -476,6 +498,17 @@ begin
   AssertEquals('Should match number of parsed options', 2, Length(LOptions));
   AssertEquals('Should match first option flag', 'a', LOptions[0].Flag);
   AssertEquals('Should match second option flag', 'b', LOptions[1].Flag);
+end;
+
+procedure TTestCommandBuilder.TestInputLn;
+var
+  LActual, LExpected: string;
+begin
+  LExpected := 'sample mock string';
+  MockInputLnResult := LExpected;
+  LActual := FBuilder.InputLn;
+
+  AssertEquals(LExpected, LActual);
 end;
 
 initialization

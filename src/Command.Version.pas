@@ -44,7 +44,8 @@ begin
     begin
       Result := 
         'Error trying to retrieve version info from binary: ' + E.Message + #13#10 +
-        'Need to specify version info on project options.';
+        'Project file .lpi should have version info.'#13#10 +
+        'Projet source .lpr should include resource info {$R *.res}';
     end;
   end;
   FreeAndNil(LResource);

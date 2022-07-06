@@ -114,7 +114,7 @@ begin
   LightColorTheme.Value := Magenta;
   LightColorTheme.Text := DarkGray;
   LightColorTheme.Other := DarkGray;
-  DarkColorTheme.Title := Magenta;
+  DarkColorTheme.Title := Yellow;
   DarkColorTheme.Value := LightGreen;
   DarkColorTheme.Text := LightBlue;
   DarkColorTheme.Other := White;

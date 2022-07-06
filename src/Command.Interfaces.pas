@@ -44,6 +44,9 @@ type
   /// with color
   TOutputColorCallback = procedure (const AMessage: string; const AColor: byte);
 
+  /// callback function that will be used to read user input from console and returns a string
+  TInputLnCallback = function: string;
+
   /// option
   IOption = interface
     ['{C24CC7B9-946E-44AA-BF92-CE89592F0940}']  
@@ -167,7 +170,7 @@ type
     procedure Parse;
 
     /// validate supplied command and arguments
-    procedure Validate;
+    function Validate: TArray<string>;
 
     /// executes the command
     procedure Execute;
@@ -217,6 +220,11 @@ type
 
     /// returns if builder has any option set on root or in any command
     function HasOptions: Boolean;
+
+    /// callback function that will be used to read user input from console and returns a key
+    function GetInputLn: TInputLnCallback;
+    procedure SetInputLn(AValue: TInputLnCallback);
+    property InputLn: TInputLnCallback read GetInputLn write SetInputLn;
 
     /// output callback procedure that will be called to print command usage and messages validation
     function GetOutput: TOutputCallback;

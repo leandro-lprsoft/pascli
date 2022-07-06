@@ -20,7 +20,7 @@ type
   private
     FApplication: TCommandApp;
   protected
-    procedure SetUp; override;
+    procedure Setup; override;
     procedure TearDown; override;
   published
     procedure TestAppHasValidCommandBuilderInstance;
@@ -34,8 +34,8 @@ uses
 
 procedure TTestCommandApp.TestAppBasicUsage;
 var
-  LCommand: ICommandBuilder;
-  LInvokedMethods: TStringList;
+  LCommand: ICommandBuilder = nil;
+  LInvokedMethods: TStringList = nil;
 begin
   {$IFDEF WINDOWS}
   LInvokedMethods := TStringList.Create;
@@ -44,8 +44,11 @@ begin
     FApplication.CommandBuilder := LCommand;
     FApplication.Initialize;
     FApplication.Run;
+    AssertTrue('Should have at least one invoked method.', LInvokedMethods.Count > 0);
     AssertEquals('Parse method should be invoked', 'Parse', LInvokedMethods[0]);
+    AssertTrue('Should have at least two invoked methods.', LInvokedMethods.Count > 1);
     AssertEquals('Validate method should be invoked', 'Validate', LInvokedMethods[1]);
+    AssertTrue('Should have at least three invoked methods.', LInvokedMethods.Count > 2);
     AssertEquals('Execute method should be invoked', 'Execute', LInvokedMethods[2]);
   finally
     LInvokedMethods.Free;
@@ -53,22 +56,22 @@ begin
   {$ENDIF}
 end;
 
-procedure TTestCommandApp.SetUp;
-begin
-  FApplication := TCommandApp.Create(nil);
-  FApplication.Title := 'basic app';
-end;
-
-procedure TTestCommandApp.TearDown;
-begin
-  FApplication.Free;
-end;
-
 procedure TTestCommandApp.TestAppHasValidCommandBuilderInstance;
 begin
   AssertTrue(
     'Application should have valid ICommandBuilder instance. Check create method.', 
-    Assigned(FApplication.CommandBuilder))  
+    Assigned(FApplication.CommandBuilder));
+end;
+
+procedure TTestCommandApp.Setup;
+begin
+  FApplication := TCommandApp.Create(nil);
+  FApplication.Title := 'basic app';  
+end;
+
+procedure TTestCommandApp.TearDown;
+begin
+  FApplication.Free;  
 end;
 
 initialization

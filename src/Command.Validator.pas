@@ -39,6 +39,8 @@ type
 
   public
 
+    constructor Create;
+
     /// returns the value of argument provided via parameter, this value should assigned after parse
     property Sucessor: IValidatorBase read GetSucessor write SetSucessor;
 
@@ -56,6 +58,10 @@ type
   end;
 
   TProvidedArgumentsAreNotValid = class(TValidatorBase)
+    function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
+  end;
+
+  TProvidedArgumentsAreNotRequired = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
@@ -122,6 +128,7 @@ begin
     .Add(TDuplicateArgumentValidator.Create)
     .Add(TDuplicateOptionValidator.Create)
     .Add(TProvidedArgumentsAreNotValid.Create)
+    .Add(TProvidedArgumentsAreNotRequired.Create)
     .Add(TProvidedArgumentsExceedsAcceptedLimit.Create)
     .Add(TSelectedCommandDoesNotAcceptCommandAsArgument.Create)
     .Add(TSelectedCommandRequiresValidCommandOrNothing.Create)
@@ -130,6 +137,11 @@ begin
     .Add(TSelectedCommandValidateIfOptionsExists.Create)
     .Add(TSelectedCommandValidateRejectedOption.Create)
     .HandleValidation(ACommand);
+end;
+
+constructor TValidatorBase.Create;
+begin
+  SetLength(FResult, 0);
 end;
 
 function TValidatorBase.GetSucessor: IValidatorBase;
@@ -180,7 +192,7 @@ var
   I, J: Integer;
   LCommand: ICommand;
   LOption: IOption;
-  LShort, LLong, LMessage: string;
+  LShort, LLong, LMessage, LRawOption: string;
 begin
   LCommand := ACommand.CommandSelected;
   if not Assigned(LCommand) then
@@ -189,7 +201,8 @@ begin
   LArray := ACommand.GetRawOptions;
   for I := 0 to Length(LArray) - 1 do
   begin
-    LOption := LCommand.Option[LArray[I]];
+    LOption := LCommand.Option[RemoveStartingDashes(LArray[I])];
+
     if Assigned(LOption) then
     begin
       LShort := LOption.Flag;
@@ -197,21 +210,24 @@ begin
     end
     else
     begin
-      LShort := LArray[I];
-      LLong := LArray[I];
+      LShort := RemoveStartingDashes(LArray[I]);
+      LLong := RemoveStartingDashes(LArray[I]);
     end;
 
     for J := 0 to Length(LArray) - 1 do
-      if (I <> J) and ((LShort = LArray[J]) or (LLong = LArray[J])) then
+    begin
+      LRawOption := RemoveStartingDashes(LArray[J]);
+      if (I <> J) and (SameText(LShort, LRawOption) or SameText(LLong, LRawOption)) then
       begin
-        LMessage := Format('Duplicate option "%s" was provided', [LArray[I]]);
-        if LShort <> LLong then
+        LMessage := Format('Duplicate options "%s", "%s" provided', [LArray[I], LArray[J]]);
+        if (LShort <> LLong) and (LArray[I] <> LArray[J]) then
           LMessage := LMessage +
-            Format('. Option %s is equivalent to %s', [LShort, LLong]);
+            Format('. Option -%s is equivalent to --%s', [LShort, LLong]);
           
         AppendToArray(FResult, LMessage);
         Exit(FResult);
       end;
+    end;
   end;
 
   Result := inherited Validate(ACommand);
@@ -223,7 +239,23 @@ begin
      (ACommand.GetCommandsFound = 0) and 
      (Length(ACommand.GetRawArguments) > 0) then
   begin
-    AppendToArray(FResult, 'Provided argumentos are not valid.');
+    AppendToArray(FResult, 'Provided arguments are not valid.');
+    Exit(FResult);
+  end;
+
+  Result := inherited Validate(ACommand);
+end;
+
+function TProvidedArgumentsAreNotRequired.Validate(ACommand: ICommandBuilder): TArray<string>;
+begin
+  if (Length(ACommand.Commands) > 0) and
+     (Assigned(ACommand.CommandSelected)) and
+     (ccNoArgumentsButCommands in ACommand.CommandSelected.Constraints) and
+     ( (Length(ACommand.GetRawArguments)  
+        - ACommand.GetCommandsFound 
+        - Length(ACommand.Arguments)) > 0) then
+  begin
+    AppendToArray(FResult, 'Provided arguments are not required.');
     Exit(FResult);
   end;
 
@@ -334,7 +366,7 @@ begin
       LOptionFound := False;
       for LOption in LCommand.Options do
       begin
-        if (LOptionCleaned = LOption.Flag) or (LOptionCleaned = LOption.Name) then
+        if SameText(LOptionCleaned, LOption.Flag) or SameText(LOptionCleaned, LOption.Name) then
         begin
           LOptionFound := True;
           Break;
