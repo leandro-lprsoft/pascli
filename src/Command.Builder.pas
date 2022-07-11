@@ -598,7 +598,7 @@ begin
       if Copy(ParamStr(I), 1, 1) <> '-' then
         AppendToArray(FProvidedArgs, ParamStr(I))
       else
-        AppendProvidedOptions(FExternalArguments[I]);
+        AppendProvidedOptions(ParamStr(I));
   end;
 end;
 
