@@ -62,6 +62,7 @@ procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
 var
   LCommand: ICommand;
   LArguments: string = '';
+  LDescription, LLine: string;
 begin
   LArguments := GetArgumentList(ABuilder);
 
@@ -73,13 +74,26 @@ begin
     LArguments);
 
   ABuilder.Output('');
+  ABuilder.OutputColor(ABuilder.Title + #13#10, ABuilder.ColorTheme.Title);
+
+  ABuilder.Output('');
   ABuilder.OutputColor('Commands: '#13#10, ABuilder.ColorTheme.Title);
   
   for LCommand in ABuilder.Commands do
   begin
     ABuilder.OutputColor('  ' + PadRight(LCommand.Name, 15), ABuilder.ColorTheme.Value);
+
+    LDescription := LCommand.Description;
+    if ABuilder.UseShortDescriptions then
+      for LLine in LDescription.Split(#13#10) do
+        if LLine <> '' then
+        begin
+          LDescription := LLine;
+          break;
+        end;
+
     ABuilder.OutputColor(
-      StringReplace(LCommand.Description, #13#10, #13#10 + PadLeft('', 17), [rfReplaceAll]), 
+      StringReplace(LDescription, #13#10, #13#10 + PadLeft('', 17), [rfReplaceAll]), 
       ABuilder.ColorTheme.Other);
     ABuilder.Output('');
   end;

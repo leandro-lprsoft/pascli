@@ -29,6 +29,7 @@ implementation
 
 procedure TCommandApp.DoRun;
 begin
+  CommandBuilder.Title := Title;
   CommandBuilder.Parse;
   CommandBuilder.Validate;
   CommandBuilder.Execute;

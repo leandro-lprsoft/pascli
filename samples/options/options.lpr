@@ -46,6 +46,7 @@ end;
 begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'CLI tool using pascli with commands and options.';
+  Application.CommandBuilder.UseShortDescriptions := True;
   Application
     .CommandBuilder
       .AddCommand(

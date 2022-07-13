@@ -25,6 +25,7 @@ type
   published
     procedure TestAppHasValidCommandBuilderInstance;
     procedure TestAppBasicUsage;
+    procedure TestAppTitle;
   end;
 
 implementation
@@ -45,11 +46,11 @@ begin
     FApplication.Initialize;
     FApplication.Run;
     AssertTrue('Should have at least one invoked method.', LInvokedMethods.Count > 0);
-    AssertEquals('Parse method should be invoked', 'Parse', LInvokedMethods[0]);
+    AssertEquals('Parse method should be invoked', 'Parse', LInvokedMethods[1]);
     AssertTrue('Should have at least two invoked methods.', LInvokedMethods.Count > 1);
-    AssertEquals('Validate method should be invoked', 'Validate', LInvokedMethods[1]);
+    AssertEquals('Validate method should be invoked', 'Validate', LInvokedMethods[2]);
     AssertTrue('Should have at least three invoked methods.', LInvokedMethods.Count > 2);
-    AssertEquals('Execute method should be invoked', 'Execute', LInvokedMethods[2]);
+    AssertEquals('Execute method should be invoked', 'Execute', LInvokedMethods[3]);
   finally
     LInvokedMethods.Free;
   end;
@@ -72,6 +73,12 @@ end;
 procedure TTestCommandApp.TearDown;
 begin
   FApplication.Free;  
+end;
+
+procedure TTestCommandApp.TestAppTitle;
+begin
+  FApplication.Run;
+  AssertEquals(FApplication.Title, FApplication.CommandBuilder.Title);
 end;
 
 initialization

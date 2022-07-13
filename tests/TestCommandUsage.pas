@@ -34,6 +34,7 @@ type
     procedure TestWriteCommandUsageWithOption;
     procedure TestWriteCommandUsageWithArgumentAndOption;
     procedure TestWriteGeneralUsage;
+    procedure TestWriteGeneralUsageShortDescription;
     procedure TestRegistryForCommandUsage;
   end;
 
@@ -254,16 +255,55 @@ begin
       .AddCommand('sample_cmd', 'execute sample action', MockCommand, [ccNoParameters])
       .SetCommandAsArgument(nil);
 
+  FApplication.CommandBuilder.Title := FApplication.Title;
+  
   // act
   UsageCommand(FApplication.CommandBuilder);
 
   // assert
+  AssertTrue(
+    'should have "' + FApplication.Title + '" title', 
+    ContainsText(CapturedOutput, FApplication.Title));
   AssertTrue('should have "Commands:" text', ContainsText(CapturedOutput, 'Commands:'));
   AssertTrue('should have "display help for given command" text ', 
     ContainsText(CapturedOutput, 'display help for given command'));
   AssertTrue('should have "sample_cmd" command text ', ContainsText(CapturedOutput, 'sample_cmd'));    
   AssertTrue('should have "for more information on a command" text', 
     ContainsText(CapturedOutput, 'for more information on a command'));  
+end;
+
+procedure TTestCommandUsage.TestWriteGeneralUsageShortDescription;
+begin
+  // arrange
+  FApplication
+    .CommandBuilder
+      .AddCommand('help', 'display help for given command', MockCommand, [ccDefault])
+      .SetCommandSelected(FApplication.CommandBuilder.Commands[0])
+      .AddCommand('sample_cmd', 
+        'execute sample action'#13#10 +
+        '#second line# should not appear on general usage', MockCommand, [ccNoParameters])
+      .SetCommandAsArgument(nil);
+
+  FApplication.CommandBuilder.Title := FApplication.Title;
+  FApplication.CommandBuilder.UseShortDescriptions := True;
+  
+  // act
+  UsageCommand(FApplication.CommandBuilder);
+
+  // assert
+  AssertTrue(
+    'should have "' + FApplication.Title + '" title', 
+    ContainsText(CapturedOutput, FApplication.Title));
+  AssertTrue('should have "Commands:" text', ContainsText(CapturedOutput, 'Commands:'));
+  AssertTrue('should have "display help for given command" text ', 
+    ContainsText(CapturedOutput, 'display help for given command'));
+  AssertTrue('should have "sample_cmd" command text ', ContainsText(CapturedOutput, 'sample_cmd'));    
+  AssertTrue('should have "for more information on a command" text', 
+    ContainsText(CapturedOutput, 'for more information on a command'));
+  AssertFalse(
+    'text #second line# should not be displayed',
+    ContainsText(CapturedOutput, '#second line#')
+  );
 end;
 
 procedure TTestCommandUsage.TestRegistryForCommandUsage;

@@ -23,7 +23,7 @@ end;
 
 begin
   Application := TCommandApp.Create(nil);
-  Application.Title := 'Basic CLI tool.';
+  Application.Title := 'a basic cli tool sample project';
 
   Command.Usage.Registry(Application.CommandBuilder);
   Command.Version.Registry(Application.CommandBuilder);

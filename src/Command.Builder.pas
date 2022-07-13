@@ -143,6 +143,8 @@ type
     FCommandAsArgument: ICommand;
     FParsedOptions: TArray<IOption>;
     FCommandsFound: Integer;
+    FTitle: String;
+    FUseShortDescriptions: Boolean;
 
     procedure AppendProvidedOptions(const AParam: string);
 
@@ -170,6 +172,16 @@ type
     /// Color theme that should be used to output colors of commands, its use is optional
     function GetColorTheme: TColorTheme;
     procedure SetColorTheme(AValue: TColorTheme);
+
+    /// Application title
+    function GetTitle: string;
+    procedure SetTitle(AValue: string);
+
+    /// display only the first line usage description for command usage, the user needs
+    /// to use help command to see full command description. Default value is false to
+    /// preserve original function.
+    function GetUseShortDescriptions: boolean;
+    procedure SetUseShortDescriptions(AValue: boolean);
 
     procedure ParseArguments;
     procedure ParseCommands;
@@ -273,7 +285,15 @@ type
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
 
     /// Color theme that should be used to output colors of commands, its use is optional
-    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;        
+    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;      
+
+    /// Application title
+    property Title: string read GetTitle write SetTitle;  
+
+    /// display only the first line usage description for command usage, the user needs
+    /// to use help command to see full command description. Default value is false to
+    /// preserve original function.
+    property UseShortDescriptions: boolean read GetUseShortDescriptions write SetUseShortDescriptions;
 
   end;
 
@@ -487,6 +507,7 @@ begin
   FCommandSelected := nil;
   FCommandAsArgument := nil;
   FUseExternalArguments := False;
+  FUseShortDescriptions := False;
   FColorTheme := StartColorTheme;
   SetLength(FExternalArguments, 0);
   FInputLn := StandardConsoleInputLn;
@@ -835,6 +856,26 @@ begin
   FExternalArguments := AArguments;
   FUseExternalArguments := True;
   Result := Self;
+end;
+
+function TCommandBuilder.GetTitle: string;
+begin
+  Result := FTitle;
+end;
+
+procedure TCommandBuilder.SetTitle(AValue: string);
+begin
+  FTitle := AValue;
+end;
+
+function TCommandBuilder.GetUseShortDescriptions: boolean;
+begin
+  Result := FUseShortDescriptions;
+end;
+
+procedure TCommandBuilder.SetUseShortDescriptions(AValue: boolean);
+begin
+  FUseShortDescriptions := AValue;
 end;
 
 function StandardConsoleInputLn: string;

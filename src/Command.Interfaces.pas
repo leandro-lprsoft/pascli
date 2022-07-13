@@ -243,7 +243,19 @@ type
     /// Color theme that should be used to output colors of commands, its use is optional
     function GetColorTheme: TColorTheme;
     procedure SetColorTheme(AValue: TColorTheme);
-    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;    
+    property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;
+
+    /// Application title
+    function GetTitle: string;
+    procedure SetTitle(AValue: string);
+    property Title: string read GetTitle write SetTitle;
+
+    /// display only the first line usage description for command usage, the user needs
+    /// to use help command to see full command description. Default value is false to
+    /// preserve original function.
+    function GetUseShortDescriptions: boolean;
+    procedure SetUseShortDescriptions(AValue: boolean);
+    property UseShortDescriptions: boolean read GetUseShortDescriptions write SetUseShortDescriptions;
 
   end;
 
