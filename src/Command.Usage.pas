@@ -32,7 +32,6 @@ uses
 implementation
 
 uses
-  Command.Builder,
   Command.Colors,
   Command.Version;
 
@@ -74,7 +73,7 @@ begin
     LArguments);
 
   ABuilder.Output('');
-  ABuilder.OutputColor(ABuilder.Title + #13#10, ABuilder.ColorTheme.Title);
+  ABuilder.OutputColor(ABuilder.Title + #13#10, ABuilder.ColorTheme.Other);
 
   ABuilder.Output('');
   ABuilder.OutputColor('Commands: '#13#10, ABuilder.ColorTheme.Title);
