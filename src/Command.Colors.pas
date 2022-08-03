@@ -110,14 +110,17 @@ begin
   StartColorTheme.Value := StartupColor;
   StartColorTheme.Text := StartupColor;
   StartColorTheme.Other := StartupColor;
+  StartColorTheme.Error := StartupColor;
   LightColorTheme.Title := Blue;
   LightColorTheme.Value := Magenta;
   LightColorTheme.Text := DarkGray;
   LightColorTheme.Other := DarkGray;
+  LightColorTheme.Error := LightRed;
   DarkColorTheme.Title := Yellow;
   DarkColorTheme.Value := LightGreen;
   DarkColorTheme.Text := LightBlue;
   DarkColorTheme.Other := White;
+  DarkColorTheme.Error := LightRed;
 end;
 
 initialization

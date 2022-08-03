@@ -30,6 +30,12 @@ begin
   WriteLn('Hello world!');
 end;
 
+procedure ErrorCommand(ABuilder: ICommandBuilder);
+begin
+  ABuilder.Output('Text displayed using error color theme: ');
+  ABuilder.OutputColor('Error message sample'#13#10, ABuilder.ColorTheme.Error);
+end;
+
 begin
   Application := TCommandApp.Create(nil);
   Application.Title := 'Basic CLI tool with colors.';
@@ -54,6 +60,13 @@ begin
         'Outputs a color palette with options that can be used on ChangeConsoleColor procedure'#13#10 +
         'Ex: colors palette',
         @OutputPalleteColor,
+        [ccNoParameters]
+      )
+      .AddCommand(
+        'error',
+        'show error message using builder color theme'#13#10 +
+        'Ex: colors error',
+        @ErrorCommand,
         [ccNoParameters]
       );
 

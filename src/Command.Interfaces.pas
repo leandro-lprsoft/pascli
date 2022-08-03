@@ -5,7 +5,6 @@ unit Command.Interfaces;
 interface
 
 uses
-  CustApp,
   Classes;
 
 type
@@ -23,6 +22,7 @@ type
     Title: Byte;
     Value: Byte;
     Text: Byte;
+    Error: Byte;
     Other: Byte;
   end;  
 

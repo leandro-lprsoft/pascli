@@ -14,8 +14,6 @@ uses
 type
   TCommandBuildMock = class(TVirtualInterface)
   private
-    class var aID : Integer;
-  private
     FName: String;
     FData: TStringList;
     procedure HandleInvoke(aMethod: TRttiMethod; const aArgs: TValueArray; out aResult: TValue);
@@ -33,9 +31,6 @@ var
 
 implementation
 
-uses
-  StrUtils;
-
 procedure MockCommand(ABuilder: ICommandBuilder);
 begin  
   MockCommandCapture := 'executed';
@@ -51,12 +46,10 @@ procedure TCommandBuildMock.HandleInvoke(aMethod: TRttiMethod; const aArgs: TVal
 var
   LResult: TArray<string>;
 begin
+  SetLength(LResult, 0);
   FData.Add(aMethod.Name);
   if SameText(aMethod.Name, 'validate') then
-  begin
-    SetLength(LResult, 0);
     aResult := TValue.From<TStringArray>(LResult);
-  end;
 end;
 
 constructor TCommandBuildMock.Create(aTypeInfo: PTypeInfo; AData: TStringList);
