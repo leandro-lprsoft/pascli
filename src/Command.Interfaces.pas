@@ -257,6 +257,12 @@ type
     procedure SetUseShortDescriptions(AValue: boolean);
     property UseShortDescriptions: boolean read GetUseShortDescriptions write SetUseShortDescriptions;
 
+    /// <summary> State that can be set by user commands allowing better communication 
+    /// between commands and the application. </summary>
+    function GetState: string;
+    procedure SetState(AValue: string);
+    property State: string read GetState write SetState;
+
   end;
 
   /// IValidatorContext

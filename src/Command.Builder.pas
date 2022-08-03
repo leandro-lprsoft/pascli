@@ -145,6 +145,7 @@ type
     FCommandsFound: Integer;
     FTitle: String;
     FUseShortDescriptions: Boolean;
+    FState: string;
 
     procedure AppendProvidedOptions(const AParam: string);
 
@@ -193,6 +194,11 @@ type
     /// build a list of IArguments related to selected command, if there are more than one argument
     /// provided the list will match one argument parameter by order of the command builder construction
     function GetParsedArguments: TArray<IArgument>;
+
+    /// <summary> State that can be set by user commands allowing better communication 
+    /// between commands and the application. </summary>
+    function GetState: string;
+    procedure SetState(AValue: string);
 
   public
 
@@ -294,6 +300,10 @@ type
     /// to use help command to see full command description. Default value is false to
     /// preserve original function.
     property UseShortDescriptions: boolean read GetUseShortDescriptions write SetUseShortDescriptions;
+
+    /// <summary> State that can be set by user commands allowing better communication 
+    /// between commands and the application. </summary>
+    property State: string read GetState write SetState;
 
   end;
 
@@ -508,6 +518,7 @@ begin
   FCommandAsArgument := nil;
   FUseExternalArguments := False;
   FUseShortDescriptions := False;
+  FState := '';
   FColorTheme := StartColorTheme;
   SetLength(FExternalArguments, 0);
   FInputLn := StandardConsoleInputLn;
@@ -601,6 +612,7 @@ begin
   SetLength(FProvidedArgs, 0); 
   SetLength(FParsedErrors, 0);
   FCommandsFound := 0;
+  FState := '';
 
   for I := 0 to Length(FArguments) - 1 do
     FArguments[I].Value := '';
@@ -876,6 +888,16 @@ end;
 procedure TCommandBuilder.SetUseShortDescriptions(AValue: boolean);
 begin
   FUseShortDescriptions := AValue;
+end;
+
+function TCommandBuilder.GetState: string;
+begin
+  Result := FState;
+end;
+
+procedure TCommandBuilder.SetState(AValue: string);
+begin
+  FState := AValue;
 end;
 
 function StandardConsoleInputLn: string;

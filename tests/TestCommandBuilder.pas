@@ -55,6 +55,7 @@ type
     procedure TestHasOptions;
     procedure TestDefaultCommandWithOptionsWithoutProvidingCommand;
     procedure TestInputLn;
+    procedure TestState;
   end;
 
 implementation
@@ -509,6 +510,12 @@ begin
   LActual := FBuilder.InputLn;
 
   AssertEquals(LExpected, LActual);
+end;
+
+procedure TTestCommandBuilder.TestState;
+begin
+  FBuilder.State := 'error';
+  AssertEquals(FBuilder.State, 'error');
 end;
 
 initialization
