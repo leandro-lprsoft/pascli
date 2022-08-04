@@ -1,3 +1,6 @@
+/// <summary> This unit contains classes to perform the validation of the parameters informed by the 
+/// user against those defined in the CommandBuilder. To make the code clearer and easier to maintain, 
+/// the validator pattern was used. </summary>
 unit Command.Validator;
 
 {$MODE DELPHI}{$H+}
@@ -11,24 +14,40 @@ uses
   Command.Helpers;
 
 type
+  /// <summary> Class that groups all validators, as well as establishes the validation order.
+  /// </summary>
   TValidatorContext = class(TInterfacedObject, IValidatorContext)
   private
     FStartValidator: IValidatorBase;
     FPreviousValidator: IValidatorBase;
   public
-    /// creates an instance of TValidatorContext and initiliaze some variables
+    /// <summary> Default class constructor just to create a basic instance of it. It does not require 
+    /// a call to the desctructor as it is interface-based.</summary>
     constructor Create;
 
-    /// adds an IValidatorBase and sets it as a Sucessor validator for previous one added
+    /// <summary> Successive calls to the add method are responsible for creating the validation context. 
+    /// This method adds an IValidatorBase and sets it as the successor if a previous IValidatorBase exists.
+    /// </summary>
+    /// <param Name="AValidator"> A valid instance of IValidatorBase responsible for processing a specific 
+    /// type of validation.</param>
     function Add(AValidator: IValidatorBase): IValidatorContext;
 
-    /// Handle validation from first added IValidatorBase
+    /// <summary> Executes the validation of the first added IValidatorBase, being the responsibility 
+    /// of this object to call its successor IValidatorBase and so on.
+    /// <param Name="ACommand"> CommandBuilder instance containing the arguments, commands and options 
+    /// configured to be validated against the arguments passed to it.</param>
     function HandleValidation(ACommand: ICommandBuilder): TArray<string>;    
 
-    /// Build validation context and runs validation
+    /// <summary> Builds the validation context by adding each class of type IValidatorBase. It then 
+    /// calls the first validator triggering the validator pattern. </summary>
+    /// <param Name="ACommand"> CommandBuilder instance containing the arguments, commands and options 
+    /// configured to be validated against the arguments passed to it.</param>
     function Validate(ACommand: ICommandBuilder): TArray<string>;
   end;
 
+  /// <summary> Base class for any validation that needs to be implemented. Specification validations 
+  /// need to inherit from this class by convention from this library. It already has control for the 
+  /// successor validator as well as its automatic call at the appropriate time. </summary>
   TValidatorBase = class(TInterfacedObject, IValidatorBase)
   private
     FSucessor: IValidatorBase;
@@ -39,56 +58,82 @@ type
 
   public
 
+    /// <summary> Default class constructor just to create a basic instance of it. It does not require 
+    /// a call to the desctructor as it is interface-based.</summary>
     constructor Create;
 
-    /// returns the value of argument provided via parameter, this value should assigned after parse
+    /// <summary> Allows you to set or access the successor validator. </summary>
     property Sucessor: IValidatorBase read GetSucessor write SetSucessor;
 
-    /// function validate a single case and if a sucessor was supplied call its validate method
+    /// <summary> Validates a single specific case. It must be implemented by the child class. 
+    /// If the validation is successful and there is a successor, the successor's validation method 
+    /// will be called. A TArry<string> will be returned with errors detected whether they are from 
+    /// the current or successor validation. </summary>
     function Validate(ACommand: ICommandBuilder): TArray<string>; virtual; 
 
   end;
 
+  /// <summary> Returns an error if a command has been passed twice. A duplicity is accepted if 
+  /// a command accepts another command as an argument through the ccNoArgumentsButCommands constraint.
+  /// </summary>
   TDuplicateArgumentValidator = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
+  /// <summary> Returns an error if an option was passed twice. </summary>
   TDuplicateOptionValidator = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
+  /// <summary> Returns an error if there are commands configured for the CommandBuilder and arguments 
+  /// were passed via the command line, but no command was found. </summary>
   TProvidedArgumentsAreNotValid = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
+  /// <summary> Returns an error if not required arguments were passed to the command.
+  /// </summary>
   TProvidedArgumentsAreNotRequired = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
+  /// <summary> Returns an error if more arguments were passed than what was set for the command.
+  /// </summary>
   TProvidedArgumentsExceedsAcceptedLimit = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override; 
   end;
 
+  /// <summary> Returns an error if a command was passed to a command that does 
+  /// ot accept this type of parameter. </summary>
   TSelectedCommandDoesNotAcceptCommandAsArgument = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if an invalid command was passed to a command that only accepts 
+  /// command as an argument. </summary>
   TSelectedCommandRequiresValidCommandOrNothing = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if no argument has been passed to a command that requires parameters.
+  /// </summary>
   TSelectedCommandRequiresOneArguments = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if an argument has been passed to a command that does not require 
+  /// parameters. </summary>
   TSelectedCommandRequiresNoArguments = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if a non-existent option was passed to a command. </summary>
   TSelectedCommandValidateIfOptionsExists = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
-
+ 
+  /// <summary> Returns an error if an option has been passed that cannot be used together with another 
+  /// option for a given command. </summary>
   TSelectedCommandValidateRejectedOption = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;

@@ -1,7 +1,7 @@
-C:\Users\leand\projects\pascli\tests\TestPascli.exe --format=plain --no-addresses -a 
+C:\Users\leand\projects\pascli\tests\TestPascli.exe -a --file=C:\Users\leand\projects\pascli\tests\TestPascli.xml 
 Heap dump by heaptrc unit of C:\Users\leand\projects\pascli\tests\TestPascli.exe
-5346 memory blocks allocated : 333823/348712
-5346 memory blocks freed     : 333823/348712
+5696 memory blocks allocated : 426661/441856
+5696 memory blocks freed     : 426661/441856
 0 unfreed memory blocks : 0
-True heap size : 1081344 (256 used in System startup)
-True free heap : 1081088
+True heap size : 1114112 (288 used in System startup)
+True free heap : 1113824

@@ -1,3 +1,8 @@
+/// <summary> This unit contains functions to display information on how to use the arguments, 
+/// commands and options configured in CommandBuilder. Its main command is the UsageCommand which 
+/// is prepared to provide usage information to the user. To use this procedure, just configure it 
+/// using CommandBuilder.AddCommand method or simply call the Registry function of this unit to do that. 
+/// </summary>
 unit Command.Usage;
 
 {$MODE DELPHI}{$H+}
@@ -9,24 +14,51 @@ uses
   StrUtils,
   Command.Interfaces;
 
-  /// prints text describing command usage according to commands, options and arguments defined
-  /// using application command builder
+  /// <summary> Outputs text describing command usage according to commands, options and arguments 
+  /// configured using application command builder. Requires to be configured using ccNoArgumentsButCommands
+  /// constraint allowing another command to be passed as parameter to UsageCommand.
+  ///
+  /// Ex:
+  /// MyApp.CommandBuilder
+  ///   .AddCommand(
+  ///     'help', 
+  ///     'Shows information about how to use this tool or about a specific command.'#13#10 +
+  ///     'Ex: ' + ABuilder.ExeName + ' help', 
+  ///     @UsageCommand,
+  ///     [ccDefault, ccNoArgumentsButCommands]);
+  /// </summary>
+  /// <param Name="ABuilder"> Instance of CommandBuilder from which the settings will be read to show
+  /// usage information via the command line. </param>
   procedure UsageCommand(ABuilder: ICommandBuilder);
 
-  /// returns a argument list using command builder definition
+  /// <summary> Returns an argument list configured for CommandBuilder. </summary>
+  /// <param Name="ABuilder"> Instance of CommandBuilder from which data will be read </param>
   function GetArgumentList(ABuilder: ICommandBuilder): string;
 
-  /// prints simple usage command using provided parameters
+  /// <summary> Outputs simple usage command using provided parameters </summary>
+  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// its configured callback procedure. </param>
+  /// <param Name="ATitle"> Application title </param>
+  /// <param Name="ACommand"> Command name </param>
+  /// <param Name="AOptions"> Options list </param>
+  /// <param Name="AArgument"> Argument description </param>
   procedure WriteUsage(ABuilder: ICommandBuilder; const ATitle, ACommand, AOptions, AArgument: string);
 
-  // prints help information for a specific command set on property Command Builder.CommandAsArgument 
+  /// <summary> Outputs usage information for a specific command. </summary>
+  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// its configured callback procedure. </param>  
   procedure WriteCommandUsage(ABuilder: ICommandBuilder);
 
-  /// prints general help information for the application, including command usage syntax, command list
-  /// and arguments.
+  /// <summary> Outputs general help information for the application, including command usage syntax, 
+  /// command list, command description, arguments that are acceptable. Also displays application title 
+  /// and version information. </summary>
+  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// its configured callback procedure. </param>  
   procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
 
-  /// configure UsageCommand with standard parameters
+  /// <summary> Configure UsageCommand with standard parameters </summary>
+  /// <param Name="ABuilder"> CommandBuilder instance that will be used to register the UsageCommand.
+  /// </param>  
   procedure Registry(ABuilder: ICommandBuilder);
 
 implementation
@@ -167,12 +199,12 @@ end;
 procedure Registry(ABuilder: ICommandBuilder);
 begin
   ABuilder
-  .AddCommand(
-    'help', 
-    'Shows information about how to use this tool or about a specific command.'#13#10 +
-    'Ex: ' + ABuilder.ExeName + ' help', 
-    @UsageCommand,
-    [ccDefault, ccNoArgumentsButCommands]);
+    .AddCommand(
+      'help', 
+      'Shows information about how to use this tool or about a specific command.'#13#10 +
+      'Ex: ' + ABuilder.ExeName + ' help', 
+      @UsageCommand,
+      [ccDefault, ccNoArgumentsButCommands]);
 end;
 
 end.

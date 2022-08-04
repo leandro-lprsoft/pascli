@@ -1,3 +1,5 @@
+/// <summary> This is the main unit of the library, the entry point for configuring a 
+/// command-line application. </summary>
 unit Command.App;
 
 {$MODE DELPHI}{$H+}
@@ -12,7 +14,22 @@ uses
   Command.Builder;
 
 type
-  { TCommandApp }
+  /// <summary> This class allows you to define which arguments, commands, and options will 
+  /// be accepted as parameters by executing the application via the command line. 
+  /// 
+  /// Ex:
+  /// ...
+  /// uses Command.Interfaces, Command.App, Command.Usage, Command.Version;
+  /// ...
+  /// Application := TCommandApp.Create(nil);
+  /// Application.Title := 'a basic cli tool sample project';
+  /// 
+  /// Command.Usage.Registry(Application.CommandBuilder);
+  /// Command.Version.Registry(Application.CommandBuilder);
+  /// 
+  /// Application.Run;
+  /// Application.Free;
+  /// </summary>
   TCommandApp = class(TCustomApplication)
   private
     FCommandBuilder: ICommandBuilder;
@@ -26,9 +43,22 @@ type
     procedure SetDefaultThemeColor;
 
   protected
+
+    /// <summary> Parse the parameters passed via the command line, validate them, execute the command 
+    /// informed if one was found according to the same parameters and finish the application execution.
+    /// </summary>
     procedure DoRun; override;
+
   public
+    /// <summary> Constructor of the class responsible for initializing it and its dependencies. The 
+    /// main dependency is the CommandBuilder.
+    /// </summary>
     constructor Create(TheOwner: TComponent); override;
+
+    /// <summary> The CommandBuilder is the main property of the class, through which the commands, 
+    /// arguments and options that will be accepted as parameters via the command line can be configured.
+    /// It is automatically launched when the application is created.
+    /// </summary>    
     property CommandBuilder: ICommandBuilder read FCommandBuilder write FCommandBuilder;
   end;
 
