@@ -19,3 +19,5 @@ fp.dsk
 **/backup/
 
 # End of https://www.toptal.com/developers/gitignore/api/freepascal
+
+tests/TestPascli
