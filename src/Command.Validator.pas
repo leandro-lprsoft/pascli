@@ -69,6 +69,8 @@ type
     /// If the validation is successful and there is a successor, the successor's validation method 
     /// will be called. A TArry<string> will be returned with errors detected whether they are from 
     /// the current or successor validation. </summary>
+    /// <param Name="ACommand"> CommandBuilder instance containing the arguments, commands and options 
+    /// configured to be validated against the arguments passed to it.</param>
     function Validate(ACommand: ICommandBuilder): TArray<string>; virtual; 
 
   end;

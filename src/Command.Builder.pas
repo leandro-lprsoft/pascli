@@ -1,3 +1,6 @@
+/// <summary> Main unit of the library, contains the implementation of the main interfaces. 
+/// How CommandBuilder works is defined in this part of the library.
+/// </summary>
 unit Command.Builder;
 
 {$MODE DELPHI}{$H+}
@@ -10,6 +13,10 @@ uses
   Command.Interfaces;
 
 type
+
+  /// <summary> Class that implements the IOption interface that represents an option that 
+  /// can be configured as expected for a command.
+  /// </summary>
   TOption = class(TInterfacedObject, IOption)
   private 
     FFlag: string;
@@ -27,23 +34,34 @@ type
     function GetNotAllowedFlags: TArray<string>;
   public 
 
-    /// letter option that will bu used as a option flag for a given command or a direct option
+    /// <summary> Represents the option as a single letter, i.e. a short option </summary>
     property Flag: string read GetFlag write SetFlag;
 
-    /// option name that will bu used as a option argument for a given command.
+    /// <summary> Represents the option as a word, that is, a long option, it does not accept 
+    /// spaces, but "-' can be used for compound names. </summary>
     property Name: string read GetName write SetName;
 
-    /// command description that will be displayed on usage examples
+    /// <summary> Description of the option that best defines your objective. It can be 
+    /// displayed to the user when the user requests information through the help command 
+    /// for example.</summary>
     property Description: string read GetDescription write SetDescription;     
 
-    /// not allowed flags to use with this option
+    /// <summary> Array of flags not supported for use in conjunction with this option. 
+    /// Only the short option without the "-" is accepted.</summary>
     property NotAllowedFlags: TArray<string> read GetNotAllowedFlags write SetNotAllowedFlags;
 
-    /// creates an IOption instance
+    /// <summary> Class factory recommended as first choice for class construction. Allows 
+    /// initialization with initial parameters.</summary>
+    /// <param name="AFlag">Short option</param>
+    /// <param name="AName">Long option</param>
+    /// <param name="ADescription">Option description</param>
+    /// <param name="ANotAllowedFlags">String array with not allowed options to be used together</param>
     class function New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>): IOption;
 
   end;
 
+  /// <summary> Class that implements the ICommand interface that represents a command that can 
+  /// be registered in CommandBuilder for later use by the user. </summary>
   TCommand = class(TInterfacedObject, ICommand)
   private
     FName: string;
@@ -64,38 +82,64 @@ type
     function GetOptions: TArray<IOption>;
 
   public
+    /// <summary> Basic class constructor. Use new class factory as first option. </summary>
     constructor Create;
 
-    /// command name that will bu used as a command line argument
+    /// <summary> Name of the command that will be used via the command line by the user.
+    /// </summary>
     property Name: string read GetName write SetName;
 
-    /// command description that will be displayed on usage examples
+    /// <summary> Description of the command that best describes its purpose. It can be 
+    /// displayed to the user when he requests help information for the application.
+    /// </summary>
     property Description: string read GetDescription write SetDescription;    
 
-    /// callback procedure that will be called if this command was provided
+    /// <summary> Procedure that will be invoked by the builder after validation of the 
+    /// arguments provided by the user and the correct match of this command as the 
+    /// requested one. </summary>
     property Callback: TCommandCallback read GetCallback write SetCallback;
 
-    /// command constraints what will be checked before execute the callback procedure
+    /// <summary> Command constrains that will be validated against the arguments provided 
+    /// by the user in order to guarantee that the command is being used correctly. </summary>
     property Constraints: TCommandConstraints read GetConstraints write SetConstraints;
 
-    /// options related to this command
+    /// <summary> Retrieves an option given the index provided as a parameter. </summary>
+    /// <param name="AIndex">Desired option index position</param>
     property Option[const AIndex: string]: IOption read GetOption;
 
+    /// <summary> Property that returns the array of options defined for the command. </summary>
     property Options: TArray<IOption> read GetOptions;
 
-    // returns true if command accept options
+    /// <summary> Function that returns true if the command has at least one option configured.
+    /// </summary>
     function HasOptions: Boolean;    
 
-    /// allow to add na option to this command
-    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil
-      ): IOption;
+    /// <summary> Creates and adds the option to the command's list of options as given parameters.
+    /// </summary>
+    /// <param name="AFlag">Represents the option as a single letter, i.e. a short option</param>
+    /// <param name="AName">Represents the option as a word, that is, a long option, it does not accept 
+    /// spaces, but "-' can be used for compound names. Ex: no-build</param>
+    /// <param name="ADescription">Description of the option that best defines your objective. It can be 
+    /// displayed to the user when the user requests information through the help command 
+    /// for example</param>
+    /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with this option. 
+    /// Only the short option without the "-" is accepted.</param>
+    function AddOption(const AFlag, AName, ADescription: string; 
+      ANotAllowedFlags: TArray<string> = nil): IOption;
 
-    /// creates an IOption instance
+    /// <summary> Class factory recommended as first choice for class construction. Allows 
+    /// initialization with initial parameters.</summary>
+    /// <param name="AName">Command name as it will be used via command line</param>
+    /// <param name="ADescription">Command description that will be displayed to the user</param>
+    /// <param name="ACallback">Callback procedure that will be invoked if this command was selected</param>
+    /// <param name="AConstraints">Constraints check to validate correct command usage by the user.</param>
     class function New(const AName, ADescription: string; ACallback: TCommandCallback; 
       AConstraints: TCommandConstraints): ICommand;
 
   end;
 
+  /// <summary>Class that implements the interface by representing an argument that can be 
+  /// registered in CommandBuilder for later use by the user. </summary>
   TArgument = class(TInterfacedObject, IArgument)
   private
     FDescription: string;
@@ -111,20 +155,34 @@ type
     
   public
 
-    /// command description that will be displayed on usage examples
+    /// <summary> Description of the argument that best describes its purpose. It can be 
+    /// displayed to the user when he requests help information for the application.
+    /// </summary>
     property Description: string read GetDescription write SetDescription;    
 
-    /// command constraints what will be checked before execute the callback procedure
+    /// <summary> Command constrains that will be validated against the arguments provided 
+    /// by the user in order to guarantee that the command is being used correctly. </summary>
     property Constraint: TArgumentConstraint read GetConstraint write SetConstraint;
 
-    /// returns the value of argument provided via parameter, this value should assigned after parse
+    /// <summary> Returns the value of an argument after parsing the parameters informed 
+    /// via the command line. If a given command line parameter has not been classified 
+    /// as a command, it will be assigned to an argument in the order of configuration.
+    /// </summary>
     property Value: string read GetValue write SetValue;    
 
-    /// creates an IArgument instance
+    /// <summary> Class factory recommended as first choice for class construction. Allows 
+    /// initialization with initial parameters.</summary>
+    /// <param name="ADescription">Argument description that will be displayed to the user</param>
+    /// <param name="AConstraint">Constraints check to validate correct argument usage by the user.</param>
     class function New(const ADescription: string; AConstraint: TArgumentConstraint): IArgument;
 
   end;  
 
+  /// <summary> Class that implements the interface that represents the CommandBuilder, its main 
+  /// purpose is to configure the arguments, commands and options accepted by the tool. Central 
+  /// point of the library, responsible for comparing and validating the parameters passed by 
+  /// the command line with the configured parameters, later executing the callback linked to 
+  /// the localized command. </summary>
   TCommandBuilder = class(TInterfacedObject, ICommandBuilder)
   private
     FExeName: string;
@@ -165,22 +223,15 @@ type
     function GetOutput: TOutputCallback;
     procedure SetOutput(AValue: TOutputCallback);
 
-    /// output callback procedure that will be called to print command usage and messages validation
-    /// with color
     function GetOutputColor: TOutputColorCallback;
     procedure SetOutputColor(AValue: TOutputColorCallback);
 
-    /// Color theme that should be used to output colors of commands, its use is optional
     function GetColorTheme: TColorTheme;
     procedure SetColorTheme(AValue: TColorTheme);
 
-    /// Application title
     function GetTitle: string;
     procedure SetTitle(AValue: string);
 
-    /// display only the first line usage description for command usage, the user needs
-    /// to use help command to see full command description. Default value is false to
-    /// preserve original function.
     function GetUseShortDescriptions: boolean;
     procedure SetUseShortDescriptions(AValue: boolean);
 
@@ -191,114 +242,164 @@ type
     function ParsedErrorsShow: Boolean;
     function GetParsedOptions: TArray<IOption>;
 
-    /// build a list of IArguments related to selected command, if there are more than one argument
-    /// provided the list will match one argument parameter by order of the command builder construction
     function GetParsedArguments: TArray<IArgument>;
 
-    /// <summary> State that can be set by user commands allowing better communication 
-    /// between commands and the application. </summary>
     function GetState: string;
     procedure SetState(AValue: string);
 
   public
 
-    /// creates an instance with a exe name that will be used as command line shell name to start the application
+    /// <summary> Default class constructor. Creates an instance with a exe name that will be 
+    /// used as command line shell name to start the application </summary>
     constructor Create(AExeName: String);
 
-    /// adds a command to the console application
+    /// <summary> Adds a command that will be available to the user of the command line 
+    /// application.
+    /// </summary>
+    /// <param name="ACommand">Command name as it will be provided by the user via command 
+    /// line parameter. </param>
+    /// <param name="ADescription">Command description that will be displayed to the user
+    /// as usage info. </param>
+    /// <param name="ACallback">Callback procedure that will be invoked by the CommandBuilder 
+    /// if the validation was successful and the command informed match the command name.</param>
+    /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
+    /// may require a required argument, a required option. Check TCommandConstraint for 
+    /// existing constraints.</param>
     function AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
       AConstraints: TCommandConstraints): ICommandBuilder;
 
-    /// returns a list of commands configured on builder
+    /// <summary> Returns the list of commands configured in CommandBuilder.
+    /// </summary>
     property Commands: TArray<ICommand> read GetCommands;
 
-    /// adds an argument parameter that can be required or optional
+    /// <summary> Adds an argument to allow the user to pass a text argument via the command 
+    /// line.</summary>
+    /// <param name="ADescription">Description of the argument to inform the user of the 
+    /// correct usage info about it. </param>
+    /// <param name="AConstraint">Constraints to check if the argument is optional or mandatory.
+    /// </param>
     function AddArgument(const ADescription: string; AConstraint: TArgumentConstraint): ICommandBuilder;
 
-    /// allow access to the arguments list
+    /// <summary> Returns the list of arguments configured in CommandBuilder. </summary>
     property Arguments: TArray<IArgument> read GetArguments;
 
-    /// adds an option to the application or to the last command that was added.
-    /// specifies a short flag, an option name and the description of this option
+    /// <summary>Adds an option to the last added command. For both the short and long 
+    /// options, "-" must not be entered at the beginning of them.</summary>
+    /// <param name="AFlag">Represents the option as a single letter, i.e. a short option. </param>
+    /// <param name="AName">Represents the option as a word, that is, a long option, it does not accept 
+    /// spaces, but "-' can be used for compound names. </param>
+    /// <param name="ADescription">Description of the option that best defines your objective. 
+    /// It can be displayed to the user when the user requests information through the help 
+    /// command for example.</param>
+    /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with 
+    /// this option. Only the short option without the "-" is accepted.</param>
     function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil
       ): ICommandBuilder;
 
-    /// parse supplied commands and arguments
+    /// <summary> Parses parameters passed via command line, matching command names and arguments 
+    /// for further validation. </summary>
     procedure Parse;
 
-    /// validate supplied command and arguments
+    /// <summary> Validates the parsed parameters, checking the configured constraints and other 
+    /// validations such as duplicity, excess arguments, combination of existing options, 
+    /// invalid options, etc. </summary>
     function Validate: TArray<string>;   
 
-    /// executes the command
+    /// <summary> Invokes the callback procedure configured for the command found once parse 
+    /// and validation have been successful. It passes the CommandBuilder itself as a parameter 
+    /// to the callback so that it is possible to call the CheckOption method to validate the 
+    /// presence of a certain option, or to obtain the value of an expected argument through 
+    /// the Arguments[n].Value property. </summary>
     procedure Execute;
 
-    /// returns the selected command after parameters parse
+    /// <summary> Returns the selected command after Parse. </summary>
     function CommandSelected: ICommand;
 
-    /// manually sets the selected command 
+    /// <summary> Manually set the selected command. Mostly used for test purpose. </summary>
     function SetCommandSelected(ACommand: ICommand): ICommandBuilder;
 
-    /// returns a option command as an argument for the selected command
+    /// <summary> Returns a possible command that was passed as an argument to another command. 
+    /// Value is available after Parse. </summary>
     function CommandAsArgument: ICommand;
 
-    /// manually sets the a command as an argument
+    /// <summary> Manually set the command as argument. Mostly used for test purpose. </summary>
     function SetCommandAsArgument(ACommand: ICommand): ICommandBuilder;
 
-    /// returns the number of commands matched against passed arguments
+    /// <summary> Returns the number of commands found among the arguments passed as 
+    /// parameters after Parse.</summary>
     function GetCommandsFound: Integer;
 
-    /// returns the default command if one was set
+    /// <summary> Returns the default command if one has been configured. </summary>
     function GetDefaultCommand: ICommand;
 
-    /// returns parsed options list
+    /// <summary> Returns the list of valid options found after parse. </summary>
     property ParsedOptions: TArray<IOption> read GetParsedOptions;    
 
-    /// checks if a specific option was provided as a parameter
+    /// <summary> Usually used within the callback procedure of a given command to customize 
+    /// its processing. </summary>
+    /// <param name="AOption">Can be provided short option or long option without leading dashes.
+    /// </param>
     function CheckOption(const AOption: string): Boolean;
 
-    /// returns a list of IArgument related to selected command
+    /// <summary> Build a list of IArguments related to selected command, if there are more than 
+    /// one argument provided the list will match one argument parameter by order of the command 
+    /// builder configuration </summary>
     property ParsedArguments: TArray<IArgument> read GetParsedArguments;
 
-    /// returns a list of raw arguments passed as parameters
+    /// <summary> Returns a list of raw arguments passed as parameters </summary>
     function GetRawArguments: TArray<string>;
 
-    /// returns a list of raw options passed as parameters
+    /// <summary> Returns a list of raw options passed as parameters </summary>
     function GetRawOptions: TArray<string>;
 
-    /// returns a reference to the TCustomApplication
+    /// <summary> Returns exe name that will be used as command line shell name to start 
+    /// the application. It´s used to outputs usage info. </summary>
     function ExeName: string;
 
-    /// returns if builder has at least one command defined
+    /// <summary> Returns True if CommandBuilder has at least one command configured. </summary>
     function HasCommands: Boolean;
 
-    /// returns if builder has at least one argument defined
+    /// <summary> Returns True if CommandBuilder has at least one argument configured. </summary>
     function HasArguments: Boolean;
 
-    /// returns if builder has any option set on root or in any command
+    /// <summary> Returns True if CommandBuilder has any option configured in any command. </summary>
     function HasOptions: Boolean;
 
-    /// callback function that will be used to read user input from console and returns a key
+    /// <summary> Callback procedure used to capture user input. A default callback is provided 
+    /// by the library, but it can be overridden for testing purposes primarily. 
+    /// Should return user input. </summary>
     property InputLn: TInputLnCallback read GetInputLn write SetInputLn;
 
-    /// output callback procedure that will be called to print command usage and messages validation
+    /// <summary> Callback procedure that is intended to output text to the console, or other 
+    /// desired output. The library provides a standard callback that simply calls WriteLn, 
+    /// but it can be overridden so that the output is redirected to a file, a test function, etc.
+    /// </summary>
     property Output: TOutputCallback read GetOutput write SetOutput;
 
-    /// output callback procedure that will be called to print command usage and messages validation
-    /// with color
+    /// <summary> Callback procedure that is intended to output text to the console usings colors. 
+    /// The library provides a standard callback that simply calls Write before change console 
+    /// color, but it can be overridden so that the output is redirected to a file, 
+    /// a test function, etc. </summary>
     property OutputColor: TOutputColorCallback read GetOutputColor write SetOutputColor;        
 
-    /// allows to inject external arguments instead of reading from ParamStr()
+    /// <summary> Allows to inject external arguments instead of reading from ParamStr().
+    /// Mainly used for testing purposes. </summary>
+    /// <param name="AArguments"> Array of strings containing the arguments, the options 
+    /// must be passed with the leading dashes.</param>
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
 
-    /// Color theme that should be used to output colors of commands, its use is optional
+    /// <summary> Color theme that should be used to output colors of commands, a standard 
+    /// theme is provided by Command.Colors unit. Should be changed prior to application
+    /// execution </summary>
     property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;      
 
-    /// Application title
+    /// <summary> Application title, should be customized and is displayer on usage info
+    /// to the user </summary>
     property Title: string read GetTitle write SetTitle;  
 
-    /// display only the first line usage description for command usage, the user needs
+    /// <summary> Display only the first line usage description for command usage, the user needs
     /// to use help command to see full command description. Default value is false to
-    /// preserve original function.
+    /// preserve original function. </summary>
     property UseShortDescriptions: boolean read GetUseShortDescriptions write SetUseShortDescriptions;
 
     /// <summary> State that can be set by user commands allowing better communication 
@@ -307,9 +408,21 @@ type
 
   end;
 
+  /// <summary> Standard callback function to read input from user. Automatically configured 
+  /// on CommandBuilder startup. </summary>
   function StandardConsoleInputLn: string;
 
+  /// <summary> Standard callback procedure that outputs the given text to the console. 
+  /// In this implementation it just mirrors the use of the WriteLn function. It is expected 
+  /// for this type of callback that the output will be performed with a line break at the 
+  /// end of it. </summary>
   procedure StandardConsoleOutput(const AMessage: string);
+
+  /// <summary> Standard callback procedure that outputs the given text to the console using 
+  /// colors. In this implementation it only mirrors the use of the Write function, but before 
+  /// that it changes the color of the console. It is expected for this type of callback that 
+  /// the output is performed without a line break at the end of it. The original color is 
+  /// not restored impacting future outputs. </summary>
   procedure ColorConsoleOutput(const AMessage: string; const AColor: byte);
 
 implementation

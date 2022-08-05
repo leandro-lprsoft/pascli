@@ -1,3 +1,5 @@
+/// <summary> This unit contains functions to expose a command that displays version information 
+/// about the application. </summary>
 unit Command.Version;
 
 {$MODE DELPHI}{$H+}
@@ -7,10 +9,21 @@ interface
 uses
   Command.Interfaces;
 
-  /// outputs version information incorporated into the binary through use of project version info
+  /// <summary> Outputs application version information that was incorporated after the 
+  /// application was built. Requires version information to be defined in the Lazarus .lpi 
+  /// file. Also the main program must include the {$R *.res} directive. 
+  /// 
+  /// To use this command add the Command.Version unit to the uses clause and run the 
+  /// following command:
+  /// Command.Version.Registry(MyApp.CommandBuilder);
+  /// </summary>
+  /// <param Name="ABuilder">CommandBuilder that will be used to output the version 
+  /// information. </param>  
   procedure VersionCommand(ABuilder: ICommandBuilder);
 
-  /// register this command with basic parameters
+  /// <summary> Configure VersionCommand with standard parameters. </summary>
+  /// <param Name="ABuilder"> CommandBuilder instance that will be used to register the 
+  /// VersionCommand.</param>  
   procedure Registry(ABuilder: ICommandBuilder);
 
 implementation
