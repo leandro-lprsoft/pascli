@@ -18,7 +18,11 @@ boss init --quiet
 boss install github.com/leandro-lprsoft/pascli
 ```
 
-## Quickstart
+## Documentation
+
+This library is documented using [**pasdoc**](https://pasdoc.github.io/). You can access the documetation using this link [**pascli docs**](https://leandro-lprsoft.github.io/pascli/)
+
+## Quick start
 
 Create a new project on Lazarus and execute "Installation" procedure to update search path and make pascli units visible to the project.
 
