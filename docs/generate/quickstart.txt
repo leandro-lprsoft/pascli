@@ -1,0 +1,113 @@
+@title(Quick start)
+@shorttitle(Quick start)
+
+@section(1 SecFirst Create a project)
+
+Create a project named helloWorld using Lazarus or an editor of your preference.
+
+@section(1 SecSecond Manual install)
+
+To install pascli is very easy, just clone the repository and add the library's "(your install path)/pascli/src" folder to the project's search path. This procedure will need to be done for each new project.
+
+@section(1 SecThird Boss install)
+
+Another option to install pascli is using the https://github.com/HashLoad/boss. If it is already installed, just type in the command line from the project folder:
+
+@longCode(
+  boss init --quiet
+  boss install github.com/leandro-lprsoft/pascli
+)
+
+This commands will download the library inside a subfolder "modules/pascli" and add this new path to the search path of the project. 
+
+Why use boss? It manages project dependencies and allows you to update dependencies when needed. It allows you to quickly operate with a previous version of that dependency reducing compatibility risks with new versions. 
+When a new version appears you can simply type from the command line in the project folder:
+
+@longCode(
+  boss update
+)
+
+@section(1 SecForth Edit the project)
+
+Open the project using Lazarus or an editor of your preference and replace all with the following code:
+
+@longCode(
+program helloWorld;
+
+{$MODE DELPHI}{$H+}
+
+uses
+  {$IFDEF UNIX}
+  cmem, cthreads,
+  {$ENDIF}
+  Command.Interfaces,
+  Command.App,
+  Command.Usage,
+  Command.Version;
+
+var
+  Application: TCommandApp;
+
+{$R *.res}
+
+procedure HelloCommand(ABuilder: ICommandBuilder);
+begin
+  WriteLn('Hello world!');
+end;
+
+begin
+  Application := TCommandApp.Create(nil);
+  Application.Title := 'a basic cli tool sample project';
+
+  Command.Usage.Registry(Application.CommandBuilder);
+  Command.Version.Registry(Application.CommandBuilder);
+
+  Application
+    .CommandBuilder
+      .AddCommand(
+        'hello',
+        'Show a hello world message.'#13#10 +
+        'Ex: basic hello',
+        @HelloCommand,
+        [ccNoParameters]);
+
+  Application.Run;
+  Application.Free;
+end.
+)
+
+Now compile it, open a terminal at the project source path and type the following:
+
+@longCode(
+  ./helloWorld
+)
+
+You should see the following output:
+
+@longCode(
+helloWorld version 1.0.0
+
+Usage: helloWorld [command] 
+
+a basic cli tool sample project
+
+Commands: 
+  help           Shows information about how to use this tool or about a specific command.
+                 Ex: helloWorld help
+  version        Shows the helloWorld version information
+                 Ex: helloWorld version
+  hello          Show a hello world message.'Show a hello world message.
+                 Ex: basic hello
+
+Run 'helloWorld help COMMAND' for more information on a command.
+)
+
+Try the following command to see the output:
+
+@longCode(
+  ./helloWorld help hello
+)
+
+This command shows how to use the "hello" command, if there were available options, they would be displayed. 
+Now you may explore this small program, try to change @code(HelloCommand) procedure to output different text. 
+Try the tutorial to see the use of advanced options or just explore the library reference to check what is available.

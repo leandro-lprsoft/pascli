@@ -1,5 +1,6 @@
-/// <summary> This is the main unit of the library, the entry point for configuring a 
-/// command-line application. </summary>
+/// <summary> This unit contains the TCommandApp class responsible for running the application. 
+/// Through this class it is possible to configure all the parameters available to the user.
+/// </summary>
 unit Command.App;
 
 {$MODE DELPHI}{$H+}
@@ -15,21 +16,26 @@ uses
 
 type
   /// <summary> This class allows you to define which arguments, commands, and options will 
-  /// be accepted as parameters by executing the application via the command line. 
+  /// be accepted as parameters by executing the application via the command line. For that 
+  /// it is necessary to use the @link(TCommandApp.CommandBuilder) property.
+  /// </summary>  
   /// 
-  /// Ex:
-  /// ...
+  /// Ex: 
+  /// @longCode(#
+  /// 
   /// uses Command.Interfaces, Command.App, Command.Usage, Command.Version;
-  /// ...
-  /// Application := TCommandApp.Create(nil);
-  /// Application.Title := 'a basic cli tool sample project';
   /// 
-  /// Command.Usage.Registry(Application.CommandBuilder);
-  /// Command.Version.Registry(Application.CommandBuilder);
+  /// begin
+  ///   Application := TCommandApp.Create(nil);
+  ///   Application.Title := 'a basic cli tool sample project';
   /// 
-  /// Application.Run;
-  /// Application.Free;
-  /// </summary>
+  ///   Command.Usage.Registry(Application.CommandBuilder);
+  ///   Command.Version.Registry(Application.CommandBuilder);
+  /// 
+  ///   Application.Run;
+  ///   Application.Free;
+  /// end.
+  /// #)
   TCommandApp = class(TCustomApplication)
   private
     FCommandBuilder: ICommandBuilder;

@@ -1,0 +1,19 @@
+@title(About the project)
+@shorttitle(About the project)
+
+This project was developed using @html(<a href="https://www.lazarus-ide.org/">Lazarus 2.2.2</a>) and @html(<a href="https://www.freepascal.org/">FPC 3.2.2</a>). It may work on older versions, but it's not our team's target.
+
+The project is also configured to work with vscode. It has configuration for build, tests and debug. However, some extensions detailed in the dependencies section below may be required.
+
+@section(1 SecFirst Github repository)
+
+https://github.com/leandro-lprsoft/pascli.git
+
+@section(1 SecSecond Development dependencies)
+
+@unorderedList(
+    @item(Lazbuild - needs to be in the path, so the build task should work.)
+    @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=webfreak.debug">Native debug</a>) - vscode extension that is configured in launh.json, you may choose one of your preference.)
+    @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=Wosi.omnipascal">Omni Pascal</a>) - vscode extension to format object pascal code)
+    @item(@html(<a href="https://pasdoc.github.io">pasdoc</a>) - it´s a documentation tool for freepascal, it´s optional for build the project, but required to build documentation. Must be in the path.)
+   )

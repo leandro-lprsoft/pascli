@@ -1,7 +1,8 @@
 /// <summary> This unit contains functions to display information on how to use the arguments, 
-/// commands and options configured in CommandBuilder. Its main command is the UsageCommand which 
+/// commands and options configured in @link(TCommandBuilder). Its main command is the UsageCommand which 
 /// is prepared to provide usage information to the user. To use this procedure, just configure it 
-/// using CommandBuilder.AddCommand method or simply call the Registry function of this unit to do that. 
+/// using @link(TCommandBuilder.AddCommand) method or simply call the @link(Registry) function of this unit
+/// to do that. 
 /// </summary>
 unit Command.Usage;
 
@@ -15,49 +16,70 @@ uses
   Command.Interfaces;
 
   /// <summary> Outputs text describing command usage according to commands, options and arguments 
-  /// configured using application command builder. Requires to be configured using ccNoArgumentsButCommands
-  /// constraint allowing another command to be passed as parameter to UsageCommand.
+  /// configured using application command builder. If a different color theme is specified to the
+  /// @link(TCommandBuilder.ColorTheme), this command displays the usage info in different colors.
+  /// </summary>
+  /// If a given command needs another command as a parameter (for example help command).This command
+  /// should be configured using @link(ccNoArgumentsButCommands) constraint allowing another command 
+  /// to be passed as parameter to UsageCommand.
   ///
+  /// To use this command, just add the Command.Usage to the uses clause:
+  /// @longCode(
+  /// uses Command.Usage;)
+  /// And call @link(Registry) procedure to add this command to the builder:
   /// Ex:
+  /// @longCode(
+  /// Command.Usage.Registry(MyApp.CommandBuilder);
+  /// )
+  /// or customize your own configuration:
+  /// @longCode(
   /// MyApp.CommandBuilder
   ///   .AddCommand(
   ///     'help', 
-  ///     'Shows information about how to use this tool or about a specific command.'#13#10 +
+  ///     'Shows information about how to use this tool or about a specific command.' + #13#10 +
   ///     'Ex: ' + ABuilder.ExeName + ' help', 
   ///     @UsageCommand,
   ///     [ccDefault, ccNoArgumentsButCommands]);
-  /// </summary>
-  /// <param Name="ABuilder"> Instance of CommandBuilder from which the settings will be read to show
+  /// )
+  /// <param name="ABuilder"> Instance of CommandBuilder from which the settings will be read to show
   /// usage information via the command line. </param>
   procedure UsageCommand(ABuilder: ICommandBuilder);
 
-  /// <summary> Returns an argument list configured for CommandBuilder. </summary>
-  /// <param Name="ABuilder"> Instance of CommandBuilder from which data will be read </param>
+  /// <summary> Returns an argument list configured for CommandBuilder as a simple string. It will be
+  /// used to display argument usage info to the user. </summary>
+  /// <param name="ABuilder"> Instance of CommandBuilder from which data will be read.</param>
   function GetArgumentList(ABuilder: ICommandBuilder): string;
 
-  /// <summary> Outputs simple usage command using provided parameters </summary>
-  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// <summary> Outputs simple usage command using provided parameters for the command provided. Display
+  /// the usage in the following format 'EXECUTABLE [command] [options]'.
+  /// </summary>
+  /// <param name="ABuilder"> Instance of CommandBuilder that will be used to output info through
   /// its configured callback procedure. </param>
-  /// <param Name="ATitle"> Application title </param>
-  /// <param Name="ACommand"> Command name </param>
-  /// <param Name="AOptions"> Options list </param>
-  /// <param Name="AArgument"> Argument description </param>
+  /// <param name="ATitle"> Application title </param>
+  /// <param name="ACommand"> Command name </param>
+  /// <param name="AOptions"> Options list </param>
+  /// <param name="AArgument"> Argument description </param>
   procedure WriteUsage(ABuilder: ICommandBuilder; const ATitle, ACommand, AOptions, AArgument: string);
 
-  /// <summary> Outputs usage information for a specific command. </summary>
-  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// <summary> Outputs full usage information for a specific command. It´s used when the user
+  /// requests help for a specific command.</summary>
+  /// <param name="ABuilder"> Instance of CommandBuilder that will be used to output info through
   /// its configured callback procedure. </param>  
   procedure WriteCommandUsage(ABuilder: ICommandBuilder);
 
   /// <summary> Outputs general help information for the application, including command usage syntax, 
   /// command list, command description, arguments that are acceptable. Also displays application title 
   /// and version information. </summary>
-  /// <param Name="ABuilder"> Instance of CommandBuilder that will be used to output info through
+  /// <param name="ABuilder"> Instance of CommandBuilder that will be used to output info through
   /// its configured callback procedure. </param>  
   procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
 
-  /// <summary> Configure UsageCommand with standard parameters </summary>
-  /// <param Name="ABuilder"> CommandBuilder instance that will be used to register the UsageCommand.
+  /// <summary> Configure UsageCommand with standard parameters. </summary>
+  /// Ex:
+  /// @longCode(
+  /// Command.Usage.Registry(MyApp.CommandBuilder);
+  /// )
+  /// <param name="ABuilder"> CommandBuilder instance that will be used to register the UsageCommand.
   /// </param>  
   procedure Registry(ABuilder: ICommandBuilder);
 

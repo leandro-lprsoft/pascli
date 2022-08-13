@@ -1,0 +1,28 @@
+@title(Overview)
+@shorttitle(pascli)
+
+pascli is a library written for Free Pascal and aims to provide components that allow the rapid creation of command line applications.
+
+It uses a Builder to allow the description of arguments, commands and options, performs the automatic validation of these parameters and also displays the appropriate syntax for using the application to the user.
+
+This strategy allows the developer to focus on the implementation of commands and create an application with a simple code structure.
+
+@section(1 SecFirst Features)
+
+@unorderedList(
+    @item(Fluent interface api to build the command strucuture.)
+    @item(Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.)
+    @item(Short options or long options using the method AddOption)
+    @item(Command usage out of the box, outputs command information for a given command or general usage of the tool.)
+    @item(Command version output procedure.)
+    @item(Command colors unit to produce colored output to the user.)
+    @item(Full unit tested.)
+   )
+
+@section(1 SecSecond Requirements)
+
+This library was developed using FPC 3.2.2, but it may work with older versions. Should work under Linux, MacOS and Windows.
+
+@section(1 SecThird License)
+
+pascli is free and open-source software licensed under the MIT License.

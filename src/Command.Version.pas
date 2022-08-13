@@ -10,19 +10,23 @@ uses
   Command.Interfaces;
 
   /// <summary> Outputs application version information that was incorporated after the 
-  /// application was built. Requires version information to be defined in the Lazarus .lpi 
-  /// file. Also the main program must include the {$R *.res} directive. 
+  /// application was built.</summary>
+  ///
+  /// @note(Requires version information to be defined in the Lazarus project @bold(.lpi) file. 
+  /// Also the main program must include the @bold({$R *.res}) directive.)
+  /// If a different color theme is specified for the @link(TCommandBuilder.ColorTheme), the
+  /// output will be properly done.
   /// 
   /// To use this command add the Command.Version unit to the uses clause and run the 
   /// following command:
-  /// Command.Version.Registry(MyApp.CommandBuilder);
-  /// </summary>
-  /// <param Name="ABuilder">CommandBuilder that will be used to output the version 
+  /// @longCode(
+  /// Command.Version.Registry(MyApp.CommandBuilder);)
+  /// <param name="ABuilder">CommandBuilder that will be used to output the version 
   /// information. </param>  
   procedure VersionCommand(ABuilder: ICommandBuilder);
 
   /// <summary> Configure VersionCommand with standard parameters. </summary>
-  /// <param Name="ABuilder"> CommandBuilder instance that will be used to register the 
+  /// <param name="ABuilder"> CommandBuilder instance that will be used to register the 
   /// VersionCommand.</param>  
   procedure Registry(ABuilder: ICommandBuilder);
 

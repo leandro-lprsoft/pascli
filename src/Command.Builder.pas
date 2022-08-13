@@ -1,5 +1,4 @@
 /// <summary> Main unit of the library, contains the implementation of the main interfaces. 
-/// How CommandBuilder works is defined in this part of the library.
 /// </summary>
 unit Command.Builder;
 
@@ -52,10 +51,13 @@ type
 
     /// <summary> Class factory recommended as first choice for class construction. Allows 
     /// initialization with initial parameters.</summary>
-    /// <param name="AFlag">Short option</param>
-    /// <param name="AName">Long option</param>
-    /// <param name="ADescription">Option description</param>
-    /// <param name="ANotAllowedFlags">String array with not allowed options to be used together</param>
+    /// <param name="AFlag">Short option, accepts only a single letter. Do not use leading dash.</param>
+    /// <param name="AName">Long option, accepts words, do not use leading dashes or spaces</param>
+    /// <param name="ADescription">Description of the option that best defines your objective. 
+    /// It can be displayed to the user when the user requests information through the help 
+    /// command for example.</param>
+    /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with 
+    /// this option. Only the short option without the "-" is accepted.</param>
     class function New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>): IOption;
 
   end;
@@ -82,7 +84,7 @@ type
     function GetOptions: TArray<IOption>;
 
   public
-    /// <summary> Basic class constructor. Use new class factory as first option. </summary>
+    /// <summary> Basic class constructor. Use @link(TCommand.New) class factory as first option. </summary>
     constructor Create;
 
     /// <summary> Name of the command that will be used via the command line by the user.
@@ -138,7 +140,7 @@ type
 
   end;
 
-  /// <summary>Class that implements the interface by representing an argument that can be 
+  /// <summary>Class that implements the IArgument interface that represents an argument that can be 
   /// registered in CommandBuilder for later use by the user. </summary>
   TArgument = class(TInterfacedObject, IArgument)
   private
@@ -167,6 +169,19 @@ type
     /// <summary> Returns the value of an argument after parsing the parameters informed 
     /// via the command line. If a given command line parameter has not been classified 
     /// as a command, it will be assigned to an argument in the order of configuration.
+    /// 
+    /// A command callback procedure receives a parameter name ABuilder of type @link(TCommandBuilder),
+    /// using its property Arguments is possible to retrieve an argument that was passed as a parameter
+    /// by the application's user. 
+    ///
+    /// Ex: get a filename from parameters:
+    /// @longCode(
+    /// procedure MyCommand(ABuilder: ICommandBuilder);
+    /// var
+    ///   LFileName: string = '';
+    /// begin
+    ///   LFileName := ABuilder.Arguments[0].Value;
+    /// end;)
     /// </summary>
     property Value: string read GetValue write SetValue;    
 
@@ -178,7 +193,7 @@ type
 
   end;  
 
-  /// <summary> Class that implements the interface that represents the CommandBuilder, its main 
+  /// <summary> Class that implements the ICommandBuilder interface, its main 
   /// purpose is to configure the arguments, commands and options accepted by the tool. Central 
   /// point of the library, responsible for comparing and validating the parameters passed by 
   /// the command line with the configured parameters, later executing the callback linked to 
@@ -250,11 +265,14 @@ type
   public
 
     /// <summary> Default class constructor. Creates an instance with a exe name that will be 
-    /// used as command line shell name to start the application </summary>
+    /// displayed to the user when using commands like @link(UsageCommand) or @link(VersionCommand).
+    /// </summary>
+    /// <param name="AExeName">Program name without extension. It´s automatically provided 
+    /// by @link(TCommandApp) during the initialization.</param>
     constructor Create(AExeName: String);
 
     /// <summary> Adds a command that will be available to the user of the command line 
-    /// application.
+    /// application. This command will be added to the @link(TCommandBuilder.Commands) property.
     /// </summary>
     /// <param name="ACommand">Command name as it will be provided by the user via command 
     /// line parameter. </param>
@@ -263,8 +281,8 @@ type
     /// <param name="ACallback">Callback procedure that will be invoked by the CommandBuilder 
     /// if the validation was successful and the command informed match the command name.</param>
     /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
-    /// may require a required argument, a required option. Check TCommandConstraint for 
-    /// existing constraints.</param>
+    /// may require a required argument, a required option. Check @link(TCommandConstraint) for 
+    /// existing constraints. Ex: @code([ccDefault, ccNoArgumentsButCommands])</param>
     function AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
       AConstraints: TCommandConstraints): ICommandBuilder;
 
@@ -272,8 +290,10 @@ type
     /// </summary>
     property Commands: TArray<ICommand> read GetCommands;
 
-    /// <summary> Adds an argument to allow the user to pass a text argument via the command 
-    /// line.</summary>
+    /// <summary> Adds an argument to allow the user to pass a text argument via the command line. 
+    /// This argument will be added to the @link(TCommandBuilder.Arguments) property. After parse 
+    /// the value can be obtained through the value property of an item in the arguments array.
+    /// </summary>
     /// <param name="ADescription">Description of the argument to inform the user of the 
     /// correct usage info about it. </param>
     /// <param name="AConstraint">Constraints to check if the argument is optional or mandatory.
@@ -284,7 +304,7 @@ type
     property Arguments: TArray<IArgument> read GetArguments;
 
     /// <summary>Adds an option to the last added command. For both the short and long 
-    /// options, "-" must not be entered at the beginning of them.</summary>
+    /// options. @note(Do not use leading "-" for short or long options)</summary>
     /// <param name="AFlag">Represents the option as a single letter, i.e. a short option. </param>
     /// <param name="AName">Represents the option as a word, that is, a long option, it does not accept 
     /// spaces, but "-' can be used for compound names. </param>
@@ -305,11 +325,11 @@ type
     /// invalid options, etc. </summary>
     function Validate: TArray<string>;   
 
-    /// <summary> Invokes the callback procedure configured for the command found once parse 
-    /// and validation have been successful. It passes the CommandBuilder itself as a parameter 
-    /// to the callback so that it is possible to call the CheckOption method to validate the 
-    /// presence of a certain option, or to obtain the value of an expected argument through 
-    /// the Arguments[n].Value property. </summary>
+    /// <summary> Invokes the @link(TCommandCallback callback) procedure configured for the command found once parse 
+    /// and validation have been successful. It passes the @link(TCommandBuilder) itself as a parameter 
+    /// to the callback so that it is possible to call the @link(TCommandBuilder.CheckOption CheckOption) 
+    /// method to validate the presence of a certain option, or to obtain the value of an expected argument 
+    /// through the Arguments[n].Value property. </summary>
     procedure Execute;
 
     /// <summary> Returns the selected command after Parse. </summary>
@@ -336,7 +356,7 @@ type
     property ParsedOptions: TArray<IOption> read GetParsedOptions;    
 
     /// <summary> Usually used within the callback procedure of a given command to customize 
-    /// its processing. </summary>
+    /// its processing. @note(Do not use leading "-")</summary>
     /// <param name="AOption">Can be provided short option or long option without leading dashes.
     /// </param>
     function CheckOption(const AOption: string): Boolean;
@@ -346,10 +366,10 @@ type
     /// builder configuration </summary>
     property ParsedArguments: TArray<IArgument> read GetParsedArguments;
 
-    /// <summary> Returns a list of raw arguments passed as parameters </summary>
+    /// <summary> Returns a list of raw arguments passed as parameters, including invalid arguments.</summary>
     function GetRawArguments: TArray<string>;
 
-    /// <summary> Returns a list of raw options passed as parameters </summary>
+    /// <summary> Returns a list of raw options passed as parameters, including invalid options.</summary>
     function GetRawOptions: TArray<string>;
 
     /// <summary> Returns exe name that will be used as command line shell name to start 
@@ -393,8 +413,8 @@ type
     /// execution </summary>
     property ColorTheme: TColorTheme read GetColorTheme write SetColorTheme;      
 
-    /// <summary> Application title, should be customized and is displayer on usage info
-    /// to the user </summary>
+    /// <summary> Application title, can be customized and is displayed as part usage info
+    /// to the user through the command @link(UsageCommand).</summary>
     property Title: string read GetTitle write SetTitle;  
 
     /// <summary> Display only the first line usage description for command usage, the user needs

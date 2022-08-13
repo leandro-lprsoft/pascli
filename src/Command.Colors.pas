@@ -1,10 +1,24 @@
 /// <summary> This unit allows using colors when generating the application's output. It has 
 /// configuration of Dark, Light and standard color themes.
 /// Check the CommandBuilder.OutputColor method that allows writing text using a certain color.
-/// NOTE: this unit has an intilization section that tries to figure out the console color before
-/// any color change. This color will be restored before application terminates via the code in
-/// finalzation section.
 /// </summary>
+///
+/// To use it, just add it to the program's uses clause, choose a theme from @link(LightColorTheme)
+/// or @link(DarkColorTheme), you can also define your own theme using the record @link(TColorTheme) 
+/// and assigning it to the @link(TCommandBuilder.ColorTheme). See the example:
+///
+/// @longCode(
+/// Application.CommandBuilder.ColorTheme := DarkColorTheme;
+/// Application.CommandBuilder.OutputColor('Hello world', Application.CommandBuilder.Title);)
+///
+/// See @link(TCommandBuilder.OutputColor) on how to use it. Color constants can be used directly 
+/// as parameters for functions, in the example above we only used the theme for convention purposes. 
+/// Library commands like @link(UsageCommand), @link(VersionCommand) are directly affected by the 
+/// chosen theme.
+///
+/// @note(This unit has an intilization section that tries to figure out the console color before
+/// any color change. This color will be restored before application terminates via the code in
+/// finalzation section.)
 unit Command.Colors;
 
 {$MODE DELPHI}{$H+}
@@ -20,8 +34,6 @@ uses
   SysUtils,
   Command.Interfaces;
 
-/// <summary> Constants for colors, can be passed as argument for some functions of this libray.
-/// </summary>
 const 
   Black         = 0;
   Blue          = 1;
@@ -41,9 +53,15 @@ const
   White         = 15;
 
   /// <summary> Changes default console color for text output.</summary>
+  /// Ex: change text output color to LightGreen color constant:
+  ///
+  /// @code(ChangeConsoleColor(LightGreen));
   procedure ChangeConsoleColor(const AColor: Integer);
 
   /// <summary> This command outputs text for each color represented by the constant colors in this unit.
+  /// You may add this command to the application using @link(TCommandBuilder.AddCommand), so you can check
+  /// how a given color is displayed on console. There is sample app called colors on the source code repository
+  /// that shows how this command works.
   /// </summary>
   procedure OutputPalleteColor(ABuilder: ICommandBuilder);
 
@@ -52,9 +70,18 @@ var
   /// </summary>
   StartupColor: byte;
 
+  
   /// <summary>Initial color themes available from the library. Can be assigned to 
   /// CommandBuilder's ColorTheme property. </summary>
-  StartColorTheme, LightColorTheme, DarkColorTheme: TColorTheme;
+  StartColorTheme: TColorTheme; 
+
+  /// <summary>Suggested light color theme. Good to use with a console that has a white background. 
+  /// Can be assigned to CommandBuilder's ColorTheme property. </summary>
+  LightColorTheme: TColorTheme; 
+
+  /// <summary>Suggested dark color theme. Good to use with a console that has a dark background. 
+  /// Can be assigned to CommandBuilder's ColorTheme property. </summary>
+  DarkColorTheme: TColorTheme;
 
 implementation
 
