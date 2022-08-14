@@ -11,9 +11,16 @@ https://github.com/leandro-lprsoft/pascli.git
 
 @section(1 SecSecond Development dependencies)
 
+There are no dependencies to work with this project in Lazarus. But to work in vscode the following dependencies are needed:
+
 @unorderedList(
     @item(Lazbuild - needs to be in the path, so the build task should work.)
     @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=webfreak.debug">Native debug</a>) - vscode extension that is configured in launh.json, you may choose one of your preference.)
     @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=Wosi.omnipascal">Omni Pascal</a>) - vscode extension to format object pascal code)
-    @item(@html(<a href="https://pasdoc.github.io">pasdoc</a>) - it´s a documentation tool for freepascal, it´s optional for build the project, but required to build documentation. Must be in the path.)
    )
+
+@section(1 SecThird Documentation dependencies)
+@unorderedList(
+    @item(@html(<a href="https://pasdoc.github.io">pasdoc</a>) - it´s a documentation tool for freepascal, it´s optional for build the project, but required to build documentation. Must be in the path.)
+    @item(build.ps1 - is a powershell script to run pasdoc and generate the documentation site, it must be called from the project root: "docs/generate/build.ps1")
+)
