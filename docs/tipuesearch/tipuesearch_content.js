@@ -242,6 +242,8 @@ var tipuesearch = {"pages": [
      {"title": "Command.Validator.TSelectedCommandRequiresOneArguments.Validate", "text": "    ", "tags": "", "url": "Command.Validator.TSelectedCommandRequiresOneArguments.html#Validate"},
      {"title": "Command.Validator.TSelectedCommandRequiresNoArguments", "text": "   ", "tags": "", "url": "Command.Validator.TSelectedCommandRequiresNoArguments.html"},
      {"title": "Command.Validator.TSelectedCommandRequiresNoArguments.Validate", "text": "    ", "tags": "", "url": "Command.Validator.TSelectedCommandRequiresNoArguments.html#Validate"},
+     {"title": "Command.Validator.TSelectedCommandRequiresOneOption", "text": "   ", "tags": "", "url": "Command.Validator.TSelectedCommandRequiresOneOption.html"},
+     {"title": "Command.Validator.TSelectedCommandRequiresOneOption.Validate", "text": "    ", "tags": "", "url": "Command.Validator.TSelectedCommandRequiresOneOption.html#Validate"},
      {"title": "Command.Validator.TSelectedCommandValidateIfOptionsExists", "text": "   ", "tags": "", "url": "Command.Validator.TSelectedCommandValidateIfOptionsExists.html"},
      {"title": "Command.Validator.TSelectedCommandValidateIfOptionsExists.Validate", "text": "    ", "tags": "", "url": "Command.Validator.TSelectedCommandValidateIfOptionsExists.html#Validate"},
      {"title": "Command.Validator.TSelectedCommandValidateRejectedOption", "text": "   ", "tags": "", "url": "Command.Validator.TSelectedCommandValidateRejectedOption.html"},

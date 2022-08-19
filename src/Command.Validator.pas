@@ -133,6 +133,12 @@ type
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if an argument has been passed to a command with out at least one 
+  /// option. Only works if @link(ccRequiresOneOption) is not set for the command. </summary>
+  TSelectedCommandRequiresOneOption = class(TValidatorBase)
+    function Validate(ACommand: ICommandBuilder): TArray<string>; override;
+  end;
+
   /// <summary> Returns an error if a non-existent option was passed to a command. </summary>
   TSelectedCommandValidateIfOptionsExists = class(TValidatorBase)
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
@@ -185,6 +191,7 @@ begin
     .Add(TSelectedCommandRequiresValidCommandOrNothing.Create)
     .Add(TSelectedCommandRequiresOneArguments.Create)
     .Add(TSelectedCommandRequiresNoArguments.Create)
+    .Add(TSelectedCommandRequiresOneOption.Create)
     .Add(TSelectedCommandValidateIfOptionsExists.Create)
     .Add(TSelectedCommandValidateRejectedOption.Create)
     .HandleValidation(ACommand);
@@ -480,6 +487,30 @@ begin
       end;
     end;
   end;
+  Result := inherited Validate(ACommand);
+end;
+
+function TSelectedCommandRequiresOneOption.Validate(ACommand: ICommandBuilder): TArray<string>;
+var
+  LCommand: ICommand;
+  LParsedOptions: TArray<IOption>;
+begin
+  LCommand := ACommand.CommandSelected;
+  if not Assigned(LCommand) then
+    LCommand := ACommand.GetDefaultCommand;
+
+  if (Assigned(LCommand)) and (ccRequiresOneOption in LCommand.Constraints) then
+  begin
+    LParsedOptions := ACommand.GetParsedOptions;
+    if Length(LParsedOptions) < 1 then
+    begin
+      AppendToArray(FResult, 
+          Format('Command "%s" requires one option',
+          [LCommand.Name]));
+      Exit(FResult);
+    end;
+  end;
+
   Result := inherited Validate(ACommand);
 end;
 

@@ -43,6 +43,7 @@ type
     procedure TestSelectedCommandRequiresValidCommandOrNothing;
     procedure TestSelectedCommandRequiresOneArgument;
     procedure TestSelectedCommandRequiresNoArguments;
+    procedure TestSelectedCommandRequiresOneOption;
     procedure TestSelectedCommandValidateIfOptionsExists;
     procedure TestSelectedCommandValidateRejectNotAllowedOption;
     procedure TestSelectedCommandValidateRejectOptionOnlyWithFlags;    
@@ -330,6 +331,32 @@ begin
   // assert
   AssertEquals('Should return one error after validation', 1, Length(FArray));
   AssertEquals('Command "other" requires no arguments.', FArray[0]);
+end;
+
+procedure TTestCommandValidator.TestSelectedCommandRequiresOneOption;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('add', 'add a feature to the project', nil, [ccRequiresOneOption, ccNoParameters])
+        .AddOption('f', 'feature-one', 'feature one description', [])
+        .AddOption('s', 'second-feature', 'second feature description', [])
+      .UseArguments(['add'])
+      .Parse;  
+  
+  // act for ccRequiresOneOption
+  FValidator := TSelectedCommandRequiresOneOption.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert for ccRequiresOneOption
+  AssertEquals('Should return one error after validation', 1, Length(FArray));
+  AssertEquals('Command "add" requires one option', FArray[0]);  
+
+  // act for ccNoParameters
+  FValidator := TSelectedCommandRequiresNoArguments.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert for ccNoParameters
+  AssertEquals('Should not return an error after validation', 0, Length(FArray));
 end;
 
 procedure TTestCommandValidator.TestSelectedCommandValidateIfOptionsExists;
