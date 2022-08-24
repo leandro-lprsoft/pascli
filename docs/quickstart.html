@@ -25,12 +25,20 @@
 <p><h2 class=""><span id="SecSecond"></span>Manual install</h2>
 
 
-<p>To install pascli is very easy, just clone the repository and add the library's &quot;(your install path)/pascli/src&quot; folder to the project's search path. This procedure will need to be done for each new project.
+<p></p>
+
+<ul class="paragraph_spacing">
+  <li><p>Download the zip file from <a href="https://github.com/leandro-lprsoft/pascli/releases">releases</a> page. Or you can just clone the repository.</p></li>
+  <li><p>Unzip it to a folder of your preference.</p></li>
+  <li><p>Create a new project using Lazarus, open the project options, access the &quot;compiler options / paths&quot; section , and add the pascli &quot;src&quot; folder to the field &quot;Other unit files&quot;, use the search button &quot;...&quot; to locate this folder.</p></li>
+</ul>
+
+<p>
 
 <p><h2 class=""><span id="SecThird"></span>Boss install</h2>
 
 
-<p>Another option to install pascli is using the <a href="https://github.com/HashLoad/boss">https://github.com/HashLoad/boss</a>. If it is already installed, just type in the command line from the project folder:
+<p>Another option to install pascli is using the <a href="https://github.com/HashLoad/boss">boss</a> (check it for installation instructions). If boss is already installed: just type in the command line from the project folder:
 
 <p></p>
 
@@ -40,7 +48,7 @@ boss install github.com/leandro-lprsoft/pascli</pre>
 
 <p>
 
-<p>This commands will download the library inside a subfolder &quot;modules/pascli&quot; and add this new path to the search path of the project.
+<p>This commands will download the library inside a subfolder &quot;modules/pascli/src&quot; and add this new path to the search path of the project.
 
 <p>Why use boss? It manages project dependencies and allows you to update dependencies when needed. It allows you to quickly operate with a previous version of that dependency reducing compatibility risks with new versions. When a new version appears you can simply type from the command line in the project folder:
 

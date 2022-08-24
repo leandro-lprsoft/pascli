@@ -1,15 +1,17 @@
 ## pascli
-Object Pascal CLI library for ease development of command line applications
+A CLI library for ease development of command line applications for FreePascal / Lazarus.
 
 ## Install
 
-* **Manual installation**: Add the following folders to your project search path.
+### Manual installation
 
-```
-../pascli/src
-```
+* Download the zip file from [releases](https://github.com/leandro-lprsoft/pascli/releases") page. Or you can just clone the repository.
+* Unzip it to a folder of your preference.
+* Create a new project using Lazarus, open the project options, access the "compiler options / paths" section , and add the pascli "src" folder to the field "Other unit files", use the search button "..." to locate this folder.
 
-* Installation using the [**Boss**](https://github.com/HashLoad/boss):
+### Installation using the [**Boss**](https://github.com/HashLoad/boss):
+
+If Boss is not installed you need to install it first. Check the above link for instructions on how to install it.
 
 Create a new project and save it. Open a terminal at the project location and type:
 

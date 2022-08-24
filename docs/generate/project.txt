@@ -16,7 +16,7 @@ There are no dependencies to work with this project in Lazarus. But to work in v
 @unorderedList(
     @item(Lazbuild - needs to be in the path, so the build task should work.)
     @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=webfreak.debug">Native debug</a>) - vscode extension that is configured in launh.json, you may choose one of your preference.)
-    @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=Wosi.omnipascal">Omni Pascal</a>) - vscode extension to format object pascal code)
+    @item(@html(<a href="https://marketplace.visualstudio.com/items?itemName=Wosi.omnipascal">Omni Pascal</a>) - vscode extension to format code, for code completion, syntax check, etc.)
    )
 
 @section(1 SecThird Documentation dependencies)
