@@ -1,0 +1,48 @@
+@title(Features)
+@shorttitle(Features)
+
+The library has several features and in the repository we can find the use of many of them through the existing samples. We will cover these features by illustrating how they were used in the example projects.
+
+@section(2 SecFirst Fluent interface api to build the command strucuture.)
+
+This feature does not need explanations, as its implementation is illustrated through several examples contained in this documentation.
+    
+@section(2 SecSecond Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.)
+
+The validations of commands, options and arguments provided by the user are performed automatically by the library, freeing the user from concentrating efforts on these needs. Any application built using this library already enjoys this feature. Therefore, we can consider that all the samples in the repository serve to illustrate this validation capability.
+
+However, an important point to emphasize is with regard to command constraints, option constraints and arguments.
+
+We have the example of using a command constraint @link(ccNoParameters) that prevents a command from accepting any parameter when used by the user employed in the sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/colors/colors.lpr">Colors</a>).
+
+Another example that we can cite is the sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>), in which we have the use of the contraints [@link(ccRequiresOneArgument), @link(ccRequiresOneOption)] being used together. The first forces the user to supply an argument for executing the command and the other forces at least one option to be informed.
+
+Check the enum @link(TCommandConstraint) for see all available command constraints.
+
+@section(2 SecThird Short options or long options using the method AddOption)
+
+The best example we can use for configuring options is sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>). We can clearly see that the options are configured through the AddOption command where their short form and long form are provided.
+
+@section(2 SecFourth Command usage out of the box, outputs command information for a given command or general usage of the tool.)
+
+All samples are using this built-in feature. You can get a better explanation of how it works by simply trying to pick one of the samples, make some changes to the description texts of the commands, compile and run the application with the help command. For more details see the unit reference @link(Command.Usage).
+
+@section(2 SecFifth Command version output procedure.)
+
+All samples are using this built-in feature. You can get a better explanation of how it works by simply trying to pick one of the samples, compile it, and run it. There is important information in the unit @link(Command.Version) regarding the prerequisites for this feature to work.
+
+@section(2 SecSixth Command colors unit to produce colored output to the user.)
+
+One of the most exciting features of the library is providing functionality to display text on the console with colors allowing the developer to provide the proper highlighting of important information.
+
+To see how to implement a command line tool with highlighted text you can check out sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/colors/colors.lpr">Colors</a>). We can see that the implemented commands use the @link(TCommandBuilder.OutputColor OutputColor) callback function, that actually is calling @link(ColorConsoleOutput) to display the text in the selected color.
+It is worth noting that a @link(TColorTheme color theme) is defined during the creation of the @link(TCommandBuilder), but it can be customized by the developer changing the property @link(TCommandBuilder.ColorTheme ColorTheme) of CommandBuilder.
+
+@section(2 SecSeventh Full unit tested.)
+
+This is not exactly a feature, but the reason this subject is here is due to the strategy of using callbacks to implement some features such as text display, command execution, etc.
+
+The @link(TCommandBuilder CommandBuilder) allows changing these callbacks so that the developer has the chance to simulate, capture texts, thus allowing to build an excellent testing strategy. This will be detailed in the @link(testing) topic on the next page.
+
+@table( @rowHead( @cell(Next @link(testing Testing)) ) )
+

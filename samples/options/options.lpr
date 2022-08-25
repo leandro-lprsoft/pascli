@@ -33,6 +33,7 @@ var
 
 begin
   LOptions := ABuilder.GetParsedOptions;
+
   for LOption in LOptions do
   begin
     if AnsiMatchText(LOption.Flag, ['a', 'alternative']) then

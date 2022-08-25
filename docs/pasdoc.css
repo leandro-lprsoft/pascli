@@ -240,7 +240,7 @@ dl.compact_spacing p { margin-top: 0em; margin-bottom: 0em; }
    This is normal thing to do when border-collapse is set to
    collapse (because this eliminates spacing between cells).
 */
-table.table_tag { border-collapse: collapse; }
+table.table_tag { border-collapse: collapse; width: 100% }
 table.table_tag td { border: 1pt solid gray; padding: 0.3em; }
 table.table_tag th { border: 1pt solid gray; padding: 0.3em; }
 
@@ -265,3 +265,12 @@ table.table_tag th > p:first-child,
 table.table_tag td > p:last-child,
 table.table_tag th > p:last-child,
        td.itemdesc > p:last-child { margin-bottom: 0em; }
+
+tr.head {
+  width: 100%;
+}
+
+tr.head th {
+  width: 100%;
+  text-align: right;
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TestResults>
-  <!-- Generated using FPCUnit on 2022-08-24 10:02:43-->
+  <!-- Generated using FPCUnit on 2022-08-25 10:08:58-->
   <TestListing>
     <TestSuite Name="" ElapsedTime="00:00:00.016" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="69" NumberOfIgnoredTests="0">
       <TestSuite Name="TTestCommandHelper" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="2" NumberOfIgnoredTests="0">
@@ -28,7 +28,7 @@
       <TestSuite Name="TTestCommandVersion" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="1" NumberOfIgnoredTests="0">
         <Test Name="TestVersionCommand" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
-      <TestSuite Name="TTestCommandValidator" ElapsedTime="00:00:00.016" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="19" NumberOfIgnoredTests="0">
+      <TestSuite Name="TTestCommandValidator" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="19" NumberOfIgnoredTests="0">
         <Test Name="TestDuplicateArgumentValidatorError" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestDuplicateArgumentValidatorAllowedCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestDuplicateOptionValidatorError" Result="OK" ElapsedTime="00:00:00.000"/>
@@ -47,7 +47,7 @@
         <Test Name="TestSelectedCommandRequiresOneOption" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandValidateIfOptionsExists" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandValidateRejectNotAllowedOption" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestSelectedCommandValidateRejectOptionOnlyWithFlags" Result="OK" ElapsedTime="00:00:00.016"/>
+        <Test Name="TestSelectedCommandValidateRejectOptionOnlyWithFlags" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
       <TestSuite Name="TTestCommandBuilderOption" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="2" NumberOfIgnoredTests="0">
         <Test Name="TestNewOptionBasic" Result="OK" ElapsedTime="00:00:00.000"/>
@@ -61,13 +61,13 @@
         <Test Name="TestNewCommandWithOptions" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestNewCommandAddOptionWithEmptyFlag" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
-      <TestSuite Name="TTestCommandBuilder" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="27" NumberOfIgnoredTests="0">
+      <TestSuite Name="TTestCommandBuilder" ElapsedTime="00:00:00.016" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="27" NumberOfIgnoredTests="0">
         <Test Name="TestConstructor" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestConstructorExeNameNotProvided" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddArgument" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddOption" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestParseBasic" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestParseBasic" Result="OK" ElapsedTime="00:00:00.016"/>
         <Test Name="TestParseOneArgumentNoCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseOneArgumentOneCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseOneArgumentAndCommandWithOptions" Result="OK" ElapsedTime="00:00:00.000"/>
@@ -98,5 +98,5 @@
   <NumberOfFailures>0</NumberOfFailures>
   <NumberOfIgnoredTests>0</NumberOfIgnoredTests>
   <TotalElapsedTime>00:00:00.016</TotalElapsedTime>
-  <DateTimeRan>2022-08-24 10:02:43</DateTimeRan>
+  <DateTimeRan>2022-08-25 10:08:58</DateTimeRan>
 </TestResults>

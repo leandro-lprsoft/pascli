@@ -1,0 +1,195 @@
+@title(Testing)
+@shorttitle(Testing)
+
+This section will detail how to implement a testing strategy with regard to eventual texts shown by the commands implemented by the developer, as long as the developer uses the @link(TCommandBuilder) callbacks. Another possibility is to configure callbacks for user input through the @link(TCommandBuilder.InputCallback) property.
+
+It is not the aim of this section to cover the entire testing strategy of the application being developed, but only what is connected with the use of the library.
+
+You can consult the tests implemented for the library itself and see how the output and input routines have been replaced by callbacks that capture the content and divert the console output to variables and simulate a user's input preventing the test from simply getting stuck.
+
+It will be considered that the developer has experience using the fpcunit testing framework.
+
+@section(2 SecFirst Unit tests using Output)
+
+Considering that a test project already exists and that a unit implementing a TTestCase class is also available, we can proceed with the instructions below.
+
+To test the Output of the commands executed by the application, we can follow the steps:
+
+@section(3 SecFirst_a Preparing for setup)
+
+Add the units Command.Interfaces, Command.Builder and StrUtils to your unit that implements the TTestCase class:
+
+@longCode(
+  uses
+    Command.Interfaces,
+    Command.App,
+    Command.Builder,
+    StrUtils;
+)
+
+Don't forget to add your unit that implements the command to be tested to uses clause too.
+
+Declare a field on TTestCase private section to hold an TCommandApp instance:
+
+@longCode(
+  private
+    FApplication: TCommandApp;
+)
+
+In the implementation section, you need to declare a variable to capture the output content and also a funcion callback to assign the text output to this variable:
+
+@longCode(
+var
+  CapturedOutput: string;
+
+procedure MockOutput(const AMessage: string);
+begin
+  CapturedOutput := CapturedOutput + AMessage + #13#10;
+end;
+)
+
+@section(3 SecFirst_b Adjust the setup)
+
+The setup procedure of unit test class will be called for each unit test, so we need to intiliaze it properly.
+
+@longCode(
+procedure TTestMyCommand.SetUp;
+begin
+  FApplication := TCommandApp.Create(nil);
+  FApplication.Title := 'testcmdapp';
+  // change the Output callback with our Mock, so we can capture the command outputs
+  FApplication.CommandBuilder.Output := @MockOutput; 
+  // clear possible other tests output
+  CapturedOutput := ''; 
+end;
+)
+
+@section(3 SecFirst_c Adjust the TearDown)
+
+We need to free the FApplication from memory to avoid leaks and have tests run independently of the other tests.
+
+@longCode(
+procedure TTestMyCommand.TearDown;
+begin
+  FreeAndNil(FApplication);
+end;
+)
+
+@section(3 SecFirst_d Implementing a test)
+
+We can implement a simple test using what has been prepared. Create a new test and use the following code:
+
+@longCode(
+procedure TTestMyCommand.TestMyCommandBasic;
+var
+  LExpected: string;
+begin
+  // arrange
+  FApplication
+    .CommandBuilder
+      // configure your command callback
+      .AddCommand('mycommand', 'mycommand description', @MyCommand, []) 
+        .AddOption('m', 'my-option', 'my option description', []);
+
+  // act
+  FApplication
+    .CommandBuilder
+      // Inject arguments to simulate an application call made by the user
+      .UseArguments(['mycommand', 'm']) 
+      .Parse;
+
+  // Here the CommandBuilder effectively calls the callback
+  FApplication.CommandBuilder.Execute; 
+
+  // asserts
+  LExpected := 'my expected output'#13#10;
+  AssertEquals(LExpected, CapturedOutput);
+end;
+)
+
+This test, in addition to testing the execution of the command, is also testing if the command is called by the CommandBuilder when a certain set of parameters are passed by the user. It is worth noting the use of the @link(TCommandBuilder.UseArguments UseArguments) method, its purpose is to inject arguments into the CommandBuilder, without the user having to provide them, which helps a lot in tests.
+
+@section(2 SecSecond Unit tests using Input)
+
+To implement a test case to test the user input of a given command we will use the work already done in the previous test in terms of preparation and setup.
+
+@section(3 SecFSecond_a Intial changes)
+
+We need to declare a variable to simulate a specific input from the user, and also provide a procedure simulate the user input. To do that add the following code to the unit implementation section:
+
+@longCode(
+var
+  MockInputLnResult: string;
+
+function MockInputLn: string;
+begin
+  Result := MockInputLnResult;
+end;
+)
+
+@section(3 SecFSecond_b Adjust the setup)
+
+We need to change the @link(InputCallback) to our MockInputLn, and also initialize the variable MockInputLnResult, add these lines to TTestMyCommand.Setup method:
+
+@longCode(
+  FApplication.CommandBuilder.InputLn := @MockInputLn;
+  MockInputLnResult := '';
+)
+
+@section(3 SecFSecond_c Implementing a test)
+
+Your command should call CommandBuilder.InputLn as we see below:
+
+@longCode(
+procedure MyCommandWithInput(ABuilder: ICommandBuilder);
+var
+  LAnswer: string;
+begin
+  ABuilder.Output('Are you sure? [y], [n]: ');
+  LAnswer := ABuilder.InputLn();
+  if LAnswer = 'y' then 
+    ABuilder.Output('Your answer was: ' + LAnswer)
+    // do MyCommand stuff
+  else
+    ABuilder.Output('Command aborted');
+end;
+)
+
+Now we can implement our test and simulate user input, so that the command can be run until the end:
+
+@longCode(
+procedure TTestMyCommand.TestMyCommandBasicWithInput;
+var
+  LExpected: string;
+begin
+  // arrange
+  FApplication
+    .CommandBuilder
+      // configure your command callback
+      .AddCommand('mycommand', 'mycommand description', @MyCommandWithInput, []) 
+        .AddOption('m', 'my-option', 'my option description', []);
+
+  // Simulates that the user entered the answer "y"
+  MockInputLnResult := 'y';
+
+  // act
+  FApplication
+    .CommandBuilder
+      // Inject arguments to simulate an application call made by the user
+      .UseArguments(['mycommand', 'm']) 
+      .Parse;
+
+  FApplication.CommandBuilder.Execute; // Here the CommandBuilder effectively calls the callback
+
+  // asserts
+  AssertTrue(MockInputLnResult, ContainsText(CapturedOutput, 'Your answer was: ' + MockInputLnResult));
+end;
+)
+
+@section(2 SecThird Summary)
+
+We saw how to implement tests using library resources, but we do not deal here with tests considering the application execution via the command line. This could be done as integration tests.
+
+In the next topic we can explore the organization of the pascli project in terms of source code, IDEs used, prerequisites, among others.
+
+@table( @rowHead( @cell(Next @link(project About the project)) ) )

@@ -49,6 +49,18 @@ function Set-NavigationItemOrder {
   $Content = $Content.Replace('<li><a href="quickstart.html">Quick start</a></li>', '')
   $Content = $Content.Replace($ItemAllUnits, '<li><a href="quickstart.html">Quick start</a></li>' + $ItemAllUnits)
 
+  $Content = $Content.Replace('<li><a href="application.html">Application structure</a></li>', '')
+  $Content = $Content.Replace($ItemAllUnits, '<li><a href="application.html">Application structure</a></li>' + $ItemAllUnits)
+
+  $Content = $Content.Replace('<li><a href="command.html">Command structure</a></li>', '')
+  $Content = $Content.Replace($ItemAllUnits, '<li><a href="command.html">Command structure</a></li>' + $ItemAllUnits)
+
+  $Content = $Content.Replace('<li><a href="features.html">Features</a></li>', '')
+  $Content = $Content.Replace($ItemAllUnits, '<li><a href="features.html">Features</a></li>' + $ItemAllUnits)
+
+  $Content = $Content.Replace('<li><a href="testing.html">Testing</a></li>', '')
+  $Content = $Content.Replace($ItemAllUnits, '<li><a href="testing.html">Testing</a></li>' + $ItemAllUnits)
+
   $Content = $Content.Replace('<li><a href="project.html">About the project</a></li>', '')
   $Content = $Content.Replace($ItemAllUnits, '<li><a href="project.html">About the project</a></li>' + $ItemAllUnits)
 
@@ -73,6 +85,10 @@ $DocArgs =
   "--output " + $BasePath + "docs " +
   "--introduction=" + $BasePath + "docs\generate\introduction.txt " +
   "--additional="  + $BasePath + "docs\generate\quickstart.txt " +
+  "--additional="  + $BasePath + "docs\generate\application.txt " +
+  "--additional="  + $BasePath + "docs\generate\command.txt " +
+  "--additional="  + $BasePath + "docs\generate\features.txt " +
+  "--additional="  + $BasePath + "docs\generate\testing.txt " +
   "--additional="  + $BasePath + "docs\generate\project.txt " +
   $BasePath + "src\*.pas "
 

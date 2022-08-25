@@ -26,3 +26,5 @@ This library was developed using FPC 3.2.2, but it may work with older versions.
 @section(1 SecThird License)
 
 pascli is free and open-source software licensed under the MIT License.
+
+@table( @rowHead( @cell(Next @link(quickstart Quick start)) ) )

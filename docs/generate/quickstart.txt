@@ -115,3 +115,5 @@ Try the following command to see the output:
 This command shows how to use the "hello" command, if there were available options, they would be displayed. 
 Now you may explore this small program, try to change @code(HelloCommand) procedure to output different text. 
 Try the tutorial to see the use of advanced options or just explore the library reference to check what is available.
+
+@table( @rowHead( @cell(Next @link(Application Application structure)) ) )

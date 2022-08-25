@@ -1,0 +1,115 @@
+@title(Application structure)
+@shorttitle(Application structure)
+
+The proposed structure for the development of a command line tool using pascli starts with the use of the TCommandApp class, however the use of this class is not mandatory, and it is possible to use the @link(TCommandBuilder) directly, which will be explored in another section on this page.
+
+@section(1 SecFirst Using TCommandApp as a base)
+
+As we saw in the @link(quickstart Quick start) section, using the @link(TCommandApp) base class is is pretty straight. See the steps to follow this way:
+
+@section(3 SecFirst_a Prepare the application)
+
+Add the @link(Command.Interfaces), @link(Command.App), @link(Command.Usage) units to the uses clause.
+Declare a variable and initialize an instance of the @link(TCommandApp) class.
+Set the contents of the application's title property with a brief description of the tool.
+
+@section(3 SecFirst_b Register built-in commands)
+
+Register built-in commands like @link(UsageCommand) or @link(VersionCommand). 
+Their respective units have commands ready to register them in CommandBuilder, with names and descriptions ready to use.
+
+@section(3 SecFirst_c Create your own commands)
+
+The main point of building a command line tool is the execution of its own services, so with the use of this library you can focus on these issues and leave it to the library to structure the commands, display information on the use of the commands, execute validation of user-supplied parameters.
+
+With that, you can implement your own commands based on the @link(TCommandCallback) signature. 
+Register your own commands using the @link(TCommandBuilder.AddCommand AddCommand) method of the application's @link(TCommandBuilder CommandBuilder) property.
+
+See the command below as an example:
+
+@longCode(
+// create your command
+procedure CustomCommand(ABuilder: ICommandBuilder);
+begin
+  if ABuilder.CheckOption('complete') then 
+    ABuilder.Output('Has option --complete');
+  if ABuilder.CheckOption('c') then
+    ABuilder.Output('Has option -c');
+  ABuilder.Output('filename: ' + ABuilder.GetParsedArguments[0].Value);
+end;
+
+// register your command
+Application
+  .CommandBuilder
+    .AddCommand(
+      'checkfile',
+      'check file content',
+      @CustomCommand,
+      [ccRequiresOneArgument]
+      )
+      .AddOption('c', 'complete', 'full check', [])
+    .AddArgument('argument parameter', acOptional);
+)
+
+In the code above we created a command that only checks for the existence of the "complete" option, this check can be done either by the short option or by the long option, we also check the name of the file passed as an argument.
+
+This command has been configured with the name "checkfile" and a description accordingly, this information is displayed in the command @link(UsageCommand) to guide the user on usage. We added a constraint @link(ccRequiresOneArgument) so that the user enters a file name, if not informed, the CustomCommand callback will not be called. We also added a "c" option, and in its long form "complete". The @link(TCommandBuilder.AddArgument) method call is at the same level as the AddCommand, that is, it is adding an argument for the tool as a whole and not for the command. 
+
+The user will need to type something like this to use this command:
+@longCode(
+  tool checkfile --complete file.txt
+  tool checkfile -c file.txt
+  tool checkfile file.txt
+)
+
+Returning to the callback command, we have the use of the CommandBuilder's @link(TCommandBuilder.Output Output) method instead of calling WriteLn, this format is preferable because it is possible to replace the @link(TCommandBuilder.Output Output) callback, by another procedure of a specific @link(TOutputCallback callback signature) to enable tests, or even redirect the output to a file for example.
+
+You can check the description of the @link(command command structure) provided by the library.
+
+@section(3 SecFirst_d Run the application)
+
+After all that, just call the application's @link(TCommandApp.Run run) method so that it takes care of analyzing the arguments provided by the user via the command line, performing the necessary checks and calling the appropriate commands once the conditions are met.
+
+@section(1 SecSecond Using TCommandBuilder as a base)
+
+We cannot assume that a new application will be able to implement TCommandApp, because often the basis of a new project can be precisely the use of another base class for the application.
+
+For this, it is possible to implement the direct use of CommandBuilder through the next steps:
+
+@section(3 SecSecond_a Prepare the CommadBuilder)
+
+Considering that you already have an application, you need to create a variable, field or property of type @link(ICommandBuilder) and initialize it properly. See the example code:
+
+@longCode(
+uses
+  Command.Interfaces,
+  Command.Builder;
+  
+var
+  FCommandBuilder: ICommandBuilder;
+
+begin
+  FCommandBuilder := TCommandBuilder.Create(ExtractFileName(ParamStr(0)));
+  FCommandBuilder.Title := 'a custom cli tool';
+end;
+)
+
+In the code above the FCommandBuilder could be the field of a class behind a property. The constructor requires as a parameter the name of the executable without extension that will be used by the user to execute the application. Other information is the title of the application. Both information will be used by the library, more specifically by the command @link(UsageCommand).
+
+@section(3 SecSecond_b Registering commands)
+
+You can register commands in the same way explained in the topics "Register built-in commands" and "Create your own commands" above.
+
+@section(3 SecSecond_c Running the command builder)
+
+Depending on the type of application you are developing, it is necessary that you choose the appropriate time to process the arguments provided by the user, usually this is done before the application starts executing its own services. To perform this processing, just run the following @link(TCommandBuilder) commands:
+
+@longCode(
+  FCommandBuilder.Parse;
+  FCommandBuilder.Validate;
+  FCommandBuilder.Execute;
+)
+
+You can check what each command above does in detail, but it is important to know that the validate command may generate exceptions preventing the application from proceeding if the parameters informed by the user are not in accordance with what was configured.
+
+@table( @rowHead( @cell(Next @link(command Command structure)) ) )
