@@ -29,6 +29,9 @@ This unit contains a set of simple functions that help to perform repetitive act
 <tr class="list2">
 <td class="itemcode"><code>function <strong><a href="Command.Helpers.html#RemoveStartingDashes">RemoveStartingDashes</a></strong>(const LOption: string): string;</code></td>
 </tr>
+<tr class="list">
+<td class="itemcode"><code>function <strong><a href="Command.Helpers.html#SplitOptionAndValue">SplitOptionAndValue</a></strong>(var AOption: string): string;</code></td>
+</tr>
 </table>
 <h2 class="description">Description</h2>
 <h3 class="detail">Functions and Procedures</h3>
@@ -65,6 +68,22 @@ Removes the first &quot;-&quot; and second &quot;-&quot; characters if found fro
 <dl class="parameters">
 <dt>LOption</dt>
 <dd>String option passed as an argument via the command line that will be processed to remove the leading &quot;-&quot;.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="SplitOptionAndValue"></span><code>function <strong>SplitOptionAndValue</strong>(var AOption: string): string;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Given an option with value, split the option in two parts: the option name and the value. The option name is the part before the &quot;=&quot; character. The value is the part after the &quot;=&quot; character. If the option doesn't contain the &quot;=&quot; character, the value is empty. The function returns the value and keeps the only the option name in the parameter AOption. </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>AOption</dt>
+<dd>String option passed as an argument via the command line that will be processed split a possible value from the option name.</dd>
 </dl>
 </td></tr>
 </table>

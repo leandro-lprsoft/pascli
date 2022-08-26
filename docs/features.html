@@ -42,6 +42,15 @@
 
 <p>The best example we can use for configuring options is sample <a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>. We can clearly see that the options are configured through the AddOption command where their short form and long form are provided.
 
+<p><h3 class=""><span id="SecThird_1"></span>Options with required value or not</h3>
+
+
+<p>The best example we can use for configuring options is also the sample <a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>. Whenever an option is configured using the AddOption command, some validation parameters can be informed:
+
+<p>* ANotAllowedOptions: this is an array of strings that can receive the flags that are prohibited for use together with the option being added to the command.
+
+<p>* Constraint: one of three options can be informed <a class="normal" href="Command.Interfaces.html#ocNoValue">ocNoValue</a> - does not allow receiving values for the option, <a class="normal" href="Command.Interfaces.html#ocRequiresValue">ocRequiresValue</a> - requires filling in a value for the option and <a class="normal" href="Command.Interfaces.html#ocOptionalValue">ocOptionalValue</a> - which does not validate if a value has been reported or not. Check the <a class="normal" href="Command.Builder.TCommand.html#AddOption">AddOption</a> command for more information. The options must be informed by the user, as in the following example: -a=&quot;value&quot; -b=&quot;my value with spaces&quot;.
+
 <p><h3 class=""><span id="SecFourth"></span>Command usage out of the box, outputs command information for a given command or general usage of the tool.</h3>
 
 

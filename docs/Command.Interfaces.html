@@ -65,18 +65,21 @@
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a></strong> = set of <a href="Command.Interfaces.html#TCommandConstraint">TCommandConstraint</a>;</code></td>
 </tr>
 <tr class="list">
+<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a></strong> = (...);</code></td>
+</tr>
+<tr class="list2">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TArgumentConstraint">TArgumentConstraint</a></strong> = (...);</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a></strong> = procedure (ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>);</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a></strong> = procedure (const AMessage: string);</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a></strong> = procedure (const AMessage: string; const AColor: byte);</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TInputLnCallback">TInputLnCallback</a></strong> = function: string;</code></td>
 </tr>
 </table>
@@ -111,6 +114,24 @@
 <tr><td colspan="1">
 <p>
  Set type of constraints, as they can have their combined use when configuring a command. </p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TOptionConstraint"></span><code><strong>TOptionConstraint</strong> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+ Enumerated type that defines constraints that apply on options. It is used to indicate to the CommandBuilder the rules for using options, allowing its validation to be done automatically. </p>
+<h6 class="description_section">Values</h6>
+<ul>
+<li>
+<span id="ocNoValue">ocNoValue</span>:  Indicates that a value is not accepted for the option.</li>
+<li>
+<span id="ocRequiresValue">ocRequiresValue</span>:  Indicates that a value is required for the option. </li>
+<li>
+<span id="ocOptionalValue">ocOptionalValue</span>:  Indicates that a value is optional for the option. </li>
+</ul>
 </td></tr>
 </table>
 <table class="detail wide_list">

@@ -23,6 +23,15 @@ Check the enum @link(TCommandConstraint) for see all available command constrain
 
 The best example we can use for configuring options is sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>). We can clearly see that the options are configured through the AddOption command where their short form and long form are provided.
 
+@section(2 SecThird_1 Options with required value or not)
+
+The best example we can use for configuring options is also the sample @html(<a href="https://github.com/leandro-lprsoft/pascli/blob/main/samples/options/options.lpr">options</a>).
+Whenever an option is configured using the AddOption command, some validation parameters can be informed:
+
+* ANotAllowedOptions: this is an array of strings that can receive the flags that are prohibited for use together with the option being added to the command.
+
+* Constraint: one of three options can be informed @link(ocNoValue) - does not allow receiving values for the option, @link(ocRequiresValue) - requires filling in a value for the option and @link(ocOptionalValue) - which does not validate if a value has been reported or not. Check the @link(TCommand.AddOption AddOption) command for more information. The options must be informed by the user, as in the following example: -a="value" -b="my value with spaces".
+
 @section(2 SecFourth Command usage out of the box, outputs command information for a given command or general usage of the tool.)
 
 All samples are using this built-in feature. You can get a better explanation of how it works by simply trying to pick one of the samples, make some changes to the description texts of the commands, compile and run the application with the help command. For more details see the unit reference @link(Command.Usage).

@@ -8,9 +8,7 @@ uses
   Classes, 
   SysUtils, 
   fpcunit, 
-  testutils, 
   testregistry,
-  Command.App,
   Command.Interfaces,
   Command.Builder;
 
@@ -65,7 +63,7 @@ begin
   // arrange
   LCommand := TCommand.New('default', 'default command description', @MockCommand, [ccNoParameters]);
   LFirstOption := LCommand.AddOption('f', 'first', 'first option', []);
-  LSecondOption := LCommand.AddOption('s', 'second', 'second option', ['f']);
+  LSecondOption := LCommand.AddOption('s', 'second', 'second option', ['f'], ocOptionalValue);
   
   // assert command
   AssertEquals('Command should return True from HasOptions function', True, LCommand.HasOptions);
@@ -80,6 +78,7 @@ begin
     LCommand.Options[0].Name);
   AssertEquals('First option shoud have flag "f"', 'f', LFirstOption.Flag);
   AssertEquals('First option shoud have long parameter "first"', 'first', LFirstOption.Name);
+  AssertEquals('First option shoud have Constraint ocNoValue = 0', Ord(ocNoValue), Ord(LFirstOption.Constraint));
 
   // assert second option
   AssertEquals('Second option description should be "second option"', 'second option', LSecondOption.Description);
@@ -91,6 +90,7 @@ begin
     'Second option not allowed flags first item should be "f"',
     'f', 
     LSecondOption.NotAllowedFlags[0]);    
+  AssertEquals('Second option shoud have Constraint ocOptionalValue = 0', Ord(ocOptionalValue), Ord(LSecondOption.Constraint));
 end;
 
 procedure TTestCommandBuilderCommand.AddOptionWithEmptyFlag;

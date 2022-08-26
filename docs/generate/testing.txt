@@ -1,7 +1,7 @@
 @title(Testing)
 @shorttitle(Testing)
 
-This section will detail how to implement a testing strategy with regard to eventual texts shown by the commands implemented by the developer, as long as the developer uses the @link(TCommandBuilder) callbacks. Another possibility is to configure callbacks for user input through the @link(TCommandBuilder.InputCallback) property.
+This section will detail how to implement a testing strategy with regard to eventual texts shown by the commands implemented by the developer, as long as the developer uses the @link(TCommandBuilder) callbacks. Another possibility is to configure callbacks for user input through the @link(TCommandBuilder.InputLn callback) property.
 
 It is not the aim of this section to cover the entire testing strategy of the application being developed, but only what is connected with the use of the library.
 
@@ -129,7 +129,7 @@ end;
 
 @section(3 SecFSecond_b Adjust the setup)
 
-We need to change the @link(InputCallback) to our MockInputLn, and also initialize the variable MockInputLnResult, add these lines to TTestMyCommand.Setup method:
+We need to change the @link(TCommandBuilder.InputLn callback) to our MockInputLn, and also initialize the variable MockInputLnResult, add these lines to TTestMyCommand.Setup method:
 
 @longCode(
   FApplication.CommandBuilder.InputLn := @MockInputLn;

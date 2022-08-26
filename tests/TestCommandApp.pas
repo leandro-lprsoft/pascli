@@ -75,6 +75,9 @@ end;
 
 procedure TTestCommandApp.TestAppTitle;
 begin
+  FApplication.Initialize;
+  FApplication.CommandBuilder.AddCommand('test', 'test command', @MockCommand, []);
+  FApplication.CommandBuilder.UseArguments(['test']);
   FApplication.Run;
   AssertEquals(FApplication.Title, FApplication.CommandBuilder.Title);
 end;

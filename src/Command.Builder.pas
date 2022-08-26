@@ -22,6 +22,8 @@ type
     FName: string;
     FDescription: string;
     FNotAllowedFlags: TArray<string>;
+    FConstraint: TOptionConstraint;
+    FValue: string;
 
     function GetFlag: string;
     procedure SetFlag(const AValue: string);
@@ -31,6 +33,10 @@ type
     procedure SetDescription(const AValue: string);
     procedure SetNotAllowedFlags(const Value: TArray<string>);
     function GetNotAllowedFlags: TArray<string>;
+    function GetConstraint: TOptionConstraint;
+    procedure SetConstraint(const AValue: TOptionConstraint);
+    function GetValue: string;
+    procedure SetValue(const AValue: string);
   public 
 
     /// <summary> Represents the option as a single letter, i.e. a short option </summary>
@@ -49,6 +55,16 @@ type
     /// Only the short option without the "-" is accepted.</summary>
     property NotAllowedFlags: TArray<string> read GetNotAllowedFlags write SetNotAllowedFlags;
 
+    /// <summary> Option constrains that will be validated against the options provided 
+    /// by the user in order to guarantee that the command is being used correctly. </summary>
+    property Constraint: TOptionConstraint read GetConstraint write SetConstraint;
+
+    /// <summary> Returns the value of an option after parsing the parameters informed 
+    /// via the command line. The value of an option shoud be passed on right side of 
+    /// an equal sign after the option name or flag.
+    /// </summary>
+    property Value: string read GetValue write SetValue;
+
     /// <summary> Class factory recommended as first choice for class construction. Allows 
     /// initialization with initial parameters.</summary>
     /// <param name="AFlag">Short option, accepts only a single letter. Do not use leading dash.</param>
@@ -58,7 +74,10 @@ type
     /// command for example.</param>
     /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with 
     /// this option. Only the short option without the "-" is accepted.</param>
-    class function New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>): IOption;
+    /// <param name="AConstraint">Option constraint that will be validated against the options provided
+    /// by the user in order to guarantee that the command is being used correctly. </param>
+    class function New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>; 
+      AConstraint: TOptionConstraint = ocNoValue): IOption;
 
   end;
 
@@ -126,8 +145,10 @@ type
     /// for example</param>
     /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with this option. 
     /// Only the short option without the "-" is accepted.</param>
-    function AddOption(const AFlag, AName, ADescription: string; 
-      ANotAllowedFlags: TArray<string> = nil): IOption;
+    /// <param name="AConstraint">Option constraint that will be validated against the options provided
+    /// by the user in order to guarantee that the command is being used correctly. </param>
+    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+      AConstraint: TOptionConstraint = ocNoValue): IOption;
 
     /// <summary> Class factory recommended as first choice for class construction. Allows 
     /// initialization with initial parameters.</summary>
@@ -162,7 +183,7 @@ type
     /// </summary>
     property Description: string read GetDescription write SetDescription;    
 
-    /// <summary> Command constrains that will be validated against the arguments provided 
+    /// <summary> Argument constraints that will be validated against the arguments provided 
     /// by the user in order to guarantee that the command is being used correctly. </summary>
     property Constraint: TArgumentConstraint read GetConstraint write SetConstraint;
 
@@ -313,8 +334,10 @@ type
     /// command for example.</param>
     /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with 
     /// this option. Only the short option without the "-" is accepted.</param>
-    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil
-      ): ICommandBuilder;
+    /// <param name="AConstraint">Option constraint that will be validated against the options provided
+    /// by the user in order to guarantee that the command is being used correctly. </param>
+    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+      AConstraint: TOptionConstraint = ocNoValue): ICommandBuilder;
 
     /// <summary> Parses parameters passed via command line, matching command names and arguments 
     /// for further validation. </summary>
@@ -359,7 +382,8 @@ type
     /// its processing. @note(Do not use leading "-")</summary>
     /// <param name="AOption">Can be provided short option or long option without leading dashes.
     /// </param>
-    function CheckOption(const AOption: string): Boolean;
+    function CheckOption(const AOption: string): Boolean; overload;
+    function CheckOption(const AOption: string; out AValue: string): Boolean; overload;
 
     /// <summary> Build a list of IArguments related to selected command, if there are more than 
     /// one argument provided the list will match one argument parameter by order of the command 
@@ -453,7 +477,8 @@ uses
   Command.Validator,
   Command.Colors;
 
-class function TOption.New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>): IOption;
+class function TOption.New(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string>; 
+  AConstraint: TOptionConstraint = ocNoValue): IOption;
 var
   LFlag: string;
 begin
@@ -476,6 +501,8 @@ begin
   Result.Name := AName;
   Result.Description := ADescription;
   Result.NotAllowedFlags := ANotAllowedFlags;
+  Result.Constraint := AConstraint;
+  Result.Value := '';
 end;
 
 function TOption.GetFlag: string;
@@ -516,6 +543,26 @@ end;
 function TOption.GetNotAllowedFlags: TArray<string>;
 begin
   Result := FNotAllowedFlags;
+end;
+
+function TOption.GetConstraint: TOptionConstraint;
+begin
+  Result := FConstraint;
+end;
+
+procedure TOption.SetConstraint(const AValue: TOptionConstraint);
+begin
+  FConstraint := AValue;
+end;
+
+procedure TOption.SetValue(const AValue: string);
+begin
+  FValue := AValue;
+end;
+
+function TOption.GetValue: string;
+begin
+  Result := FValue;
 end;
 
 constructor TCommand.Create;
@@ -588,12 +635,12 @@ begin
   Result := FOptions;
 end;
 
-function TCommand.AddOption(const AFlag, AName, ADescription: string; 
-  ANotAllowedFlags: TArray<string> = nil): IOption;
+function TCommand.AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+  AConstraint: TOptionConstraint = ocNoValue): IOption;
 var 
   LOption: IOption;
 begin
-  LOption := TOption.New(AFlag, AName, ADescription, ANotAllowedFlags);
+  LOption := TOption.New(AFlag, AName, ADescription, ANotAllowedFlags, AConstraint);
   SetLength(FOptions, Length(FOptions) + 1);
   FOptions[Length(FOptions) - 1] := LOption;
   Result := FOptions[Length(FOptions) - 1];
@@ -699,13 +746,13 @@ begin
       Exit(FArguments[I]);
 end;
 
-function TCommandBuilder.AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil
-  ): ICommandBuilder;
+function TCommandBuilder.AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+  AConstraint: TOptionConstraint = ocNoValue): ICommandBuilder;
 begin
   if Length(FCommands) = 0 then
     raise Exception.Create('Must add a command to add an option.');
 
-  FCommands[Length(FCommands) - 1].AddOption(AFlag, AName, ADescription, ANotAllowedFlags);
+  FCommands[Length(FCommands) - 1].AddOption(AFlag, AName, ADescription, ANotAllowedFlags, AConstraint);
   Result := Self;
 end;
 
@@ -750,6 +797,9 @@ begin
   for I := 0 to Length(FArguments) - 1 do
     FArguments[I].Value := '';
 
+  for I := 0 to Length(FParsedOptions) - 1 do
+    FParsedOptions[I].Value := '';
+
   if FUseExternalArguments then
   begin
     for I := 0 to Length(FExternalArguments) - 1 do
@@ -778,7 +828,7 @@ begin
       begin
         if not Assigned(FCommandSelected) then 
           FCommandSelected := FCommands[J]
-        else
+        else if ccNoArgumentsButCommands in FCommandSelected.Constraints then
           FCommandAsArgument := FCommands[J];
         Inc(FCommandsFound);
       end;
@@ -801,6 +851,7 @@ begin
     for LRawOption in FProvidedOptions do
     begin
       LOptionCleaned := RemoveStartingDashes(LRawOption);
+      LOption.Value := SplitOptionAndValue(LOptionCleaned);
       if AnsiMatchText(LOptionCleaned, [LOption.Flag, LOption.Name]) then
       begin
         SetLength(FParsedOptions, Length(FParsedOptions) + 1);
@@ -869,7 +920,17 @@ begin
     AppendToArray(FProvidedOptions, AParam)
   else
     for I := 2 to Length(AParam) do
-      AppendToArray(FProvidedOptions, '-' + Copy(AParam, I, 1));
+    begin
+      if Copy(AParam, I + 1, 1) = '=' then
+      begin
+        AppendToArray(FProvidedOptions, Copy(AParam, I, Length(AParam) - I + 1));
+        break;
+      end
+      else
+      begin
+        AppendToArray(FProvidedOptions, '-' + Copy(AParam, I, 1));
+      end;
+    end;
 end;
 
 function TCommandBuilder.CheckOption(const AOption: string): Boolean;
@@ -880,6 +941,20 @@ begin
   for LOption in FParsedOptions do
     if AnsiMatchText(AOption, [LOption.Flag, LOption.Name]) then
       Exit(True);
+end;
+
+function TCommandBuilder.CheckOption(const AOption: string; out AValue: string): Boolean;
+var
+  LOption: IOption;
+begin
+  Result := False;
+  AValue := '';
+  for LOption in FParsedOptions do
+    if AnsiMatchText(AOption, [LOption.Flag, LOption.Name]) then
+    begin
+      AValue := LOption.Value;
+      Exit(True);
+    end;
 end;
 
 function TCommandBuilder.GetParsedArguments: TArray<IArgument>;

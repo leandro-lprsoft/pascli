@@ -8,13 +8,11 @@ uses
   Classes, 
   SysUtils, 
   fpcunit, 
-  testutils, 
   testregistry,
   CustApp,
   Command.App,
   Command.Interfaces,
-  Command.Builder,
-  Command.Usage;
+  Command.Builder;
 
 type
 
@@ -70,6 +68,7 @@ begin
   FExeName := ChangeFileExt(ExtractFileName(FApplication.ExeName), '');
   FBuilder := TCommandBuilder.Create(FExeName);
   FBuilder.InputLn := MockInputLn;
+  FBuilder.Output := MockOutput;
   MockCommandCapture := '';
   MockInputLnResult := '';
 end;
@@ -148,24 +147,21 @@ begin
 end;
 
 procedure TTestCommandBuilder.TestParseBasic;
-var
-  LBuilder: ICommandBuilder;
 begin
   // arrange
-  LBuilder := TCommandBuilder.Create(FExeName);
-
-  // act
-  LBuilder
+  FBuilder
     .AddCommand('test', 'first command', @MockCommand, [ccDefault])
       .AddOption('d', 'doption', 'option d for command test', [])
     .AddArgument('file argument', acOptional)
-    .UseArguments(['test', '-d', 'test1.txt'])
-    .Parse;
+    .UseArguments(['test', '-d', 'test1.txt']);
+
+  // act
+  FBuilder.Parse;
 
   // assert
-  AssertTrue('Selected command should be assigned.', Assigned(LBuilder.CommandSelected));
-  AssertEquals('Number of options does not match.', 1, Length(LBuilder.GetParsedOptions));
-  AssertEquals('Number of arguments does not match.', 1, Length(LBuilder.GetParsedArguments));
+  AssertTrue('Selected command should be assigned.', Assigned(FBuilder.CommandSelected));
+  AssertEquals('Number of options does not match.', 1, Length(FBuilder.GetParsedOptions));
+  AssertEquals('Number of arguments does not match.', 1, Length(FBuilder.GetParsedArguments));
 end;
 
 procedure TTestCommandBuilder.TestParseOneArgumentNoCommand;

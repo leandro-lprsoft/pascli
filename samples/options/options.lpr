@@ -19,28 +19,25 @@ var
 procedure HelloCommand(ABuilder: ICommandBuilder);
 var
   LOutput: string = 'Hello World!';
-  LOptions: TArray<IOption>;
-  LOption: IOption;
+  LValue: string;
 
-  function GetFirstArgumentValue(AArguments: TArray<IArgument>): string;
-  var
-    LArgument: IArgument;
+  function GetFirstArgumentValue: string;
   begin
     Result := 'no arguments';
-    for LArgument in AArguments do
-      Exit(LArgument.Value);
+    if Length(ABuilder.GetParsedArguments) > 0 then
+      Result := ABuilder.GetParsedArguments[0].Value;
   end;
 
 begin
-  LOptions := ABuilder.GetParsedOptions;
+  if ABuilder.CheckOption('alternative') then
+    LOutPut := LOutput + #13#10'Hi world!';
 
-  for LOption in LOptions do
-  begin
-    if AnsiMatchText(LOption.Flag, ['a', 'alternative']) then
-      LOutPut := LOutput + #13#10'Hi world!';
-    if AnsiMatchText(LOption.Flag, ['s', 'show-arg']) then
-      LOutPut := LOutput + #13#10'Hi ' + GetFirstArgumentValue(ABuilder.GetParsedArguments);
-  end;
+  if ABuilder.CheckOption('s') then
+    LOutPut := LOutput + #13#10'Hi ' + GetFirstArgumentValue;
+
+  if ABuilder.CheckOption('n', LValue) then
+    LOutPut := LOutput + #13#10'Hi ' + LValue;
+
   WriteLn(LOutput);
 end;
 
@@ -64,6 +61,7 @@ begin
         [ccRequiresOneArgument, ccRequiresOneOption])
           .AddOption('a', 'alternative', 'display an alternative Hello World', [])
           .AddOption('s', 'show-arg', 'display Hello World and argument parameter value', [])
+          .AddOption('n', 'show-name', 'display Hello World with the value of the option', [], ocRequiresValue)
       .AddArgument('argument parameter', acOptional);
 
   Application.Run;

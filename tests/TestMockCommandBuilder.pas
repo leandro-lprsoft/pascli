@@ -25,9 +25,11 @@ type
 
   procedure MockCommand(ABuilder: ICommandBuilder);
   function MockInputLn: string;
+  procedure MockOutput(const AMessage: string);
+  procedure MockOutputColor(const AMessage: string; const AColor: Byte);
 
 var
-  MockCommandCapture, MockInputLnResult: string;
+  MockCommandCapture, MockInputLnResult, CapturedOutput: string;
 
 implementation
 
@@ -39,6 +41,16 @@ end;
 function MockInputLn: string;
 begin
   Result := MockInputLnResult;
+end;
+
+procedure MockOutput(const AMessage: string);
+begin
+  CapturedOutput := CapturedOutput + AMessage + #13#10;
+end;
+
+procedure MockOutputColor(const AMessage: string; const AColor: Byte);
+begin
+  CapturedOutput := CapturedOutput + AMessage;
 end;
 
 procedure TCommandBuildMock.HandleInvoke(aMethod: TRttiMethod; const aArgs: TValueArray; 

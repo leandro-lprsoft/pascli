@@ -9,7 +9,7 @@
       "type": "gdb",
       "request": "launch",
       "target": "./tests/TestPascli.exe",
-      "arguments": "--suite=TestParseCommandWithInvalidOption",
+      "arguments": "--suite=TestSelectedCommandOptionDoesNotRequireValue",
       "cwd": "${workspaceRoot}"
     }
   ]

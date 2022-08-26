@@ -18,11 +18,10 @@ type
 
   TTestCommandBuilderOption = class(TTestCase)
   private
-    FApplication: TCommandApp;
-
     procedure NewOptionWithInvalidNotAllowedFlag;
   published
     procedure TestNewOptionBasic;
+    procedure TestNewOptionWithConstraint;
     procedure TestNewOptionWithInvalidNotAllowedFlag;
   end;
 
@@ -38,14 +37,20 @@ begin
   AssertEquals(LOption.Name, 'activate');
   AssertEquals(LOption.Description, 'start the application');
   AssertEquals(Length(LOption.NotAllowedFlags), 1);
+  AssertEquals(Ord(LOption.Constraint), Ord(ocNoValue));
 end;
 
-
-procedure TTestCommandBuilderOption.NewOptionWithInvalidNotAllowedFlag;
+procedure TTestCommandBuilderOption.TestNewOptionWithConstraint;
 var
   LOption: IOption;
 begin
-  LOption := TOption.New('a', 'activate', 'start the application', ['not_a_flag']);
+  LOption := TOption.New('a', 'activate', 'start the application', ['b'], ocRequiresValue);
+  AssertEquals(Ord(LOption.Constraint), Ord(ocRequiresValue));
+end;
+
+procedure TTestCommandBuilderOption.NewOptionWithInvalidNotAllowedFlag;
+begin
+  TOption.New('a', 'activate', 'start the application', ['not_a_flag']);
 end;
 
 procedure TTestCommandBuilderOption.TestNewOptionWithInvalidNotAllowedFlag;

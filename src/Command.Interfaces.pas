@@ -62,6 +62,17 @@ type
   /// a command. </summary>
   TCommandConstraints = set of TCommandConstraint;
 
+  /// <summary> Enumerated type that defines constraints that apply on options. It is used 
+  /// to indicate to the CommandBuilder the rules for using options, allowing its validation 
+  /// to be done automatically. </summary>
+  TOptionConstraint = (
+    /// <summary> Indicates that a value is not accepted for the option.</summary>
+    ocNoValue,
+    /// <summary> Indicates that a value is required for the option. </summary>
+    ocRequiresValue, 
+    /// <summary> Indicates that a value is optional for the option. </summary>
+    ocOptionalValue);
+
   /// <summary> Enumerated type that defines constraints that apply on arguments. It is used 
   /// to indicate to the CommandBuilder the rules for using arguments, allowing its validation 
   /// to be done automatically. </summary>
@@ -132,6 +143,23 @@ type
     /// Only the short option without the "-" is accepted.</summary>
     property NotAllowedFlags: TArray<string> read GetNotAllowedFlags write SetNotAllowedFlags;
 
+    function GetConstraint: TOptionConstraint;
+    procedure SetConstraint(const AValue: TOptionConstraint);
+
+    /// <summary> Option constrains that will be validated against the options provided 
+    /// by the user in order to guarantee that the command is being used correctly. </summary>
+    property Constraint: TOptionConstraint read GetConstraint write SetConstraint;
+
+    /// returns the value of the option provided via parameter, this value should assigned after parse
+    function GetValue: string;
+    procedure SetValue(const AValue: string);
+
+    /// <summary> Returns the value of an option after parsing the parameters informed 
+    /// via the command line. The value of an option shoud be passed on right side of 
+    /// an equal sign after the option name or flag.
+    /// </summary>
+    property Value: string read GetValue write SetValue;
+
   end;
 
   /// <summary>Interface representing a command that can be registered in CommandBuilder 
@@ -198,8 +226,10 @@ type
     /// for example</param>
     /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with this option. 
     /// Only the short option without the "-" is accepted.</param>
-    function AddOption(const AFlag, AName, ADescription: string; 
-      ANotAllowedFlags: TArray<string> = nil): IOption;
+    /// <param name="AConstraint">Option constraint that will be validated against the options provided
+    /// by the user in order to guarantee that the command is being used correctly. </param>
+    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+      AConstraint: TOptionConstraint = ocNoValue): IOption;
 
   end;
 
@@ -220,7 +250,7 @@ type
     function GetConstraint: TArgumentConstraint;
     procedure SetConstraint(const AValue: TArgumentConstraint);
 
-    /// <summary> Command constrains that will be validated against the arguments provided 
+    /// <summary> Argument constraints that will be validated against the arguments provided 
     /// by the user in order to guarantee that the command is being used correctly. </summary>
     property Constraint: TArgumentConstraint read GetConstraint write SetConstraint;
 
@@ -298,8 +328,10 @@ type
     /// command for example.</param>
     /// <param name="ANotAllowedFlags">Array of flags not supported for use in conjunction with 
     /// this option. Only the short option without the "-" is accepted.</param>
-    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil
-      ): ICommandBuilder;
+    /// <param name="AConstraint">Option constraint that will be validated against the options provided
+    /// by the user in order to guarantee that the command is being used correctly. </param>
+    function AddOption(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray<string> = nil;
+      AConstraint: TOptionConstraint = ocNoValue): ICommandBuilder;
 
     /// <summary> Parses parameters passed via command line, matching command names and arguments 
     /// for further validation. </summary>
@@ -340,7 +372,9 @@ type
     /// its processing. </summary>
     /// <param name="AOption">Can be provided short option or long option without leading dashes.
     /// </param>
-    function CheckOption(const AOption: string): Boolean;
+    /// <param name="AValue">Returns the value of the option if it was provided by the user. </param>
+    function CheckOption(const AOption: string): Boolean; overload;
+    function CheckOption(const AOption: string; out AValue: string): Boolean; overload;
 
     /// <summary> Build a list of IArguments related to selected command, if there are more than 
     /// one argument provided the list will match one argument parameter by order of the command 

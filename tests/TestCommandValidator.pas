@@ -33,6 +33,7 @@ type
     procedure TestDuplicateOptionValidatorError;
     procedure TestDuplicateOptionValidatorErrorUsingShortAndLongOption;
     procedure TestDuplicateOptionValidatorWorks;
+    procedure TestDuplicateOptionValidatorNotOccurWithValue;
     procedure TestMultipleOptionsSameDash;
     procedure TestProvidedArgumentsAreNotValid;
     procedure TestProvidedArgumentsAreNotRequired;
@@ -45,8 +46,11 @@ type
     procedure TestSelectedCommandRequiresNoArguments;
     procedure TestSelectedCommandRequiresOneOption;
     procedure TestSelectedCommandValidateIfOptionsExists;
+    procedure TestSelectedCommandValidateIfOptionsWithValueExists;
     procedure TestSelectedCommandValidateRejectNotAllowedOption;
     procedure TestSelectedCommandValidateRejectOptionOnlyWithFlags;    
+    procedure TestSelectedCommandOptionDoesNotRequireValue;
+    procedure TestSelectedCommandOptionRequiresValue;
   end;
 
 implementation
@@ -145,13 +149,32 @@ end;
 
 procedure TTestCommandValidator.TestDuplicateOptionValidatorWorks;
 begin
-   // arrange
+  // arrange
   FBuilder
       .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
       .AddCommand('other', 'other command', nil, [])
         .AddOption('d', 'debug', 'debug option', [])
         .AddOption('r', 'run', 'run option', [])
       .UseArguments(['other', '-d', '-r']) // should work
+      .Parse;
+
+  // act
+  FValidator := TDuplicateOptionValidator.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 0', 0, Length(FArray));
+end;
+
+procedure TTestCommandValidator.TestDuplicateOptionValidatorNotOccurWithValue;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [], ocOptionalValue)
+      .UseArguments(['other', '-r="debug teste"']) // should work
       .Parse;
 
   // act
@@ -263,7 +286,6 @@ begin
   FBuilder
       .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
       .AddCommand('other', 'other command', nil, [ccNoParameters])
-      .AddArgument('some argument', acOptional)
       .UseArguments(['other', 'help'])
       .Parse;
 
@@ -349,7 +371,7 @@ begin
 
   // assert for ccRequiresOneOption
   AssertEquals('Should return one error after validation', 1, Length(FArray));
-  AssertEquals('Command "add" requires one option', FArray[0]);  
+  AssertEquals('Command "add" requires one valid option', FArray[0]);  
 
   // act for ccNoParameters
   FValidator := TSelectedCommandRequiresNoArguments.Create;
@@ -377,6 +399,24 @@ begin
   // assert
   AssertEquals('Should return one error after validation', 1, Length(FArray));
   AssertEquals('Command "other" invalid. Option not found: -i', FArray[0]);  
+end;
+
+procedure TTestCommandValidator.TestSelectedCommandValidateIfOptionsWithValueExists;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('v', 'valid', 'valid option with value', [], ocRequiresValue)
+      .UseArguments(['other', '--v="custom value"'])
+      .Parse;
+
+  // act
+  FValidator := TSelectedCommandValidateIfOptionsExists.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Should not return error after validation', 0, Length(FArray));
 end;
 
 procedure TTestCommandValidator.TestSelectedCommandValidateRejectNotAllowedOption;
@@ -438,6 +478,48 @@ begin
   AssertEquals('Array length should be equals 1', 1, Length(FArray));
   if Length(FArray) > 0 then
     AssertEquals('Command "other" invalid. Option not found: -a', FArray[0]);
+end;
+
+procedure TTestCommandValidator.TestSelectedCommandOptionDoesNotRequireValue;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('d', 'debug', 'debug option', [])
+        .AddOption('r', 'run', 'run option', [])
+      .UseArguments(['other', '-d=1'])
+      .Parse;
+
+  // act
+  FValidator := TSelectedCommandValidateOptionValueNotRequired.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 1', 1, Length(FArray));
+  if Length(FArray) > 0 then
+    AssertEquals('Command "other" invalid. Option "d" does not require a value', FArray[0]);
+end;
+
+procedure TTestCommandValidator.TestSelectedCommandOptionRequiresValue;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('d', 'debug', 'debug option', [], ocRequiresValue)
+        .AddOption('r', 'run', 'run option', [])
+      .UseArguments(['other', '-d'])
+      .Parse;
+
+  // act
+  FValidator := TSelectedCommandValidateOptionValueRequired.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 1', 1, Length(FArray));
+  if Length(FArray) > 0 then
+    AssertEquals('Command "other" invalid. Option "d" requires a value', FArray[0]);
 end;
 
 initialization

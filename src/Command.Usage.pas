@@ -162,7 +162,9 @@ end;
 procedure WriteCommandUsage(ABuilder: ICommandBuilder);
 var
   LArguments: string = '';
+  LOptionValue: string;
   LOption: IOption;
+  LOptionConstraint: boolean = false;
 begin
   LArguments := GetArgumentList(ABuilder);
 
@@ -192,22 +194,32 @@ begin
 
     for LOption in ABuilder.CommandAsArgument.Options do
     begin
+      LOptionValue := '';
+      if LOption.Constraint in [ocRequiresValue, ocOptionalValue] then
+      begin
+        LOptionValue := IfThen(LOption.Constraint = ocRequiresValue, '=*', '=?') ;
+        LOptionConstraint := True;
+      end;
+
       ABuilder.OutputColor(
         Format('  %s%s', [
           PadRight('-' + LOption.Flag + ',', 4),
-          PadRight('--' + LOption.Name, 20)
+          PadRight('--' + LOption.Name + LOptionValue, 20)
           ]), 
         ABuilder.ColorTheme.Value);  
 
       ABuilder.OutputColor(
         StringReplace(LOption.Description, #13#10, #13#10 + PadLeft('', 30), [rfReplaceAll]) + #13#10,
         ABuilder.ColorTheme.Other);
-
     end;
-
     ABuilder.Output('');
+
+    if LOptionConstraint then
+    begin
+      ABuilder.OutputColor('  * Requires a value.'+#13#10, ABuilder.ColorTheme.Value);
+      ABuilder.OutputColor('  ? Accepts a value, but it is optional.'+#13#10, ABuilder.ColorTheme.Value);
+    end;
   end;
-  
 end;
 
 procedure UsageCommand(ABuilder: ICommandBuilder);

@@ -68,7 +68,7 @@ You can check the description of the @link(command command structure) provided b
 
 @section(3 SecFirst_d Run the application)
 
-After all that, just call the application's @link(TCommandApp.Run run) method so that it takes care of analyzing the arguments provided by the user via the command line, performing the necessary checks and calling the appropriate commands once the conditions are met.
+After all that, just call the application's @link(TCommandApp.DoRun run) method so that it takes care of analyzing the arguments provided by the user via the command line, performing the necessary checks and calling the appropriate commands once the conditions are met.
 
 @section(1 SecSecond Using TCommandBuilder as a base)
 

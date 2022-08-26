@@ -13,6 +13,7 @@ This strategy allows the developer to focus on the implementation of commands an
     @item(Fluent interface api to build the command strucuture.)
     @item(Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.)
     @item(Short options or long options using the method AddOption)
+    @item(Options with required value or not)
     @item(Command usage out of the box, outputs command information for a given command or general usage of the tool.)
     @item(Command version output procedure.)
     @item(Command colors unit to produce colored output to the user.)

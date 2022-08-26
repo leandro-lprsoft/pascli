@@ -17,7 +17,7 @@
 <h1 class="externalitem">Testing</h1>
  
 
-<p>This section will detail how to implement a testing strategy with regard to eventual texts shown by the commands implemented by the developer, as long as the developer uses the <a class="normal" href="Command.Builder.TCommandBuilder.html">TCommandBuilder</a> callbacks. Another possibility is to configure callbacks for user input through the <code>TCommandBuilder.InputCallback</code> property.
+<p>This section will detail how to implement a testing strategy with regard to eventual texts shown by the commands implemented by the developer, as long as the developer uses the <a class="normal" href="Command.Builder.TCommandBuilder.html">TCommandBuilder</a> callbacks. Another possibility is to configure callbacks for user input through the <a class="normal" href="Command.Builder.TCommandBuilder.html#InputLn">callback</a> property.
 
 <p>It is not the aim of this section to cover the entire testing strategy of the application being developed, but only what is connected with the use of the library.
 
@@ -174,7 +174,7 @@
 <p><h4 class=""><span id="SecFSecond_b"></span>Adjust the setup</h4>
 
 
-<p>We need to change the <code>InputCallback</code> to our MockInputLn, and also initialize the variable MockInputLnResult, add these lines to TTestMyCommand.Setup method:
+<p>We need to change the <a class="normal" href="Command.Builder.TCommandBuilder.html#InputLn">callback</a> to our MockInputLn, and also initialize the variable MockInputLnResult, add these lines to TTestMyCommand.Setup method:
 
 <p></p>
 

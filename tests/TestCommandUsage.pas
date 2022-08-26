@@ -44,19 +44,6 @@ uses
   TestMockCommandBuilder,
   StrUtils;
 
-var
-  CapturedOutput: string;
-
-procedure MockOutput(const AMessage: string);
-begin
-  CapturedOutput := CapturedOutput + AMessage + #13#10;
-end;
-
-procedure MockOutputColor(const AMessage: string; const AColor: Byte);
-begin
-  CapturedOutput := CapturedOutput + AMessage;
-end;
-
 procedure TTestCommandUsage.SetUp;
 begin
   FApplication := TCommandApp.Create(nil);
@@ -217,7 +204,7 @@ end;
 
 procedure TTestCommandUsage.TestWriteCommandUsageWithArgumentAndOption;
 var
-  LExpectUsage, LExpectDesc: string;
+  LExpectUsage: string;
 begin
   // arrange
   FApplication
@@ -236,7 +223,6 @@ begin
 
   // asserts
   LExpectUsage := Format('Usage: %s %s [%s] <%s>', [FExeName, 'cmd_with_opt', 'options', 'arg1']);
-  LExpectDesc := 'command that requires options';
   
   AssertTrue('Should have usage instruction for the command with [options]', 
     ContainsText(CapturedOutput, LExpectUsage));

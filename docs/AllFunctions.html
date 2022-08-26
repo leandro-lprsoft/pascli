@@ -62,36 +62,41 @@
 <td class="itemdesc"><p>Removes the first &quot;-&quot; and second &quot;-&quot; characters if found from the string passed as a parameter. Returns a new string without these characters.</p></td>
 </tr>
 <tr class="list">
+<td class="itemname"><a class="bold" href="Command.Helpers.html#SplitOptionAndValue">SplitOptionAndValue</a></td>
+<td class="itemunit"><a class="bold" href="Command.Helpers.html">Command.Helpers</a></td>
+<td class="itemdesc"><p>Given an option with value, split the option in two parts: the option name and the value. The option name is the part before the &quot;=&quot; character. The value is the part after the &quot;=&quot; character. If the option doesn't contain the &quot;=&quot; character, the value is empty. The function returns the value and keeps the only the option name in the parameter AOption. </p></td>
+</tr>
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Builder.html#StandardConsoleInputLn">StandardConsoleInputLn</a></td>
 <td class="itemunit"><a class="bold" href="Command.Builder.html">Command.Builder</a></td>
 <td class="itemdesc"><p> Standard callback function to read input from user. Automatically configured on CommandBuilder startup. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Builder.html#StandardConsoleOutput">StandardConsoleOutput</a></td>
 <td class="itemunit"><a class="bold" href="Command.Builder.html">Command.Builder</a></td>
 <td class="itemdesc"><p> Standard callback procedure that outputs the given text to the console. In this implementation it just mirrors the use of the WriteLn function. It is expected for this type of callback that the output will be performed with a line break at the end of it. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Usage.html#UsageCommand">UsageCommand</a></td>
 <td class="itemunit"><a class="bold" href="Command.Usage.html">Command.Usage</a></td>
 <td class="itemdesc"><p> Outputs text describing command usage according to commands, options and arguments configured using application command builder. If a different color theme is specified to the <a class="normal" href="Command.Builder.TCommandBuilder.html#ColorTheme">TCommandBuilder.ColorTheme</a>, this command displays the usage info in different colors. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Version.html#VersionCommand">VersionCommand</a></td>
 <td class="itemunit"><a class="bold" href="Command.Version.html">Command.Version</a></td>
 <td class="itemdesc"><p> Outputs application version information that was incorporated after the application was built.</p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Usage.html#WriteCommandUsage">WriteCommandUsage</a></td>
 <td class="itemunit"><a class="bold" href="Command.Usage.html">Command.Usage</a></td>
 <td class="itemdesc"><p> Outputs full usage information for a specific command. It´s used when the user requests help for a specific command.</p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Usage.html#WriteGeneralUsage">WriteGeneralUsage</a></td>
 <td class="itemunit"><a class="bold" href="Command.Usage.html">Command.Usage</a></td>
 <td class="itemdesc"><p> Outputs general help information for the application, including command usage syntax, command list, command description, arguments that are acceptable. Also displays application title and version information. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Usage.html#WriteUsage">WriteUsage</a></td>
 <td class="itemunit"><a class="bold" href="Command.Usage.html">Command.Usage</a></td>
 <td class="itemdesc"><p> Outputs simple usage command using provided parameters for the command provided. Display the usage in the following format 'EXECUTABLE [command] [options]'. </p></td>

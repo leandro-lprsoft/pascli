@@ -68,6 +68,22 @@
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.IOption.html#GetNotAllowedFlags">GetNotAllowedFlags</a></strong>: TArray&lt;string&gt;;</code></td>
 </tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Interfaces.IOption.html#GetConstraint">GetConstraint</a></strong>: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.IOption.html#SetConstraint">SetConstraint</a></strong>(const AValue: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a>);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Interfaces.IOption.html#GetValue">GetValue</a></strong>: string;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.IOption.html#SetValue">SetValue</a></strong>(const AValue: string);</code></td>
+</tr>
 </table>
 <span id="PasDoc-Properties"></span><h3 class="summary">Properties</h3>
 <table class="summary wide_list">
@@ -86,6 +102,14 @@
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>property <strong><a href="Command.Interfaces.IOption.html#NotAllowedFlags">NotAllowedFlags</a></strong>: TArray&lt;string&gt; read <a href="Command.Interfaces.IOption.html#GetNotAllowedFlags">GetNotAllowedFlags</a> write <a href="Command.Interfaces.IOption.html#SetNotAllowedFlags">SetNotAllowedFlags</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="Command.Interfaces.IOption.html#Constraint">Constraint</a></strong>: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> read <a href="Command.Interfaces.IOption.html#GetConstraint">GetConstraint</a> write <a href="Command.Interfaces.IOption.html#SetConstraint">SetConstraint</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="Command.Interfaces.IOption.html#Value">Value</a></strong>: string read <a href="Command.Interfaces.IOption.html#GetValue">GetValue</a> write <a href="Command.Interfaces.IOption.html#SetValue">SetValue</a>;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -154,6 +178,40 @@
 <tr><td colspan="2">
 &nbsp;</td></tr>
 </table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="GetConstraint"></span><code>function <strong>GetConstraint</strong>: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="SetConstraint"></span><code>procedure <strong>SetConstraint</strong>(const AValue: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="GetValue"></span><code>function <strong>GetValue</strong>: string;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+returns the value of the option provided via parameter, this value should assigned after parse</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="SetValue"></span><code>procedure <strong>SetValue</strong>(const AValue: string);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
 <h3 class="detail">Properties</h3>
 <table class="detail wide_list">
 <tr class="list">
@@ -193,6 +251,26 @@
 <tr><td colspan="2">
 <p>
  Array of flags not supported for use in conjunction with this option. Only the short option without the &quot;-&quot; is accepted.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Constraint"></span><code>property <strong>Constraint</strong>: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> read <a href="Command.Interfaces.IOption.html#GetConstraint">GetConstraint</a> write <a href="Command.Interfaces.IOption.html#SetConstraint">SetConstraint</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Option constrains that will be validated against the options provided by the user in order to guarantee that the command is being used correctly. </p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Value"></span><code>property <strong>Value</strong>: string read <a href="Command.Interfaces.IOption.html#GetValue">GetValue</a> write <a href="Command.Interfaces.IOption.html#SetValue">SetValue</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Returns the value of an option after parsing the parameters informed via the command line. The value of an option shoud be passed on right side of an equal sign after the option name or flag. </p>
 </td></tr>
 </table>
 <hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0</a>. </em>

@@ -41,7 +41,7 @@
 </tr>
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommand.html#AddOption">AddOption</a></strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil): <a href="Command.Interfaces.IOption.html">IOption</a>;</code></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommand.html#AddOption">AddOption</a></strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil; AConstraint: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> = <a href="Command.Interfaces.html#ocNoValue">ocNoValue</a>): <a href="Command.Interfaces.IOption.html">IOption</a>;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -100,13 +100,15 @@
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><span id="AddOption"></span><code>function <strong>AddOption</strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil): <a href="Command.Interfaces.IOption.html">IOption</a>;</code></td>
+<td class="itemcode"><span id="AddOption"></span><code>function <strong>AddOption</strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil; AConstraint: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> = <a href="Command.Interfaces.html#ocNoValue">ocNoValue</a>): <a href="Command.Interfaces.IOption.html">IOption</a>;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
  Creates and adds the option to the command's list of options as given parameters. </p>
 <p>
  
+
+<p>
 
 <p>
 
@@ -123,6 +125,8 @@
 <dd>Description of the option that best defines your objective. It can be displayed to the user when the user requests information through the help command for example</dd>
 <dt>ANotAllowedFlags</dt>
 <dd>Array of flags not supported for use in conjunction with this option. Only the short option without the &quot;-&quot; is accepted.</dd>
+<dt>AConstraint</dt>
+<dd>Option constraint that will be validated against the options provided by the user in order to guarantee that the command is being used correctly.</dd>
 </dl>
 </td></tr>
 </table>

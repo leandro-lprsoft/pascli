@@ -62,7 +62,7 @@
 </tr>
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#AddOption">AddOption</a></strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil ): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+<td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#AddOption">AddOption</a></strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil; AConstraint: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> = <a href="Command.Interfaces.html#ocNoValue">ocNoValue</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -98,93 +98,97 @@
 </tr>
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#CheckOption">CheckOption</a></strong>(const AOption: string): Boolean;</code></td>
+<td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#CheckOption">CheckOption</a></strong>(const AOption: string): Boolean; overload;</code></td>
 </tr>
 <tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#CheckOption">CheckOption</a></strong>(const AOption: string; out AValue: string): Boolean; overload;</code></td>
+</tr>
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetParsedArguments">GetParsedArguments</a></strong>: TArray&lt;<a href="Command.Interfaces.IArgument.html">IArgument</a>&gt;;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetRawArguments">GetRawArguments</a></strong>: TArray&lt;string&gt;;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetRawOptions">GetRawOptions</a></strong>: TArray&lt;string&gt;;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#ExeName">ExeName</a></strong>: string;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#HasCommands">HasCommands</a></strong>: Boolean;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#HasArguments">HasArguments</a></strong>: Boolean;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#HasOptions">HasOptions</a></strong>: Boolean;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetInputLn">GetInputLn</a></strong>: <a href="Command.Interfaces.html#TInputLnCallback">TInputLnCallback</a>;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetInputLn">SetInputLn</a></strong>(AValue: <a href="Command.Interfaces.html#TInputLnCallback">TInputLnCallback</a>);</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetOutput">GetOutput</a></strong>: <a href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a>;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetOutput">SetOutput</a></strong>(AValue: <a href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a>);</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetOutputColor">GetOutputColor</a></strong>: <a href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a>;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetOutputColor">SetOutputColor</a></strong>(AValue: <a href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a>);</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#UseArguments">UseArguments</a></strong>(AArguments: TArray&lt;string&gt;): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetColorTheme">GetColorTheme</a></strong>: <a href="Command.Interfaces.TColorTheme.html">TColorTheme</a>;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetColorTheme">SetColorTheme</a></strong>(AValue: <a href="Command.Interfaces.TColorTheme.html">TColorTheme</a>);</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetTitle">GetTitle</a></strong>: string;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetTitle">SetTitle</a></strong>(AValue: string);</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetUseShortDescriptions">GetUseShortDescriptions</a></strong>: boolean;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetUseShortDescriptions">SetUseShortDescriptions</a></strong>(AValue: boolean);</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Interfaces.ICommandBuilder.html#GetState">GetState</a></strong>: string;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Interfaces.ICommandBuilder.html#SetState">SetState</a></strong>(AValue: string);</code></td>
 </tr>
@@ -331,13 +335,15 @@
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><span id="AddOption"></span><code>function <strong>AddOption</strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil ): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+<td class="itemcode"><span id="AddOption"></span><code>function <strong>AddOption</strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil; AConstraint: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> = <a href="Command.Interfaces.html#ocNoValue">ocNoValue</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
 Adds an option to the last added command. For both the short and long options, &quot;-&quot; must not be entered at the beginning of them.</p>
 <p>
  
+
+<p>
 
 <p>
 
@@ -354,6 +360,8 @@ Adds an option to the last added command. For both the short and long options, &
 <dd>Description of the option that best defines your objective. It can be displayed to the user when the user requests information through the help command for example.</dd>
 <dt>ANotAllowedFlags</dt>
 <dd>Array of flags not supported for use in conjunction with this option. Only the short option without the &quot;-&quot; is accepted.</dd>
+<dt>AConstraint</dt>
+<dd>Option constraint that will be validated against the options provided by the user in order to guarantee that the command is being used correctly.</dd>
 </dl>
 </td></tr>
 </table>
@@ -440,19 +448,31 @@ Adds an option to the last added command. For both the short and long options, &
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><span id="CheckOption"></span><code>function <strong>CheckOption</strong>(const AOption: string): Boolean;</code></td>
+<td class="itemcode"><span id="CheckOption"></span><code>function <strong>CheckOption</strong>(const AOption: string): Boolean; overload;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
  Usually used within the callback procedure of a given command to customize its processing. </p>
 <p>
- </p>
+ 
+
+<p></p>
 <h6 class="description_section">Parameters</h6>
 <dl class="parameters">
 <dt>AOption</dt>
 <dd>Can be provided short option or long option without leading dashes.</dd>
+<dt>AValue</dt>
+<dd>Returns the value of the option if it was provided by the user.</dd>
 </dl>
 </td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="CheckOption"></span><code>function <strong>CheckOption</strong>(const AOption: string; out AValue: string): Boolean; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">

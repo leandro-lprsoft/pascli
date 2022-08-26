@@ -150,6 +150,18 @@ type
     function Validate(ACommand: ICommandBuilder): TArray<string>; override;
   end;
 
+  /// <summary> Returns an error if an option has been passed with a value and it is configured to not 
+  /// accept a value. </summary>
+  TSelectedCommandValidateOptionValueNotRequired = class(TValidatorBase)
+    function Validate(ACommand: ICommandBuilder): TArray<string>; override;
+  end;
+
+  /// <summary> Returns an error if an option has been passed without a value and it is configured to  
+  /// require a value. </summary>
+  TSelectedCommandValidateOptionValueRequired = class(TValidatorBase)
+    function Validate(ACommand: ICommandBuilder): TArray<string>; override;
+  end;
+
 implementation
 
 uses
@@ -194,6 +206,8 @@ begin
     .Add(TSelectedCommandRequiresOneOption.Create)
     .Add(TSelectedCommandValidateIfOptionsExists.Create)
     .Add(TSelectedCommandValidateRejectedOption.Create)
+    .Add(TSelectedCommandValidateOptionValueNotRequired.Create)
+    .Add(TSelectedCommandValidateOptionValueRequired.Create)
     .HandleValidation(ACommand);
 end;
 
@@ -224,6 +238,7 @@ var
   LArray: TArray<string>;
   I, J: Integer;
   LAllowedDuplicate: string = '';
+  LArgumentCount: integer;
 begin
   LArray := ACommand.GetRawArguments;
 
@@ -234,12 +249,20 @@ begin
     LAllowedDuplicate := ACommand.CommandSelected.Name;
 
   for I := 0 to Length(LArray) - 1 do
+  begin
+    LArgumentCount := Length(ACommand.Arguments);
     for J := 0 to Length(LArray) - 1 do
       if (I <> J) and (SameText(LArray[I], LArray[J])) and (not SameText(LAllowedDuplicate, LArray[J])) then
       begin
-        AppendToArray(FResult, Format('Duplicate argument "%s" was provided', [LArray[I]]));
-        Exit(FResult);
+        if LArgumentCount > 0 then
+          Dec(LArgumentCount)
+        else
+        begin
+          AppendToArray(FResult, Format('Duplicate argument "%s" was provided', [LArray[I]]));
+          Exit(FResult);
+        end;
       end;
+  end;
 
   Result := inherited Validate(ACommand);
 end;
@@ -259,8 +282,10 @@ begin
   LArray := ACommand.GetRawOptions;
   for I := 0 to Length(LArray) - 1 do
   begin
-    LOption := LCommand.Option[RemoveStartingDashes(LArray[I])];
-
+    LRawOption := RemoveStartingDashes(LArray[I]);
+    SplitOptionAndValue(LRawOption);
+    
+    LOption := LCommand.Option[LRawOption];
     if Assigned(LOption) then
     begin
       LShort := LOption.Flag;
@@ -270,11 +295,14 @@ begin
     begin
       LShort := RemoveStartingDashes(LArray[I]);
       LLong := RemoveStartingDashes(LArray[I]);
+      SplitOptionAndValue(LShort);
+      SplitOptionAndValue(LLong);
     end;
 
     for J := 0 to Length(LArray) - 1 do
     begin
       LRawOption := RemoveStartingDashes(LArray[J]);
+      SplitOptionAndValue(LRawOption);
       if (I <> J) and (SameText(LShort, LRawOption) or SameText(LLong, LRawOption)) then
       begin
         LMessage := Format('Duplicate options "%s", "%s" provided', [LArray[I], LArray[J]]);
@@ -321,10 +349,12 @@ begin
 end;
 
 function TProvidedArgumentsExceedsAcceptedLimit.Validate(ACommand: ICommandBuilder): TArray<string>;
+var
+  LCommandCount: Integer = 1;
 begin
+  If Assigned(ACommand.CommandAsArgument) Then Inc(LCommandCount);
   if (Length(ACommand.Commands) > 0) and 
-     (ACommand.GetCommandsFound = 1) and 
-     ((Length(ACommand.GetRawArguments) - 1) > Length(ACommand.Arguments)) then
+     ((Length(ACommand.GetRawArguments) - LCommandCount) > Length(ACommand.Arguments)) then     
   begin
     AppendToArray(FResult, 
         Format('Provided arguments for "%s" is greater thant accepted number',
@@ -338,7 +368,7 @@ end;
 function TSelectedCommandDoesNotAcceptCommandAsArgument.Validate(ACommand: ICommandBuilder): TArray<string>;
 begin
   if (Length(ACommand.Commands) > 0) and 
-     (ACommand.GetCommandsFound > 1) and 
+     ((ACommand.GetCommandsFound - Length(ACommand.Arguments)) > 1) and 
      (not (ccNoArgumentsButCommands in ACommand.CommandSelected.Constraints)) then
   begin
     AppendToArray(FResult, 
@@ -417,9 +447,8 @@ begin
     
     for I := 0 to Length(LParsedOptions) - 1 do
     begin
-      LOptionCleaned := Copy(LParsedOptions[I], 2, 30);
-      if StartsText('-', LOptionCleaned) then
-        LOptionCleaned := Copy(LOptionCleaned, 2, 30);
+      LOptionCleaned := RemoveStartingDashes(LParsedOptions[I]);
+      SplitOptionAndValue(LOptionCleaned);
 
       LOptionFound := False;
       for LOption in LCommand.Options do
@@ -505,12 +534,84 @@ begin
     if Length(LParsedOptions) < 1 then
     begin
       AppendToArray(FResult, 
-          Format('Command "%s" requires one option',
+          Format('Command "%s" requires one valid option',
           [LCommand.Name]));
       Exit(FResult);
     end;
   end;
 
+  Result := inherited Validate(ACommand);
+end;
+
+function TSelectedCommandValidateOptionValueNotRequired.Validate(ACommand: ICommandBuilder): TArray<string>;
+var
+  I: Integer;
+  LParsedOptions: TArray<string>;
+  LOptionCleaned, LOptionValue: string;
+  LCommand: ICommand;
+  LOption: IOption;
+begin
+  LCommand := ACommand.CommandSelected;
+  if not Assigned(LCommand) then
+    LCommand := ACommand.GetDefaultCommand;
+
+  if Assigned(LCommand) then
+  begin
+    LParsedOptions := ACommand.GetRawOptions;
+    
+    for I := 0 to Length(LParsedOptions) - 1 do
+    begin
+      LOptionCleaned := RemoveStartingDashes(LParsedOptions[I]);
+      LOptionValue := SplitOptionAndValue(LOptionCleaned);
+
+      for LOption in LCommand.Options do
+        if (AnsiMatchText(LOptionCleaned, [LOption.Flag, LOption.Name])) and (LOptionValue <> '') and
+           (ocNoValue = LOption.Constraint) then
+          begin
+            AppendToArray(FResult, 
+              Format('Command "%s" invalid. Option "%s" does not require a value',
+              [LCommand.Name, LOption.Flag])
+            );
+            Exit(FResult);
+          end;
+    end;
+  end;
+  Result := inherited Validate(ACommand);
+end;
+
+function TSelectedCommandValidateOptionValueRequired.Validate(ACommand: ICommandBuilder): TArray<string>;
+var
+  I: Integer;
+  LParsedOptions: TArray<string>;
+  LOptionCleaned, LOptionValue: string;
+  LCommand: ICommand;
+  LOption: IOption;
+begin
+  LCommand := ACommand.CommandSelected;
+  if not Assigned(LCommand) then
+    LCommand := ACommand.GetDefaultCommand;
+
+  if Assigned(LCommand) then
+  begin
+    LParsedOptions := ACommand.GetRawOptions;
+    
+    for I := 0 to Length(LParsedOptions) - 1 do
+    begin
+      LOptionCleaned := RemoveStartingDashes(LParsedOptions[I]);
+      LOptionValue := SplitOptionAndValue(LOptionCleaned);
+
+      for LOption in LCommand.Options do
+        if (AnsiMatchText(LOptionCleaned, [LOption.Flag, LOption.Name])) and 
+           (LOptionValue = '') and (ocRequiresValue = LOption.Constraint) then
+        begin
+          AppendToArray(FResult, 
+            Format('Command "%s" invalid. Option "%s" requires a value',
+            [LCommand.Name, LOption.Flag])
+          );
+          Exit(FResult);
+        end;
+    end;
+  end;
   Result := inherited Validate(ACommand);
 end;
 
