@@ -209,7 +209,7 @@ begin
         ABuilder.ColorTheme.Value);  
 
       ABuilder.OutputColor(
-        StringReplace(LOption.Description, #13#10, #13#10 + PadLeft('', 30), [rfReplaceAll]) + #13#10,
+        StringReplace(LOption.Description, #13#10, #13#10 + PadLeft('', 26), [rfReplaceAll]) + #13#10,
         ABuilder.ColorTheme.Other);
     end;
     ABuilder.Output('');
