@@ -5,12 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug - Tests",
-      "type": "gdb",
+      "type": "fpDebug",
       "request": "launch",
-      "target": "./tests/TestPascli.exe",
-      "arguments": "--suite=TestSelectedCommandOptionDoesNotRequireValue",
-      "cwd": "${workspaceRoot}"
+      "name": "Debug Pascal program",
+      "program": "${workspaceFolder}/tests/TestPascli${command:executableExtension}",
+      "parameters": ["--suite=TestNewOptionBasic"],
+      "fpdserver": {
+        "executable": "${extensionInstallFolder:cnoc.fpdebug}/bin/fpdserver-x86_64.exe"
+      },
+      "preLaunchTask": "pasc: tests build"
     }
   ]
 }
