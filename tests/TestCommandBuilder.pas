@@ -30,6 +30,10 @@ type
     procedure TestConstructor;
     procedure TestConstructorExeNameNotProvided;
     procedure TestAddCommand;
+    procedure TestAddCommandWithDescription;
+    procedure TestAddCommandCheckConstraints;
+    procedure TestAddCommandOnExecute;
+    procedure TestAddCommandCallback;
     procedure TestAddArgument;
     procedure TestAddOption;
     procedure TestParseBasic;
@@ -112,6 +116,52 @@ begin
 
   AssertEquals('Commands added should be 2', 2, Length(LBuilder.Commands));
   AssertEquals('Second command name should be "test2"', 'test2', LBuilder.Commands[1].Name);
+end;
+
+procedure TTestCommandBuilder.TestAddCommandWithDescription;
+begin
+  FBuilder
+    .AddCommand('test')
+      .Description('test command')
+    .AddCommand('withoutdescription');
+
+  AssertEquals('Commands added should be 2', 2, Length(FBuilder.Commands));
+  AssertEquals('Command test should have description', 'test command', FBuilder.Commands[0].Description);
+  AssertEquals('Command withoutdescription should have no description', '', FBuilder.Commands[1].Description);
+end;
+
+procedure TTestCommandBuilder.TestAddCommandCheckConstraints;
+begin
+  FBuilder
+    .AddCommand('test')
+      .Description('test command')
+      .CheckConstraints([ccDefault, ccRequiresOneArgument]);
+
+  AssertEquals('Commands added should be 1', 1, Length(FBuilder.Commands));
+  AssertTrue('Command test should have constraint ccDefault', 
+    ccDefault in FBuilder.Commands[0].Constraints);
+  AssertTrue('Command test should have constraint ccRequiresOneArgument', 
+    ccRequiresOneArgument in FBuilder.Commands[0].Constraints);
+end;
+
+procedure TTestCommandBuilder.TestAddCommandOnExecute;
+begin
+  FBuilder
+    .AddCommand('test')
+      .Description('test command')
+      .OnExecute(@MockCommand);
+
+  AssertEquals('Commands added should be 1', 1, Length(FBuilder.Commands));
+  AssertTrue('Command test should have callback', Assigned(FBuilder.Commands[0].Callback));
+end;
+
+procedure TTestCommandBuilder.TestAddCommandCallback;
+begin
+  FBuilder
+    .AddCommand(@MockRegistryCommand);
+
+  AssertEquals('Commands added should be 1', 1, Length(FBuilder.Commands));
+  AssertTrue('Command test should have callback', Assigned(FBuilder.Commands[0].Callback));
 end;
 
 procedure TTestCommandBuilder.TestAddArgument;

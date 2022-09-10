@@ -75,6 +75,11 @@ type
 
   end;
 
+  /// <summary> Returns an error if a command was configured without a callback </summary>
+  TConfiguredCommandWithCallback = class(TValidatorBase)
+    function Validate(ACommand: ICommandBuilder): TArray<string>; override;
+  end;  
+
   /// <summary> Returns an error if a command has been passed twice. A duplicity is accepted if 
   /// a command accepts another command as an argument through the @link(ccNoArgumentsButCommands)
   /// constraint.
@@ -194,6 +199,7 @@ end;
 function TValidatorContext.Validate(ACommand: ICommandBuilder): TArray<string>;
 begin
   Result := Self
+    .Add(TConfiguredCommandWithCallback.Create)
     .Add(TDuplicateArgumentValidator.Create)
     .Add(TDuplicateOptionValidator.Create)
     .Add(TProvidedArgumentsAreNotValid.Create)
@@ -231,6 +237,22 @@ begin
   Result := FResult;
   if Assigned(FSucessor) then
     Result := FSucessor.Validate(ACommand);
+end;
+
+
+function TConfiguredCommandWithCallback.Validate(ACommand: ICommandBuilder): TArray<string>;
+var
+  LCommand: ICommand;
+begin
+  for LCommand in ACommand.Commands do
+    if not Assigned(LCommand.Callback) then
+    begin
+      AppendToArray(
+          FResult, 
+          Format('Command %s was configured without a callback.', [LCommand.Name]));
+          Exit(FResult);
+    end;
+  Result := inherited Validate(ACommand);
 end;
 
 function TDuplicateArgumentValidator.Validate(ACommand: ICommandBuilder): TArray<string>;

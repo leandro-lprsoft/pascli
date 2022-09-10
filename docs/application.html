@@ -115,13 +115,12 @@ tool checkfile <span class="pascal_keyword">file</span>.txt</pre>
   FCommandBuilder: ICommandBuilder;
 
 <span class="pascal_keyword">begin</span>
-  FCommandBuilder := TCommandBuilder.Create(ExtractFileName(ParamStr(<span class="pascal_numeric">0</span>)));
-  FCommandBuilder.Title := <span class="pascal_string">'a custom cli tool'</span>;
+  FCommandBuilder := TCommandBuilder.New(<span class="pascal_string">'a custom cli tool'</span>);
 <span class="pascal_keyword">end</span>;</pre>
 
 <p>
 
-<p>In the code above the FCommandBuilder could be the field of a class behind a property. The constructor requires as a parameter the name of the executable without extension that will be used by the user to execute the application. Other information is the title of the application. Both information will be used by the library, more specifically by the command <a class="normal" href="Command.Usage.html#UsageCommand">UsageCommand</a>.
+<p>In the code above the FCommandBuilder could be the field of a class behind a property. The <a class="normal" href="Command.Builder.TCommandBuilder.html#New">new</a> class factory requires as a parameter the title of the application that will be used by the library, more specifically by the command <a class="normal" href="Command.Usage.html#UsageCommand">UsageCommand</a> to print usage information to the user.
 
 <p><h4 class=""><span id="SecSecond_b"></span>Registering commands</h4>
 
@@ -136,11 +135,11 @@ tool checkfile <span class="pascal_keyword">file</span>.txt</pre>
 <p></p>
 
 <pre class="longcode">
-FCommandBuilder.Parse;
-FCommandBuilder.Validate;
-FCommandBuilder.Execute;</pre>
+FCommandBuilder.Run;</pre>
 
 <p>
+
+<p>Internally builder calls the methods <a class="normal" href="Command.Builder.TCommandBuilder.html#Parse">Parse</a>, <a class="normal" href="Command.Builder.TCommandBuilder.html#Validate">Validate</a> and <a class="normal" href="Command.Builder.TCommandBuilder.html#Execute">Execute</a> to process the parameters provided by the user.
 
 <p>You can check what each command above does in detail, but it is important to know that the validate command may generate exceptions preventing the application from proceeding if the parameters informed by the user are not in accordance with what was configured.
 

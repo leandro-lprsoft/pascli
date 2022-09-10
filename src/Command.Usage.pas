@@ -31,6 +31,11 @@ uses
   /// @longCode(
   /// Command.Usage.Registry(MyApp.CommandBuilder);
   /// )
+  /// or you can use the overloaded version of AddCommand to add the command to the builder using fluent interface:
+  /// @longCode(
+  ///   MyBuilder
+  ///     .AddCommand(Command.Usage.Registry);
+  /// )
   /// or customize your own configuration:
   /// @longCode(
   /// MyApp.CommandBuilder
@@ -74,14 +79,19 @@ uses
   /// its configured callback procedure. </param>  
   procedure WriteGeneralUsage(ABuilder: ICommandBuilder);
 
-  /// <summary> Configure UsageCommand with standard parameters. </summary>
+  /// <summary> Configure UsageCommand with standard parameters.</summary>
+  ///
   /// Ex:
   /// @longCode(
   /// Command.Usage.Registry(MyApp.CommandBuilder);
   /// )
+  /// Ex with fluent interface:
+  /// @longCode(
+  ///   Builder.AddCommand(Command.Usage.Registry);
+  /// )
   /// <param name="ABuilder"> CommandBuilder instance that will be used to register the UsageCommand.
   /// </param>  
-  procedure Registry(ABuilder: ICommandBuilder);
+  function Registry(ABuilder: ICommandBuilder): Boolean;
 
 implementation
 
@@ -230,15 +240,16 @@ begin
     WriteGeneralUsage(ABuilder);
 end;
 
-procedure Registry(ABuilder: ICommandBuilder);
+function Registry(ABuilder: ICommandBuilder): Boolean;
 begin
   ABuilder
-    .AddCommand(
-      'help', 
-      'Shows information about how to use this tool or about a specific command.'#13#10 +
-      'Ex: ' + ABuilder.ExeName + ' help', 
-      @UsageCommand,
-      [ccDefault, ccNoArgumentsButCommands]);
+    .AddCommand('help')
+      .Description(
+        'Shows information about how to use this tool or about a specific command.'#13#10 +
+        'Ex: ' + ABuilder.ExeName + ' help')
+      .CheckConstraints([ccDefault, ccNoArgumentsButCommands])
+      .OnExecute(@UsageCommand);
+  Result := True;
 end;
 
 end.

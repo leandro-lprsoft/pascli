@@ -74,12 +74,15 @@
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a></strong> = procedure (ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>);</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a></strong> = procedure (const AMessage: string);</code></td>
+<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TAddCommandCallback">TAddCommandCallback</a></strong> = function (ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>): Boolean;</code></td>
 </tr>
 <tr class="list">
-<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a></strong> = procedure (const AMessage: string; const AColor: byte);</code></td>
+<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a></strong> = procedure (const AMessage: string);</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code><strong><a href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a></strong> = procedure (const AMessage: string; const AColor: byte);</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code><strong><a href="Command.Interfaces.html#TInputLnCallback">TInputLnCallback</a></strong> = function: string;</code></td>
 </tr>
 </table>
@@ -163,6 +166,22 @@
 <dl class="parameters">
 <dt>ABuilder</dt>
 <dd>Instance of CommandBuilder that processed, validated, and identified the callback command being called.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="TAddCommandCallback"></span><code><strong>TAddCommandCallback</strong> = function (ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>): Boolean;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+ Callback function signature need to add a command using the overloaded version of CommandBuilder.AddCommand. This signature is different to avoid collision with the TCommandCallback signature. The return result is not required. </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>ABuilder</dt>
+<dd>Instance of CommandBuilder used to add the command.</dd>
 </dl>
 </td></tr>
 </table>

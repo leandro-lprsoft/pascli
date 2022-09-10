@@ -37,27 +37,51 @@
 </tr>
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#AddCommand">AddCommand</a></strong>(const ACommand, ADescription: string; ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a>; AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+<td class="itemcode"><code>class function <strong><a href="Command.Builder.TCommandBuilder.html#New">New</a></strong>(ATitle: String): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
 <tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#AddCommand">AddCommand</a></strong>(const ACommand: string; const ADescription: string = ''; ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a> = nil; AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a> = []): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#AddCommand">AddCommand</a></strong>(const ACommand: <a href="Command.Interfaces.html#TAddCommandCallback">TAddCommandCallback</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#Description">Description</a></strong>(const ADescription: string): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#CheckConstraints">CheckConstraints</a></strong>(AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#OnExecute">OnExecute</a></strong>(ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#AddArgument">AddArgument</a></strong>(const ADescription: string; AConstraint: <a href="Command.Interfaces.html#TArgumentConstraint">TArgumentConstraint</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#AddOption">AddOption</a></strong>(const AFlag, AName, ADescription: string; ANotAllowedFlags: TArray&lt;string&gt; = nil; AConstraint: <a href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a> = <a href="Command.Interfaces.html#ocNoValue">ocNoValue</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Builder.TCommandBuilder.html#Parse">Parse</a></strong>;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#Validate">Validate</a></strong>: TArray&lt;string&gt;;</code></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>procedure <strong><a href="Command.Builder.TCommandBuilder.html#Execute">Execute</a></strong>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#Run">Run</a></strong>: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
@@ -118,6 +142,10 @@
 <tr class="list2">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
 <td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#UseArguments">UseArguments</a></strong>(AArguments: TArray&lt;string&gt;): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Command.Builder.TCommandBuilder.html#UseColorTheme">UseColorTheme</a></strong>(ATheme: <a href="Command.Interfaces.TColorTheme.html">TColorTheme</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
 </tr>
 </table>
 <span id="PasDoc-Properties"></span><h3 class="summary">Properties</h3>
@@ -189,7 +217,24 @@
 <table class="detail wide_list">
 <tr class="list">
 <td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><span id="AddCommand"></span><code>function <strong>AddCommand</strong>(const ACommand, ADescription: string; ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a>; AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+<td class="itemcode"><span id="New"></span><code>class function <strong>New</strong>(ATitle: String): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ A class factory for command builder. It allows the initialization of the builder with a brief description and will extract the application executable name that will be used to display usage info on how to use the tool. </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>ATitle</dt>
+<dd>Brief description of the tool. It will be displayed on the <a class="normal" href="Command.Usage.html#UsageCommand">UsageCommand</a> command.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="AddCommand"></span><code>function <strong>AddCommand</strong>(const ACommand: string; const ADescription: string = ''; ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a> = nil; AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a> = []): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>; overload;</code></td>
 </tr>
 <tr><td colspan="2">
 <p>
@@ -212,6 +257,71 @@
 <dd>Callback procedure that will be invoked by the CommandBuilder if the validation was successful and the command informed match the command name.</dd>
 <dt>AConstraints</dt>
 <dd>Validation constraints for command usage, may set to default, may require a required argument, a required option. Check <a class="normal" href="Command.Interfaces.html#TCommandConstraint">TCommandConstraint</a> for existing constraints. Ex: <code>[ccDefault, ccNoArgumentsButCommands]</code></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="AddCommand"></span><code>function <strong>AddCommand</strong>(const ACommand: <a href="Command.Interfaces.html#TAddCommandCallback">TAddCommandCallback</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Using a callback to add a command to the CommandBuilder. The main purpose of this method is to allow the use of the fluent interface. Ex: CommandBuilder.AddCommand(@Command.Usage.Registry); </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>ACommand</dt>
+<dd>Command callback that will be invoked by CommandBuilder to add the command.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Description"></span><code>function <strong>Description</strong>(const ADescription: string): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Set the description for the last command that was added. </p>
+<p>
+
+
+<p>Description of the command that best describes its purpose.&lt;/summay</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="CheckConstraints"></span><code>function <strong>CheckConstraints</strong>(AConstraints: <a href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Set the constraints for the last command that was added. </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>AConstraints</dt>
+<dd>Validation constraints for command usage, may set to default, may require a required argument, a required option. Check TCommandConstraint for existing constraints.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="OnExecute"></span><code>function <strong>OnExecute</strong>(ACallback: <a href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Set the callback for the last command that was added. </p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>ACallback</dt>
+<dd>Callback procedure that will be invoked by the CommandBuilder</dd>
 </dl>
 </td></tr>
 </table>
@@ -297,6 +407,16 @@ Adds an option to the last added command. For both the short and long options. <
 <tr><td colspan="2">
 <p>
  Invokes the <a class="normal" href="Command.Interfaces.html#TCommandCallback">callback</a> procedure configured for the command found once parse and validation have been successful. It passes the <a class="normal" href="Command.Builder.TCommandBuilder.html">TCommandBuilder</a> itself as a parameter to the callback so that it is possible to call the <a class="normal" href="Command.Builder.TCommandBuilder.html#CheckOption">CheckOption</a> method to validate the presence of a certain option, or to obtain the value of an expected argument through the Arguments[n].Value property. </p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Run"></span><code>function <strong>Run</strong>: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Executes the <a class="normal" href="Command.Builder.TCommandBuilder.html#Parse">TCommandBuilder.Parse</a>, <code>TCommandBuilder.Validade</code> and <a class="normal" href="Command.Builder.TCommandBuilder.html#Execute">TCommandBuilder.Execute</a> methods to process all parameters provided by the user and call the correct callback command or to print validation messages. </p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -458,6 +578,23 @@ Adds an option to the last added command. For both the short and long options. <
 <dl class="parameters">
 <dt>AArguments</dt>
 <dd>Array of strings containing the arguments, the options must be passed with the leading dashes.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="UseColorTheme"></span><code>function <strong>UseColorTheme</strong>(ATheme: <a href="Command.Interfaces.TColorTheme.html">TColorTheme</a>): <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Allows to use a different color theme for the too. Returns the CommandBuilder to allow the use of fluent interface.</p>
+<p>
+ </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>ATheme</dt>
+<dd>Color theme to be used.</dd>
 </dl>
 </td></tr>
 </table>

@@ -8,9 +8,7 @@ uses
   Classes, 
   SysUtils, 
   fpcunit, 
-  testutils, 
   testregistry,
-  Command.App,
   Command.Interfaces,
   Command.Builder;
 

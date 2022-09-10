@@ -6,7 +6,6 @@ interface
 
 uses
   fpcunit, 
-  testutils, 
   testregistry,
   Command.App,
   Command.Interfaces,

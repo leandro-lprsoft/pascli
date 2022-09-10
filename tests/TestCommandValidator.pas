@@ -8,7 +8,6 @@ uses
   Classes, 
   SysUtils, 
   fpcunit, 
-  testutils, 
   testregistry,
   Command.App,
   Command.Interfaces,
@@ -28,6 +27,7 @@ type
     procedure SetUp; override;
     procedure TearDown; override;
   published
+    procedure TestConfiguredCommandWithCallback;
     procedure TestDuplicateArgumentValidatorError;
     procedure TestDuplicateArgumentValidatorAllowedCommand;
     procedure TestDuplicateOptionValidatorError;
@@ -65,6 +65,24 @@ end;
 procedure TTestCommandValidator.TearDown;
 begin
   FApplication.Free;
+end;
+
+procedure TTestCommandValidator.TestConfiguredCommandWithCallback;
+begin
+  // arrange
+  FBuilder
+    .AddCommand('test')
+    .UseArguments(['test'])
+    .Parse;
+
+  // act
+  FValidator := TConfiguredCommandWithCallback.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Array length should be equals 1', 1, Length(FArray));
+  if Length(FArray) > 0 then
+    AssertEquals('Command test was configured without a callback.', FArray[0]);  
 end;
 
 procedure TTestCommandValidator.TestDuplicateArgumentValidatorError;

@@ -22,41 +22,46 @@
 <th class="itemdesc">Description</th>
 </tr>
 <tr class="list">
+<td class="itemname"><a class="bold" href="Command.Interfaces.html#TAddCommandCallback">TAddCommandCallback</a></td>
+<td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
+<td class="itemdesc"><p> Callback function signature need to add a command using the overloaded version of CommandBuilder.AddCommand. This signature is different to avoid collision with the TCommandCallback signature. The return result is not required. </p></td>
+</tr>
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TArgumentConstraint">TArgumentConstraint</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Enumerated type that defines constraints that apply on arguments. It is used to indicate to the CommandBuilder the rules for using arguments, allowing its validation to be done automatically. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Callback procedure signature that represents a command defined in the program. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandConstraint">TCommandConstraint</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Enumerated type that defines constraints that apply on commands. It is used to indicate to the CommandBuilder the rules for using the command, allowing its validation to be done automatically. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Set type of constraints, as they can have their combined use when configuring a command. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TInputLnCallback">TInputLnCallback</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Callback procedure signature used by the library to capture user input. A default callback is provided by the library, but it can be overridden for testing purposes primarily. Should return user input. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TOptionConstraint">TOptionConstraint</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Enumerated type that defines constraints that apply on options. It is used to indicate to the CommandBuilder the rules for using options, allowing its validation to be done automatically. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TOutputCallback">TOutputCallback</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Callback procedure signature that is intended to output text to the console, or other desired output. The library provides a standard callback that simply calls WriteLn, but it can be overridden so that the output is redirected to a file, a test function, etc. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TOutputColorCallback">TOutputColorCallback</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Callback procedure signature that is intended to output text to the console usings colors. The library provides a standard callback that simply calls Write before change console color, but it can be overridden so that the output is redirected to a file, a test function, etc. </p></td>

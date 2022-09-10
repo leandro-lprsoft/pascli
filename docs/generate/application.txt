@@ -89,12 +89,11 @@ var
   FCommandBuilder: ICommandBuilder;
 
 begin
-  FCommandBuilder := TCommandBuilder.Create(ExtractFileName(ParamStr(0)));
-  FCommandBuilder.Title := 'a custom cli tool';
+  FCommandBuilder := TCommandBuilder.New('a custom cli tool');
 end;
 )
 
-In the code above the FCommandBuilder could be the field of a class behind a property. The constructor requires as a parameter the name of the executable without extension that will be used by the user to execute the application. Other information is the title of the application. Both information will be used by the library, more specifically by the command @link(UsageCommand).
+In the code above the FCommandBuilder could be the field of a class behind a property. The @link(TCommandBuilder.New new) class factory requires as a parameter the title of the application that will be used by the library, more specifically by the command @link(UsageCommand) to print usage information to the user.
 
 @section(3 SecSecond_b Registering commands)
 
@@ -105,10 +104,10 @@ You can register commands in the same way explained in the topics "Register buil
 Depending on the type of application you are developing, it is necessary that you choose the appropriate time to process the arguments provided by the user, usually this is done before the application starts executing its own services. To perform this processing, just run the following @link(TCommandBuilder) commands:
 
 @longCode(
-  FCommandBuilder.Parse;
-  FCommandBuilder.Validate;
-  FCommandBuilder.Execute;
+  FCommandBuilder.Run;
 )
+
+Internally builder calls the methods @link(TCommandBuilder.Parse Parse), @link(TCommandBuilder.Validate Validate) and @link(TCommandBuilder.Execute Execute) to process the parameters provided by the user.
 
 You can check what each command above does in detail, but it is important to know that the validate command may generate exceptions preventing the application from proceeding if the parameters informed by the user are not in accordance with what was configured.
 

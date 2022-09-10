@@ -89,6 +89,12 @@ type
   /// the callback command being called. </param>
   TCommandCallback = procedure (ABuilder: ICommandBuilder);
 
+  /// <summary> Callback function signature need to add a command using the overloaded version
+  /// of CommandBuilder.AddCommand. This signature is different to avoid collision with the
+  /// TCommandCallback signature. The return result is not required. </summary>
+  /// <param name="ABuilder"> Instance of CommandBuilder used to add the command. </param>
+  TAddCommandCallback = function (ABuilder: ICommandBuilder): Boolean;
+
   /// <summary> Callback procedure signature that is intended to output text to the console, 
   /// or other desired output. The library provides a standard callback that simply calls WriteLn, 
   /// but it can be overridden so that the output is redirected to a file, a test function, etc.
@@ -286,8 +292,16 @@ type
     /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
     /// may require a required argument, a required option. Check TCommandConstraint for 
     /// existing constraints.</param>
-    function AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
-      AConstraints: TCommandConstraints): ICommandBuilder;
+    function AddCommand(const ACommand: string; const ADescription: string = ''; 
+      ACallback: TCommandCallback = nil; AConstraints: TCommandConstraints = []): ICommandBuilder; overload;
+
+    /// <summary> Using a callback to add a command to the CommandBuilder. The main purpose of this
+    /// method is to allow the use of the fluent interface.
+    /// Ex: CommandBuilder.AddCommand(@Command.Usage.Registry);
+    /// </summary>
+    /// <param name="ACommand">Command callback that will be invoked by CommandBuilder to add the
+    /// command. </param>
+    function AddCommand(const ACommand: TAddCommandCallback): ICommandBuilder; overload;
 
     /// <summary> Returns the list of commands configured in CommandBuilder.
     /// </summary>
@@ -303,6 +317,20 @@ type
 
     /// <summary> Returns the default command if one has been configured. </summary>
     function GetDefaultCommand: ICommand;
+
+    /// <summary> Set the description for the last command that was added. </summary>
+    /// <paran ame="ADescription">Description of the command that best describes its purpose.</summay
+    function Description(const ADescription: string): ICommandBuilder;
+
+    /// <summary> Set the constraints for the last command that was added. </summary>
+    /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
+    /// may require a required argument, a required option. Check TCommandConstraint for 
+    /// existing constraints.</param>
+    function CheckConstraints(AConstraints: TCommandConstraints): ICommandBuilder;
+
+    /// <summary> Set the callback for the last command that was added. </summary>
+    /// <param name="ACallback">Callback procedure that will be invoked by the CommandBuilder</summary>
+    function OnExecute(ACallback: TCommandCallback): ICommandBuilder;
 
     /// <summary> Adds an argument to allow the user to pass a text argument via the command 
     /// line.</summary>
@@ -348,6 +376,11 @@ type
     /// presence of a certain option, or to obtain the value of an expected argument through 
     /// the Arguments[n].Value property. </summary>
     procedure Execute;
+
+    /// <summary> Executes the @link(TCommandBuilder.Parse), @link(TCommandBuilder.Validade) and
+    /// @link(TCommandBuilder.Execute) methods to process all parameters provided by the user
+    /// and call the correct callback command or to print validation messages. </summary>
+    function Run: ICommandBuilder;
 
     /// <summary> Returns the selected command after Parse. </summary>
     function CommandSelected: ICommand;
@@ -436,6 +469,11 @@ type
     /// <param name="AArguments"> Array of strings containing the arguments, the options 
     /// must be passed with the leading dashes.</param>
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
+
+    /// <summary> Allows to use a different color theme for the too. Returns the CommandBuilder
+    /// to allow the use of fluent interface.</summary>
+    /// <param name="ATheme">Color theme to be used. </param>
+    function UseColorTheme(ATheme: TColorTheme): ICommandBuilder;
 
     function GetColorTheme: TColorTheme;
     procedure SetColorTheme(AValue: TColorTheme);

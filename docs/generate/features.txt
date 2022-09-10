@@ -5,7 +5,7 @@ The library has several features and in the repository we can find the use of ma
 
 @section(2 SecFirst Fluent interface api to build the command strucuture.)
 
-This feature does not need explanations, as its implementation is illustrated through several examples contained in this documentation.
+This feature does not need explanations, as its implementation is illustrated through several examples contained in this documentation. You may check the fluent sample project to check how the fluent interface can be used.
     
 @section(2 SecSecond Built-in constraints to validate allowed commands, allowed options, not allowed options, and arguments.)
 

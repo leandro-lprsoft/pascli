@@ -24,6 +24,7 @@ type
   end;
 
   procedure MockCommand(ABuilder: ICommandBuilder);
+  function MockRegistryCommand(ABuilder: ICommandBuilder): Boolean;
   function MockInputLn: string;
   procedure MockOutput(const AMessage: string);
   procedure MockOutputColor(const AMessage: string; const AColor: Byte);
@@ -36,6 +37,14 @@ implementation
 procedure MockCommand(ABuilder: ICommandBuilder);
 begin  
   MockCommandCapture := 'executed';
+end;
+
+function MockRegistryCommand(ABuilder: ICommandBuilder): Boolean;
+begin
+  ABuilder
+    .AddCommand('mock')
+      .Description('mock command')
+      .OnExecute(MockCommand);
 end;
 
 function MockInputLn: string;

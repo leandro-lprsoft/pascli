@@ -21,14 +21,28 @@ uses
   /// following command:
   /// @longCode(
   /// Command.Version.Registry(MyApp.CommandBuilder);)
+  /// or you can use the overloaded version of AddCommand to add the command to the builder using fluent interface:
+  /// @longCode(
+  ///   MyBuilder
+  ///     .AddCommand(Command.Version.Registry);
+  /// )
   /// <param name="ABuilder">CommandBuilder that will be used to output the version 
   /// information. </param>  
   procedure VersionCommand(ABuilder: ICommandBuilder);
 
   /// <summary> Configure VersionCommand with standard parameters. </summary>
+  ///
+  /// Ex:
+  /// @longCode(
+  /// Command.Version.Registry(MyApp.CommandBuilder);
+  /// )
+  /// Ex with fluent interface:
+  /// @longCode(
+  ///   Builder.AddCommand(Command.Version.Registry);
+  /// )
   /// <param name="ABuilder"> CommandBuilder instance that will be used to register the 
   /// VersionCommand.</param>  
-  procedure Registry(ABuilder: ICommandBuilder);
+  function Registry(ABuilder: ICommandBuilder): Boolean;
 
 implementation
 
@@ -75,15 +89,16 @@ begin
   ABuilder.OutputColor(ResourceVersionInfo + #13#10, ABuilder.ColorTheme.Other);
 end;
 
-procedure Registry(ABuilder: ICommandBuilder);
+function Registry(ABuilder: ICommandBuilder): Boolean;
 begin
   ABuilder
-    .AddCommand(
-      'version', 
-      'Shows the ' + ABuilder.ExeName + ' version information'#13#10 +
-      'Ex: ' + ABuilder.ExeName + ' version', 
-      @VersionCommand,
-      [ccNoParameters]);
+    .AddCommand('version')
+      .Description( 
+        'Shows the ' + ABuilder.ExeName + ' version information'#13#10 +
+        'Ex: ' + ABuilder.ExeName + ' version')
+      .CheckConstraints([ccNoParameters])
+      .OnExecute(VersionCommand);
+  Result := True;
 end;
 
 end.

@@ -159,7 +159,7 @@
 <tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Usage.html#Registry">Registry</a></td>
 <td class="itemunit"><a class="bold" href="Command.Usage.html">Command.Usage</a></td>
-<td class="itemdesc"><p> Configure UsageCommand with standard parameters. </p></td>
+<td class="itemdesc"><p> Configure UsageCommand with standard parameters.</p></td>
 </tr>
 <tr class="list">
 <td class="itemname"><a class="bold" href="Command.Version.html#Registry">Registry</a></td>
@@ -197,49 +197,59 @@
 <td class="itemdesc"><p>Contains the initial color detected by the application before any color change. </p></td>
 </tr>
 <tr class="list2">
+<td class="itemname"><a class="bold" href="Command.Interfaces.html#TAddCommandCallback">TAddCommandCallback</a></td>
+<td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
+<td class="itemdesc"><p> Callback function signature need to add a command using the overloaded version of CommandBuilder.AddCommand. This signature is different to avoid collision with the TCommandCallback signature. The return result is not required. </p></td>
+</tr>
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Builder.TArgument.html">TArgument</a></td>
 <td class="itemunit"><a class="bold" href="Command.Builder.html">Command.Builder</a></td>
 <td class="itemdesc"><p>Class that implements the IArgument interface that represents an argument that can be registered in CommandBuilder for later use by the user. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TArgumentConstraint">TArgumentConstraint</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Enumerated type that defines constraints that apply on arguments. It is used to indicate to the CommandBuilder the rules for using arguments, allowing its validation to be done automatically. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.TColorTheme.html">TColorTheme</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Color theme structure used across the library. All fields in this record represent colors that can be defined from the color constants found in the Command.Colors unit. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Builder.TCommand.html">TCommand</a></td>
 <td class="itemunit"><a class="bold" href="Command.Builder.html">Command.Builder</a></td>
 <td class="itemdesc"><p> Class that implements the ICommand interface that represents a command that can be registered in CommandBuilder for later use by the user. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.App.TCommandApp.html">TCommandApp</a></td>
 <td class="itemunit"><a class="bold" href="Command.App.html">Command.App</a></td>
 <td class="itemdesc"><p> This class allows you to define which arguments, commands, and options will be accepted as parameters by executing the application via the command line. For that it is necessary to use the <a class="normal" href="Command.App.TCommandApp.html#CommandBuilder">TCommandApp.CommandBuilder</a> property. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Builder.TCommandBuilder.html">TCommandBuilder</a></td>
 <td class="itemunit"><a class="bold" href="Command.Builder.html">Command.Builder</a></td>
 <td class="itemdesc"><p> Class that implements the ICommandBuilder interface, its main purpose is to configure the arguments, commands and options accepted by the tool. Central point of the library, responsible for comparing and validating the parameters passed by the command line with the configured parameters, later executing the callback linked to the localized command. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandCallback">TCommandCallback</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Callback procedure signature that represents a command defined in the program. </p></td>
 </tr>
-<tr class="list">
+<tr class="list2">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandConstraint">TCommandConstraint</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Enumerated type that defines constraints that apply on commands. It is used to indicate to the CommandBuilder the rules for using the command, allowing its validation to be done automatically. </p></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemname"><a class="bold" href="Command.Interfaces.html#TCommandConstraints">TCommandConstraints</a></td>
 <td class="itemunit"><a class="bold" href="Command.Interfaces.html">Command.Interfaces</a></td>
 <td class="itemdesc"><p> Set type of constraints, as they can have their combined use when configuring a command. </p></td>
+</tr>
+<tr class="list2">
+<td class="itemname"><a class="bold" href="Command.Validator.TConfiguredCommandWithCallback.html">TConfiguredCommandWithCallback</a></td>
+<td class="itemunit"><a class="bold" href="Command.Validator.html">Command.Validator</a></td>
+<td class="itemdesc"><p> Returns an error if a command was configured without a callback </p></td>
 </tr>
 <tr class="list">
 <td class="itemname"><a class="bold" href="Command.Validator.TDuplicateArgumentValidator.html">TDuplicateArgumentValidator</a></td>

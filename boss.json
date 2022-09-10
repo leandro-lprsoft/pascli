@@ -1,7 +1,7 @@
 {
 	"name": "pascli",
 	"description": "Object Pascal CLI library for ease development of command line applications",
-	"version": "1.6.0",
+	"version": "1.7.0",
 	"homepage": "https://github.com/leandro-lprsoft/pascli",
 	"mainsrc": "src/",
 	"projects": [],

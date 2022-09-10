@@ -8,12 +8,10 @@ uses
   Classes, 
   SysUtils, 
   fpcunit, 
-  testutils, 
   testregistry,
   Command.Interfaces,
   Command.App,
-  Command.Usage,
-  Command.Builder;
+  Command.Usage;
 
 type
 
@@ -176,7 +174,7 @@ end;
 
 procedure TTestCommandUsage.TestWriteCommandUsageWithOption;
 var
-  LExpectUsage, LExpectDesc: string;
+  LExpectUsage: string;
 begin
   // arrange
   FApplication
@@ -194,7 +192,6 @@ begin
 
   // asserts
   LExpectUsage := Format('Usage: %s %s [%s]', [FExeName, 'cmd_with_opt', 'options']);
-  LExpectDesc := 'command that requires options';
 
   AssertTrue('Should have usage instruction for the command with [options]', 
     ContainsText(CapturedOutput, LExpectUsage));

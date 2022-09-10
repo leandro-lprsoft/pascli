@@ -39,7 +39,7 @@
 <td class="itemcode"><code>procedure <strong><a href="Command.Usage.html#WriteGeneralUsage">WriteGeneralUsage</a></strong>(ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>);</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code>procedure <strong><a href="Command.Usage.html#Registry">Registry</a></strong>(ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>);</code></td>
+<td class="itemcode"><code>function <strong><a href="Command.Usage.html#Registry">Registry</a></strong>(ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>): Boolean;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -63,6 +63,12 @@
 
 <pre class="longcode">
 Command.Usage.Registry(MyApp.CommandBuilder);</pre>
+
+<p> or you can use the overloaded version of AddCommand to add the command to the builder using fluent interface: </p>
+
+<pre class="longcode">
+MyBuilder
+  <span class="pascal_float">.</span>AddCommand(Command.Usage.Registry);</pre>
 
 <p> or customize your own configuration: </p>
 
@@ -165,16 +171,23 @@ MyApp.CommandBuilder
 </table>
 <table class="detail wide_list">
 <tr class="list">
-<td class="itemcode"><span id="Registry"></span><code>procedure <strong>Registry</strong>(ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>);</code></td>
+<td class="itemcode"><span id="Registry"></span><code>function <strong>Registry</strong>(ABuilder: <a href="Command.Interfaces.ICommandBuilder.html">ICommandBuilder</a>): Boolean;</code></td>
 </tr>
 <tr><td colspan="1">
 <p>
- Configure UsageCommand with standard parameters. </p>
+ Configure UsageCommand with standard parameters.</p>
 <p>
- Ex: </p>
+
+
+<p>Ex: </p>
 
 <pre class="longcode">
 Command.Usage.Registry(MyApp.CommandBuilder);</pre>
+
+<p> Ex with fluent interface: </p>
+
+<pre class="longcode">
+Builder.AddCommand(Command.Usage.Registry);</pre>
 
 <p> </p>
 <h6 class="description_section">Parameters</h6>

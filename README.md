@@ -41,34 +41,26 @@ uses
 * **Basic implementation**
 
 ```pascal
-var
-  Application: TCommandApp;
-
 {$R *.res} // important to build version info
 
 procedure HelloCommand(ABuilder: ICommandBuilder);
 begin
   WriteLn('Hello world!');
+  if ABuilder.CheckOption('c') then
+    WriteLn('You have used the -c option');
 end;
 
 begin
-  Application := TCommandApp.Create(nil);
-  Application.Title := 'Basic CLI tool.';
-
-  Command.Usage.Registry(Application.CommandBuilder);
-  Command.Version.Registry(Application.CommandBuilder);
-
-  Application
-    .CommandBuilder
-      .AddCommand(
-        'hello',
-        'Show a hello world message.'#13#10 +
-        'Ex: basic hello',
-        @HelloCommand,
-        [ccNoParameters]);  
-  
-  Application.Run;
-  Application.Free;
+  TCommandBuilder
+    .New('a sample project using fluent calls to build the commands')
+    .AddCommand('hello')
+      .Description('Prints hello world')
+      .CheckConstraints([ccRequiresOneOption])
+        .AddOption('c', 'custom', 'custom option to change command behavior', [], ocNoValue)
+      .OnExecute(HelloCommand)
+    .AddCommand(Command.Usage.Registry)
+    .AddCommand(Command.Version.Registry)
+    .Run;
 end.
 ``` 
 
@@ -82,16 +74,38 @@ Build the project and try run on console:
 You should see the following output:
 ```console
 
-Usage: basic.exe [command] 
+basic version 1.0.3
+
+Usage: basic [command] [options] 
+
+a sample project using fluent calls to build the commands
 
 Commands: 
+  hello          Prints hello world
   help           Shows information about how to use this tool or about a specific command.
-                 Ex: basic help
-  hello          Show a hello world message.
-                 Ex: basic hello
+                 Ex: fluent help
+  version        Shows the fluent version information
+                 Ex: fluent version
 
-Run 'basic.exe help COMMAND' for more information on a command.
+Run 'basic help COMMAND' for more information on a command.
 
+```
+
+Try to extract usage info about the hello command:
+```console
+./basic help hello
+```
+
+You should see the following output:
+```console
+basic version 1.0.3
+
+Usage: basic hello [options] 
+
+Prints hello world
+
+Options: 
+  -c, --custom            custom option to change command behavior
 ```
 
 ## Features
@@ -106,14 +120,14 @@ end;
 
 {...}
 
-Application
-  .CommandBuilder
-    .AddCommand(
-      'mycommand',
-      'Excutes MyCommand procedure.'#13#10 +
-      'Ex: myapp mycommand',
-      @MyCommand,
-      [ccNoParameters]);
+  MyBuilder := TCommandBuilder.New('my cli tool');
+  MyBuilder
+    .AddCommand('mycommand')
+      .Description(
+        'Excutes MyCommand procedure.'#13#10 +
+        'Ex: myapp mycommand')
+      .CheckConstraints([ccNoParameters])
+      .OnExecute(@MyCommand);
 
 {...}
 

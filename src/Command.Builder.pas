@@ -292,6 +292,13 @@ type
     /// by @link(TCommandApp) during the initialization.</param>
     constructor Create(AExeName: String);
 
+    /// <summary> A class factory for command builder. It allows the initialization of the
+    /// builder with a brief description and will extract the application executable name
+    /// that will be used to display usage info on how to use the tool. </summary>
+    /// <param name="ATitle">Brief description of the tool. It will be displayed on the
+    /// @link(UsageCommand) command.</param>
+    class function New(ATitle: String): ICommandBuilder;
+
     /// <summary> Adds a command that will be available to the user of the command line 
     /// application. This command will be added to the @link(TCommandBuilder.Commands) property.
     /// </summary>
@@ -304,12 +311,34 @@ type
     /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
     /// may require a required argument, a required option. Check @link(TCommandConstraint) for 
     /// existing constraints. Ex: @code([ccDefault, ccNoArgumentsButCommands])</param>
-    function AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
-      AConstraints: TCommandConstraints): ICommandBuilder;
+    function AddCommand(const ACommand: string; const ADescription: string = ''; 
+      ACallback: TCommandCallback = nil; AConstraints: TCommandConstraints = []): ICommandBuilder; overload;
+
+    /// <summary> Using a callback to add a command to the CommandBuilder. The main purpose of this
+    /// method is to allow the use of the fluent interface.
+    /// Ex: CommandBuilder.AddCommand(@Command.Usage.Registry);
+    /// </summary>
+    /// <param name="ACommand">Command callback that will be invoked by CommandBuilder to add the
+    /// command. </param>
+    function AddCommand(const ACommand: TAddCommandCallback): ICommandBuilder; overload;
 
     /// <summary> Returns the list of commands configured in CommandBuilder.
     /// </summary>
     property Commands: TArray<ICommand> read GetCommands;
+
+    /// <summary> Set the description for the last command that was added. </summary>
+    /// <paran ame="ADescription">Description of the command that best describes its purpose.</summay
+    function Description(const ADescription: string): ICommandBuilder;
+
+    /// <summary> Set the constraints for the last command that was added. </summary>
+    /// <param name="AConstraints">Validation constraints for command usage, may set to default, 
+    /// may require a required argument, a required option. Check TCommandConstraint for 
+    /// existing constraints.</param>
+    function CheckConstraints(AConstraints: TCommandConstraints): ICommandBuilder;
+
+    /// <summary> Set the callback for the last command that was added. </summary>
+    /// <param name="ACallback">Callback procedure that will be invoked by the CommandBuilder</summary>
+    function OnExecute(ACallback: TCommandCallback): ICommandBuilder;
 
     /// <summary> Adds an argument to allow the user to pass a text argument via the command line. 
     /// This argument will be added to the @link(TCommandBuilder.Arguments) property. After parse 
@@ -354,6 +383,11 @@ type
     /// method to validate the presence of a certain option, or to obtain the value of an expected argument 
     /// through the Arguments[n].Value property. </summary>
     procedure Execute;
+
+    /// <summary> Executes the @link(TCommandBuilder.Parse), @link(TCommandBuilder.Validade) and
+    /// @link(TCommandBuilder.Execute) methods to process all parameters provided by the user
+    /// and call the correct callback command or to print validation messages. </summary>
+    function Run: ICommandBuilder;
 
     /// <summary> Returns the selected command after Parse. </summary>
     function CommandSelected: ICommand;
@@ -431,6 +465,11 @@ type
     /// <param name="AArguments"> Array of strings containing the arguments, the options 
     /// must be passed with the leading dashes.</param>
     function UseArguments(AArguments: TArray<string>): ICommandBuilder;
+
+    /// <summary> Allows to use a different color theme for the too. Returns the CommandBuilder
+    /// to allow the use of fluent interface.</summary>
+    /// <param name="ATheme">Color theme to be used. </param>
+    function UseColorTheme(ATheme: TColorTheme): ICommandBuilder;
 
     /// <summary> Color theme that should be used to output colors of commands, a standard 
     /// theme is provided by Command.Colors unit. Should be changed prior to application
@@ -706,11 +745,49 @@ begin
   FOutputColor := ColorConsoleOutput;
 end;
 
+class function TCommandBuilder.New(ATitle: String): ICommandBuilder;
+begin
+  Result := TCommandBuilder.Create(ChangeFileExt(ExtractFileName(ParamStr(0)), ''));
+  Result.Title := ATitle;
+end;
+
 function TCommandBuilder.AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
   AConstraints: TCommandConstraints): ICommandBuilder;
 begin
   SetLength(FCommands, Length(FCommands) + 1);
   FCommands[Length(FCommands) - 1] := TCommand.New(ACommand, ADescription, ACallback, AConstraints);
+  Result := Self;
+end;
+
+function TCommandBuilder.AddCommand(const ACommand: TAddCommandCallback): ICommandBuilder;
+begin
+  ACommand(Self);
+  Result := Self;  
+end;
+
+function TCommandBuilder.Description(const ADescription: string): ICommandBuilder;
+begin
+  if Length(FCommands) = 0 then
+    raise Exception.Create('No command to add description.');
+  FCommands[Length(FCommands) - 1].Description := ADescription;
+  Result := Self;
+end;
+
+function TCommandBuilder.CheckConstraints(AConstraints: TCommandConstraints): ICommandBuilder;
+begin
+  if Length(FCommands) = 0 then
+    raise Exception.Create('No command to set a constraint.');
+  FCommands[Length(FCommands) - 1].Constraints := AConstraints;
+  Result := Self;
+end;
+
+function TCommandBuilder.OnExecute(ACallback: TCommandCallback): ICommandBuilder;
+begin
+  if Length(FCommands) = 0 then
+    raise Exception.Create('No command to set a callback.');
+  if not Assigned(ACallback) then
+    raise Exception.Create('Callback cannot be nil.');
+  FCommands[Length(FCommands) - 1].Callback := ACallback;
   Result := Self;
 end;
 
@@ -883,6 +960,14 @@ procedure TCommandBuilder.Execute;
 begin
   if Length(FParsedErrors) = 0 then
     CommandSelected.Callback(Self);
+end;
+
+function TCommandBuilder.Run: ICommandBuilder;
+begin
+  Parse;
+  Validate;
+  Execute;
+  Result := Self;
 end;
 
 function TCommandBuilder.CommandSelected: ICommand;
@@ -1075,6 +1160,12 @@ function TCommandBuilder.UseArguments(AArguments: TArray<string>): ICommandBuild
 begin
   FExternalArguments := AArguments;
   FUseExternalArguments := True;
+  Result := Self;
+end;
+
+function TCommandBuilder.UseColorTheme(ATheme: TColorTheme): ICommandBuilder;
+begin
+  FColorTheme := ATheme;
   Result := Self;
 end;
 
