@@ -551,9 +551,50 @@ Adds an option to the last added command. For both the short and long options, &
 </tr>
 <tr><td colspan="2">
 <p>
- Usually used within the callback procedure of a given command to customize its processing. </p>
+ Returns true if the option provided through command line by user matches the the parameter AOption. This method is usually used within the callback procedure of a given command to customize its processing.</p>
 <p>
- 
+
+
+<p>Ex: </p>
+
+<pre class="longcode">
+<span class="pascal_keyword">if</span> ABuilder.CheckOption(<span class="pascal_string">'v'</span>) <span class="pascal_keyword">then</span> 
+<span class="pascal_keyword">begin</span>
+  <span class="pascal_comment">// do something</span>
+<span class="pascal_keyword">end</span>;</pre>
+
+<p> </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>AOption</dt>
+<dd>Can be provided short option or long option without leading dashes.</dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="CheckOption"></span><code>function <strong>CheckOption</strong>(const AOption: string; out AValue: string): Boolean; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ Returns true if the option provided through command line by user matches the the parameter AOption. This method is usually used within the callback procedure of a given command to customize its processing.</p>
+<p>
+
+
+<p>Ex: </p>
+
+<pre class="longcode">
+<span class="pascal_keyword">var</span>
+  LValue: <span class="pascal_keyword">string</span>;
+<span class="pascal_keyword">begin</span>
+  <span class="pascal_keyword">if</span> ABuilder.CheckOption(<span class="pascal_string">'v'</span>, LValue) <span class="pascal_keyword">then</span> 
+  <span class="pascal_keyword">begin</span>
+    <span class="pascal_comment">// do something</span>
+    WriteLn(<span class="pascal_string">'Option d value is '</span>, LValue);
+  <span class="pascal_keyword">end</span>;</pre>
+
+<p> 
 
 <p></p>
 <h6 class="description_section">Parameters</h6>
@@ -564,14 +605,6 @@ Adds an option to the last added command. For both the short and long options, &
 <dd>Returns the value of the option if it was provided by the user.</dd>
 </dl>
 </td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
-<td class="itemcode"><span id="CheckOption"></span><code>function <strong>CheckOption</strong>(const AOption: string; out AValue: string): Boolean; overload;</code></td>
-</tr>
-<tr><td colspan="2">
-&nbsp;</td></tr>
 </table>
 <table class="detail wide_list">
 <tr class="list">

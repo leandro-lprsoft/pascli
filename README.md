@@ -83,9 +83,9 @@ a sample project using fluent calls to build the commands
 Commands: 
   hello          Prints hello world
   help           Shows information about how to use this tool or about a specific command.
-                 Ex: fluent help
-  version        Shows the fluent version information
-                 Ex: fluent version
+                 Ex: basic help
+  version        Shows the basic version information
+                 Ex: basic version
 
 Run 'basic help COMMAND' for more information on a command.
 

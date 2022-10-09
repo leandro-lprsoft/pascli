@@ -401,12 +401,39 @@ type
     /// <summary> Returns the list of valid options found after parse. </summary>
     property ParsedOptions: TArray<IOption> read GetParsedOptions;
 
-    /// <summary> Usually used within the callback procedure of a given command to customize 
-    /// its processing. </summary>
+    /// <summary> Returns true if the option provided through command line by user matches the
+    /// the parameter AOption. This method is usually used within the callback procedure of a 
+    /// given command to customize its processing.</summary>
+    ///
+    /// Ex:
+    /// @longCode(#
+    ///   if ABuilder.CheckOption('v') then 
+    ///   begin
+    ///     // do something
+    ///   end; 
+    /// #)
+    /// <param name="AOption">Can be provided short option or long option without leading dashes.
+    /// </param>
+    function CheckOption(const AOption: string): Boolean; overload;
+
+    /// <summary> Returns true if the option provided through command line by user matches the
+    /// the parameter AOption. This method is usually used within the callback procedure of a 
+    /// given command to customize its processing.</summary>
+    ///
+    /// Ex:
+    /// @longCode(#
+    /// var
+    ///   LValue: string;
+    /// begin
+    ///   if ABuilder.CheckOption('v', LValue) then 
+    ///   begin
+    ///     // do something
+    ///     WriteLn('Option d value is ', LValue);
+    ///   end; 
+    /// #)
     /// <param name="AOption">Can be provided short option or long option without leading dashes.
     /// </param>
     /// <param name="AValue">Returns the value of the option if it was provided by the user. </param>
-    function CheckOption(const AOption: string): Boolean; overload;
     function CheckOption(const AOption: string; out AValue: string): Boolean; overload;
 
     /// <summary> Build a list of IArguments related to selected command, if there are more than 
