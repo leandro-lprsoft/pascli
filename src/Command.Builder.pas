@@ -782,6 +782,9 @@ end;
 function TCommandBuilder.AddCommand(const ACommand, ADescription: string; ACallback: TCommandCallback; 
   AConstraints: TCommandConstraints): ICommandBuilder;
 begin
+  if (ccDefault in AConstraints) and Assigned(GetDefaultCommand) then
+    raise Exception.Create('Cannot add a second default command.');
+
   SetLength(FCommands, Length(FCommands) + 1);
   FCommands[Length(FCommands) - 1] := TCommand.New(ACommand, ADescription, ACallback, AConstraints);
   Result := Self;

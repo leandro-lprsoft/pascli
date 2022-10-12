@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TestResults>
-  <!-- Generated using FPCUnit on 2022-10-09 19:05:10-->
+  <!-- Generated using FPCUnit on 2022-10-12 10:06:18-->
   <TestListing>
-    <TestSuite Name="" ElapsedTime="00:00:00.010" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="80" NumberOfIgnoredTests="0">
-      <TestSuite Name="TTestCommandHelper" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="3" NumberOfIgnoredTests="0">
+    <TestSuite Name="" ElapsedTime="00:00:00.010" NumberOfErrors="0" NumberOfFailures="1" NumberOfRunTests="81" NumberOfIgnoredTests="0">
+      <TestSuite Name="TTestCommandHelper" ElapsedTime="00:00:00.001" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="3" NumberOfIgnoredTests="0">
         <Test Name="TestAppendToArray" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestRemoveStartingDashes" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestRemoveStartingDashes" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestSplitOptionAndValue" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
       <TestSuite Name="TTestCommandApp" ElapsedTime="00:00:00.002" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="3" NumberOfIgnoredTests="0">
@@ -15,15 +15,15 @@
       </TestSuite>
       <TestSuite Name="TTestCommandUsage" ElapsedTime="00:00:00.002" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="11" NumberOfIgnoredTests="0">
         <Test Name="TestWriteUsage" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestUsageCommandPathGeneral" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestUsageCommandPathGeneral" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestUsageCommandPathSpecificCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestGetArgumentList" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestWriteCommandUsage" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestWriteCommandUsageWithArgument" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestWriteCommandUsageWithArgument" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestWriteCommandUsageWithOption" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestWriteCommandUsageWithArgumentAndOption" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestWriteCommandUsageWithArgumentAndOption" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestWriteGeneralUsage" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestWriteGeneralUsageShortDescription" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestWriteGeneralUsageShortDescription" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestRegistryForCommandUsage" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
       <TestSuite Name="TTestCommandVersion" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="1" NumberOfIgnoredTests="0">
@@ -37,7 +37,7 @@
         <Test Name="TestDuplicateOptionValidatorErrorUsingShortAndLongOption" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestDuplicateOptionValidatorWorks" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestDuplicateOptionValidatorNotOccurWithValue" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestMultipleOptionsSameDash" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestMultipleOptionsSameDash" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestProvidedArgumentsAreNotValid" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestProvidedArgumentsAreNotRequired" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestProvidedArgumentsAreNotRequiredShouldNotRaise" Result="OK" ElapsedTime="00:00:00.000"/>
@@ -50,14 +50,14 @@
         <Test Name="TestSelectedCommandRequiresOneOption" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandValidateIfOptionsExists" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandValidateIfOptionsWithValueExists" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestSelectedCommandValidateRejectNotAllowedOption" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestSelectedCommandValidateRejectNotAllowedOption" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandValidateRejectOptionOnlyWithFlags" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandOptionDoesNotRequireValue" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestSelectedCommandOptionRequiresValue" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
-      <TestSuite Name="TTestCommandBuilderOption" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="3" NumberOfIgnoredTests="0">
+      <TestSuite Name="TTestCommandBuilderOption" ElapsedTime="00:00:00.001" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="3" NumberOfIgnoredTests="0">
         <Test Name="TestNewOptionBasic" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestNewOptionWithConstraint" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestNewOptionWithConstraint" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestNewOptionWithInvalidNotAllowedFlag" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
       <TestSuite Name="TTestCommandBuilderArgument" ElapsedTime="00:00:00.000" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="1" NumberOfIgnoredTests="0">
@@ -68,17 +68,22 @@
         <Test Name="TestNewCommandWithOptions" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestNewCommandAddOptionWithEmptyFlag" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
-      <TestSuite Name="TTestCommandBuilder" ElapsedTime="00:00:00.003" NumberOfErrors="0" NumberOfFailures="0" NumberOfRunTests="31" NumberOfIgnoredTests="0">
+      <TestSuite Name="TTestCommandBuilder" ElapsedTime="00:00:00.002" NumberOfErrors="0" NumberOfFailures="1" NumberOfRunTests="32" NumberOfIgnoredTests="0">
         <Test Name="TestConstructor" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestConstructorExeNameNotProvided" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddCommand" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestAddCommandDefaultTwoTimes" Result="Failed" ElapsedTime="00:00:00.000">
+          <Message>TTestCommandBuilder.TestAddCommandDefaultTwoTimes: Should raise error with two default commands added.: Exception Exception expected but no exception was raised</Message>
+          <ExceptionClass>EAssertionFailedError</ExceptionClass>
+          <ExceptionMessage>Should raise error with two default commands added.: Exception Exception expected but no exception was raised</ExceptionMessage>
+        </Test>
         <Test Name="TestAddCommandWithDescription" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddCommandCheckConstraints" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddCommandOnExecute" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddCommandCallback" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddArgument" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestAddOption" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestParseBasic" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestParseBasic" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestParseOneArgumentNoCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseOneArgumentOneCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseOneArgumentAndCommandWithOptions" Result="OK" ElapsedTime="00:00:00.000"/>
@@ -86,28 +91,28 @@
         <Test Name="TestParseCommandSelectedDefault" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseCommandSelectedProvided" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseCommandAsArgument" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestParseCommandsFound" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestParseCommandsFound" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParseCommandWithInvalidOption" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestGetDefaultCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestParsedOptions" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestCheckOption" Result="OK" ElapsedTime="00:00:00.000"/>
+        <Test Name="TestCheckOption" Result="OK" ElapsedTime="00:00:00.001"/>
         <Test Name="TestParsedArguments" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestGetRawArguments" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestGetRawOptions" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestHasCommands" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestHasArguments" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestHasOptions" Result="OK" ElapsedTime="00:00:00.000"/>
-        <Test Name="TestDefaultCommandWithOptionsWithoutProvidingCommand" Result="OK" ElapsedTime="00:00:00.001"/>
+        <Test Name="TestDefaultCommandWithOptionsWithoutProvidingCommand" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestInputLn" Result="OK" ElapsedTime="00:00:00.000"/>
         <Test Name="TestState" Result="OK" ElapsedTime="00:00:00.000"/>
       </TestSuite>
     </TestSuite>
   </TestListing>
   <Title>TestPascli console test runner</Title>
-  <NumberOfRunTests>80</NumberOfRunTests>
+  <NumberOfRunTests>81</NumberOfRunTests>
   <NumberOfErrors>0</NumberOfErrors>
-  <NumberOfFailures>0</NumberOfFailures>
+  <NumberOfFailures>1</NumberOfFailures>
   <NumberOfIgnoredTests>0</NumberOfIgnoredTests>
   <TotalElapsedTime>00:00:00.010</TotalElapsedTime>
-  <DateTimeRan>2022-10-09 19:05:10</DateTimeRan>
+  <DateTimeRan>2022-10-12 10:06:18</DateTimeRan>
 </TestResults>

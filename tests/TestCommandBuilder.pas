@@ -26,10 +26,12 @@ type
     procedure TearDown; override;
 
     procedure BuilderConstructorNoName;
+    procedure AddSecondDefaultCommand;
   published
     procedure TestConstructor;
     procedure TestConstructorExeNameNotProvided;
     procedure TestAddCommand;
+    procedure TestAddCommandDefaultTwoTimes;    
     procedure TestAddCommandWithDescription;
     procedure TestAddCommandCheckConstraints;
     procedure TestAddCommandOnExecute;
@@ -116,6 +118,21 @@ begin
 
   AssertEquals('Commands added should be 2', 2, Length(LBuilder.Commands));
   AssertEquals('Second command name should be "test2"', 'test2', LBuilder.Commands[1].Name);
+end;
+
+procedure TTestCommandBuilder.AddSecondDefaultCommand;
+begin
+  TCommandBuilder.New('my command test')
+    .AddCommand('test1', 'first default command', @MockCommand, [ccDefault])
+    .AddCommand('test2', 'second default command', @MockCommand, [ccDefault]);
+end;
+
+procedure TTestCommandBuilder.TestAddCommandDefaultTwoTimes;
+begin
+  AssertException(
+    'Should raise error with two default commands added.', 
+    Exception,     
+    AddSecondDefaultCommand);
 end;
 
 procedure TTestCommandBuilder.TestAddCommandWithDescription;
