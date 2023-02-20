@@ -501,7 +501,7 @@ var
   I: Integer;
   LParsedOptions: TArray<string>;
   LOptionCleaned: string;
-  LOption: IOption;
+  LOption, LNotAllowedOption: IOption;
   LCommand: ICommand;
   LReject: string;
 begin
@@ -525,7 +525,11 @@ begin
         begin
           for LReject in LOption.NotAllowedFlags do
           begin
-            if AnsiMatchText('-' + LReject, LParsedOptions) then
+            LNotAllowedOption := LCommand.GetOption(LReject);
+            if not Assigned(LNotAllowedOption) then continue;
+            
+            if AnsiMatchText('-' + LNotAllowedOption.Flag, LParsedOptions)
+               or AnsiMatchText('--' + LNotAllowedOption.Name, LParsedOptions) then
             begin
               AppendToArray(FResult, 
                 Format('Command "%s" invalid. Option "-%s" cannot be used with "-%s"',

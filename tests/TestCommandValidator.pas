@@ -48,6 +48,7 @@ type
     procedure TestSelectedCommandValidateIfOptionsExists;
     procedure TestSelectedCommandValidateIfOptionsWithValueExists;
     procedure TestSelectedCommandValidateRejectNotAllowedOption;
+    procedure TestSelectedCommandValidateRejectNotAllowedOptionLongName;
     procedure TestSelectedCommandValidateRejectOptionOnlyWithFlags;    
     procedure TestSelectedCommandOptionDoesNotRequireValue;
     procedure TestSelectedCommandOptionRequiresValue;
@@ -456,6 +457,27 @@ begin
   // assert
   AssertEquals('Should return one error after validation', 1, Length(FArray));
   AssertEquals('Command "other" invalid. Option "-v" cannot be used with "-r"', FArray[0]);
+end;
+
+procedure TTestCommandValidator.TestSelectedCommandValidateRejectNotAllowedOptionLongName;
+begin
+  // arrange
+  FBuilder
+      .AddCommand('help', 'show help information', nil, [ccDefault, ccNoArgumentsButCommands])
+      .AddCommand('other', 'other command', nil, [])
+        .AddOption('v', 'valid', 'valid option', ['r'])
+        .AddOption('r', 'rejected', 'rejected option with valid option', ['v'])
+      .AddArgument('some argument', acOptional)
+      .UseArguments(['other', '--valid', '--rejected'])
+      .Parse;
+
+  // act
+  FValidator := TSelectedCommandValidateRejectedOption.Create;
+  FArray := FValidator.Validate(FBuilder);
+
+  // assert
+  AssertEquals('Should return one error after validation', 1, Length(FArray));
+  AssertEquals('Command "other" invalid. Option "-v" cannot be used with "-r"', FArray[0]);  
 end;
 
 procedure TTestCommandValidator.AddOptionInvalidNotAllowedFlag;
